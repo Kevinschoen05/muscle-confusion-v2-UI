@@ -12,7 +12,7 @@
                         Talk about the other services they do with keywords and locations where they serve.  Try to make this 2-3 lines tall.
                     </p>
                 </div>
-                <div class="workout-box"></div>
+                <workout-summary></workout-summary>
             </div>
             <picture>
               <img aria-hidden="true" decoding="async" src="../assets/hero-background.jpeg" >
@@ -24,10 +24,12 @@
 
 <script>
 import WorkoutTimeline from '../components/Timeline.vue'
+import WorkoutSummary from '../components/WorkoutSummary.vue';
 export default {
   name: 'HomePage',
   components: {
     WorkoutTimeline,
+    WorkoutSummary
   },
   props: {
     msg: String
@@ -113,15 +115,10 @@ export default {
 
   .hero-content {
     display: flex;
-    justify-content: space-between;
-    align-content: center;
+    width: 100%;
+    justify-content: space-around;
+    align-content:center;
     align-items: center;
-  }
-
-  .workout-box { 
-    height: 600px;
-    width: 500px;
-    background-color: white;
   }
 }
 /* Tablet */
