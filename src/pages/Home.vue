@@ -2,22 +2,23 @@
   <div>
     <header>
     </header>
+
     <body>
       <section id="hero">
         <workout-timeline></workout-timeline>
-            <div class="hero-content">
-                <div class="heroText">
-                    <h1 id="home-h">Main Keywords of What They Do, And Location If Needed</h1>
-                    <p>
-                        Talk about the other services they do with keywords and locations where they serve.  Try to make this 2-3 lines tall.
-                    </p>
-                </div>
-                <workout-summary></workout-summary>
-            </div>
-            <picture>
-              <img aria-hidden="true" decoding="async" src="../assets/hero-background.jpeg" >
-            </picture>
-        </section>
+        <div class="hero-content">
+          <div class="heroText">
+            <h1 id="home-h">Lorem ipsum, dolor sit amet consectetur adipisicing elit </h1>
+            <p>
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ab ipsam quisquam in totam nemo minima. Quod
+              ipsum quidem temporibus vero odit </p>
+          </div>
+          <workout-summary></workout-summary>
+        </div>
+        <picture>
+          <img aria-hidden="true" decoding="async" src="../assets/hero-background.jpeg">
+        </picture>
+      </section>
     </body>
   </div>
 </template>
@@ -39,30 +40,31 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  body{
-    padding: 0;
-    margin: 0;
-  }
+body {
+  padding: 0;
+  margin: 0;
+}
 
-  @media only screen and (min-width: 0em) {
+@media only screen and (min-width: 0em) {
   #hero {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
     -webkit-box-pack: center;
-        -ms-flex-pack: center;
-            justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
     -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
-        -ms-flex-direction: column;
-            flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
     position: relative;
     z-index: 1;
     min-height: 30vh;
   }
+
   #hero:before {
     content: '';
     position: absolute;
@@ -75,6 +77,7 @@ export default {
     left: 0;
     z-index: -1;
   }
+
   #hero picture {
     position: absolute;
     top: 0;
@@ -83,6 +86,7 @@ export default {
     width: 100%;
     z-index: -2;
   }
+
   #hero picture img {
     position: absolute;
     top: 0;
@@ -90,8 +94,9 @@ export default {
     height: 100%;
     width: 100%;
     -o-object-fit: cover;
-       object-fit: cover;
+    object-fit: cover;
   }
+
   #hero h1 {
     color: #fff;
     font-size: 2.13333333em;
@@ -103,6 +108,7 @@ export default {
     margin-top: 1.09375em;
     margin-bottom: 0.46875em;
   }
+
   #hero p {
     color: #fff;
     text-align: center;
@@ -117,19 +123,22 @@ export default {
     display: flex;
     width: 100%;
     justify-content: space-around;
-    align-content:center;
+    align-content: center;
     align-items: center;
   }
 }
+
 /* Tablet */
 @media only screen and (min-width: 48em) {
   #hero {
     font-size: 16px;
   }
+
   #hero h1 {
     font-size: 4em;
   }
 }
+
 /* Small Desktop */
 @media only screen and (min-width: 64em) {
   #hero {
@@ -137,10 +146,9 @@ export default {
     height: auto;
     padding-top: 8.25em;
     -webkit-padding-after: 6.25em;
-            padding-block-end: 6.25em;
+    padding-block-end: 6.25em;
     background-attachment: fixed;
     font-size: inherit;
   }
 }
-
 </style>

@@ -7,9 +7,15 @@
             <li v-for="exercise in exercises" :key="exercise.item">
                 <img aria-hidden="true" loading="lazy" decoding="async" src="../assets/check-circle.svg"
                     alt="check mark" width="20" height="20">
-                <span>{{exercise}}</span>
+                <span>{{ exercise }}</span>
             </li>
         </ul>
+        <div class="diagram-container">
+            <img id="diagram" aria-hidden="true" loading="lazy" decoding="async" :src="getWorkoutImage(this.workout)"
+                alt="">
+        </div>
+        <button class="primary-button">Start Workout</button>
+        <button class="secondary-button">Mark Complete</button>
     </div>
 </template>
   
@@ -19,13 +25,19 @@ export default {
     name: 'WorkoutSummary',
     data() {
         return {
-            workout: "Chest and Triceps",
+            workout: "back-bis",
             exercises: ['barbell bench press', 'cable fly', 'pushup']
         }
     },
     methods: {
+        getWorkoutImage(workout){
+             return require('../assets/workout-images/'+ workout  +'.png')
+        }
+        
+
     },
     mounted() {
+        this.getWorkoutImage(this.workout)
     }
 
 }
@@ -35,29 +47,16 @@ export default {
   <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .container {
-    height: 600px;
-    width: 500px;
     box-sizing: border-box;
-
-
-    /* Auto layout */
-
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     padding-left: 2em;
     margin-top: 1.09375em;
-    width: 384px;
-    height: 570px;
-
-    /* Base/White */
-
+    width: 25em;
+    height: 37em;
     background: #FFFFFF;
-    /* Gray/200 */
-
     border: 1px solid #EAECF0;
-    /* Shadow/lg */
-
     box-shadow: 0px 12px 16px -4px rgba(16, 24, 40, 0.08), 0px 4px 6px -2px rgba(16, 24, 40, 0.03);
     border-radius: 16px;
 }
@@ -100,10 +99,70 @@ ul li img {
     margin-right: 0.625em;
 }
 
-.divider{
-width: 90%;
-height: 1px;
-background-color: #B2DDFF;
+.divider {
+    width: 90%;
+    height: 1px;
+    background-color: #B2DDFF;
+}
+
+.primary-button {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 20px;
+    gap: 8px;
+    width: 90%;
+    height: 2.6em;
+    font-family: 'Roboto';
+    color: white;
+    background: #1849A9;
+    border: 1px solid #1849A9;
+    box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
+    border-radius: 8px;
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.secondary-button {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 20px;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    gap: 8px;
+    width: 90%;
+    height: 2.6em;
+    font-family: 'Roboto';
+    color: #1849A9;
+    background: white;
+    border: 1px solid #1849A9;
+    box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
+    border-radius: 8px;
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.diagram-container {
+    display: flex;
+    justify-content:center ;
+    font-size: 20px;
+    width: 100%;
+    height: 100%;
+}
+
+#diagram { 
+    height: 10em;
+    width: 10em;
+    padding-right: 2em;
 }
 </style>
   
