@@ -19,6 +19,7 @@
           <img aria-hidden="true" decoding="async" src="../assets/hero-background.jpeg">
         </picture>
       </section>
+      <exercise-card></exercise-card>
     </body>
   </div>
 </template>
@@ -26,11 +27,13 @@
 <script>
 import WorkoutTimeline from '../components/Timeline.vue'
 import WorkoutSummary from '../components/WorkoutSummary.vue';
+import ExerciseCard from '@/components/ExerciseCard.vue';
 export default {
   name: 'HomePage',
   components: {
     WorkoutTimeline,
-    WorkoutSummary
+    WorkoutSummary,
+    ExerciseCard
   },
   props: {
     msg: String
