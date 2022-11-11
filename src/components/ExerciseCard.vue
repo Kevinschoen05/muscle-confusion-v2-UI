@@ -2,8 +2,8 @@
     <div class="container">
         <div class="exercise-header">
             <p class="exercise-name">Barbell Bench Press</p>
-            <primary-muscle-badge title="Chest"> </primary-muscle-badge>
-            <secondary-muscle-badge title="Triceps"> </secondary-muscle-badge>
+            <muscle-badge title="Chest" primary> </muscle-badge>
+            <muscle-badge title="Triceps"></muscle-badge>
         </div>
         <div class="output">
             <p class="output-value">{{sets.length}} Sets</p>
@@ -20,14 +20,12 @@
 </template>
   
 <script>
-import PrimaryMuscleBadge from './PrimaryBadge.vue'
-import SecondaryMuscleBadge from './SecondaryBadge.vue'
+import MuscleBadge from './MuscleBadge.vue'
 export default {
     name: 'ExcerciseCard',
 
     components: {
-        PrimaryMuscleBadge,
-        SecondaryMuscleBadge
+        MuscleBadge
     },
     data() {
         return {
