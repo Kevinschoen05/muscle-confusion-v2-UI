@@ -25,7 +25,7 @@ export default {
     name: 'WorkoutSummary',
     data() {
         return {
-            workout: "back-bis",
+            workout: "chest-tris",
             exercises: ['barbell bench press', 'cable fly', 'pushup']
         }
     },

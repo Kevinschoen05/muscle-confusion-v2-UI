@@ -19,7 +19,9 @@
           <img aria-hidden="true" decoding="async" src="../assets/hero-background.jpeg">
         </picture>
       </section>
-      <exercise-card></exercise-card>
+      <div class="test">
+        <exercise-card></exercise-card>
+      </div>
     </body>
   </div>
 </template>
@@ -46,6 +48,11 @@ export default {
 body {
   padding: 0;
   margin: 0;
+}
+
+.test {
+  display: flex;
+  justify-content: center;
 }
 
 @media only screen and (min-width: 0em) {

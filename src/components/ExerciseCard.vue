@@ -2,20 +2,28 @@
     <div class="container">
         <div class="exercise-header">
             <p class="exercise-name">Barbell Bench Press</p>
-            <muscle-badge title="Chest" primary> </muscle-badge>
+            <muscle-badge title="Chest" primary></muscle-badge>
             <muscle-badge title="Triceps"></muscle-badge>
         </div>
         <div class="output">
             <p class="output-value">{{sets.length}} Sets</p>
             <p class="output-value">{{reps}} Reps</p>
         </div>
-        <table class="set-list">
+        <div class="set-table">
+            <table class="set-list">
+            <thead class="header">
+                <th class="header-item">Set</th>
+                <th class="header-item">Reps</th>
+                <th class="header-item">Weight</th>
+            </thead>
             <tr class="set" v-for="set in sets" :key="set.index">
-                <td class="set-item">{{set.index}}.</td>
+                <td class="set-index">{{set.index}}.</td>
                 <td class="set-item">{{set.reps}}</td>
                 <td class="set-item">{{set.weight}}</td>
             </tr>
         </table>
+        </div>
+
     </div>
 </template>
   
@@ -54,7 +62,6 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    padding-left: 2em;
     margin-top: 1.09375em;
     width: 37em;
     height: 25em;
@@ -67,12 +74,13 @@ export default {
 .exercise-header{ 
     display: flex;
     justify-content: left;
+    padding-left: 2em;
     align-items: center;
 }
 .exercise-name {
     font-family: 'roboto';
-    font-size: 18px;
-    font-weight: medium;
+    font-size: 20px;
+    font-weight: bolder;
     color: #101828
     
 }
@@ -85,6 +93,12 @@ export default {
 
 }
 
+.set-table {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+}
 .output-value {
     font-family: 'roboto';
     font-size: 48px;
@@ -94,13 +108,24 @@ export default {
 }
 
 .set-list {
-    width: 90%;
+    width: 80%;
 }
-.set{
+
+.header { 
+    background-color: #EAECF0;
+}
+
+.header-item {
+    font-family: 'roboto';
+    font-weight: 600;
+    color: #475467;
+}
+.set, thead{
 box-sizing: border-box;
 display: flex;
 flex-direction: row;
 align-items: center;
+justify-content: space-around;
 padding: 16px 24px;
 gap: 12px;
 width: 100%;
@@ -109,8 +134,16 @@ flex: none;
 order: 1;
 align-self: stretch;
 flex-grow: 0;
-
+border-radius: 10px;
 }
+
+.set-index {
+    font-family: 'roboto';
+    font-weight: 400;
+    color: #475467;
+}
+
+
 </style>
 
   
