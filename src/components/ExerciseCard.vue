@@ -18,14 +18,16 @@
                 </thead>
                 <tr class="set">
                     <td class="set-index">Target</td>
-                    <td class="set-item">{{ set.target_reps }}</td>
-                    <td class="set-item">{{ set.target_weight }}</td>
+                    <td class="set-item">{{set.target_reps}}</td>
+                    <td class="set-item"> <input class="set-input" type="number" step=5 v-model="targetWeight"> </td>
                 </tr>
                 <tr class="set">
                     <td class="set-index">Actual</td>
-                    <td class="set-item">{{ set.actual_reps }}</td>
-                    <td class="set-item">{{ set.actual_weight }}</td>
+                    <td class="set-item"><input class="set-input" type="number" step=5 v-model="actualReps"> </td>
+                    <td class="set-item"><input class="set-input" type="number" step=5 v-model="actualWeight"> </td>
                 </tr>
+
+                <button @click="saveSet(targetWeight, actualReps, actualWeight, set.index)"> Save</button>
             </table>
         </div>
 
@@ -42,14 +44,26 @@ export default {
     },
     data() {
         return {
-            sets: [{ index: 1, target_reps: 15, actual_reps: 0, target_weight: 225, actual_weight: 175 }, { index: 2, target_reps: 10, actual_reps: 0, target_weight: 135, actual_weight: 210 }],
+            sets: [{ index: 1, target_reps: 15, actual_reps: 0, target_weight: 0, actual_weight: 175 }, { index: 2, target_reps: 10, actual_reps: 0, target_weight: 135, actual_weight: 210 }],
             reps: 25,
             workout: "chest-tris",
-            exercises: ['barbell bench press', 'cable fly', 'pushup']
+            exercises: ['barbell bench press', 'cable fly', 'pushup'],
+            targetWeight: 0,
+            actualReps: 0,
+            actualWeight:0,
+
         }
     },
     methods: {
-
+        saveSet(targetWeight, actualReps, actualWeight, index){
+            for(let i=0; i < this.sets.length; i++)
+            if (this.sets[i].index === index){
+                this.sets[i].target_weight = targetWeight;
+                this.sets[i].actual_reps = actualReps;
+                this.sets[i].actual_weight = actualWeight;
+            }
+            console.log(this.sets[0])
+        }
 
     },
     mounted() {
@@ -138,15 +152,19 @@ thead {
     flex-direction: row;
     align-items: center;
     justify-content: space-around;
-    padding: 16px 24px;
+    padding: 12px 24px;
     gap: 12px;
     width: 100%;
     border-bottom: 1px solid #EAECF0;
-    flex: none;
-    order: 1;
-    align-self: stretch;
-    flex-grow: 0;
     border-radius: 10px;
+}
+
+.set-success{
+    background-color: #D3F8DF;
+}
+
+.set-failure {
+    background-color: #FFE4E8;
 }
 
 .set-index {
@@ -154,6 +172,26 @@ thead {
     font-weight: 400;
     color: #475467;
     border: none !important;
+}
+
+.set-input {
+    width: 3em;
+    border: 1px solid #EAECF0;
+    border-radius: 5px;
+    font-family: 'roboto';
+    text-align: center;
+    box-shadow: 0px 12px 16px -4px rgba(16, 24, 40, 0.08), 0px 4px 6px -2px rgba(16, 24, 40, 0.03);
+
+}
+
+.set-input:focus {
+    outline: none !important;
+    border:1px solid #1849A9;
+    box-shadow: 0 0 10px #719ECE;
+}
+
+.set-item {
+    width: 3em;
 }
 </style>
 
