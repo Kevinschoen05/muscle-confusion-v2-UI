@@ -24,7 +24,7 @@
                         <p v-else class="set-value">{{ set.target_weight }}</p>
                     </td>
                 </tr>
-                <tr class="set" v-bind:class="{'set-success': set.success, 'set-failure': !set.success}">
+                <tr class="set" v-bind:class="{    'set-success': (set.success && set.completed), 'set-failure': (!set.success && set.completed)    }">
                     <td class="set-index">Actual</td>
                     <td class="set-item"><input v-if="!set.completed" class="set-input" type="number" step=5
                             v-model="set.actual_reps">
@@ -58,7 +58,7 @@ export default {
     },
     data() {
         return {
-            sets: [{ index: 1, target_reps: 15, actual_reps: 0, target_weight: 0, actual_weight: 175, completed: false, success: false}, { index: 2, target_reps: 10, actual_reps: 0, target_weight: 135, actual_weight: 210, completed: false, success: false }],
+            sets: [{ index: 1, target_reps: 15, actual_reps: 0, target_weight: 0, actual_weight: 175, completed: false, success: false }, { index: 2, target_reps: 10, actual_reps: 0, target_weight: 135, actual_weight: 210, completed: false, success: false }],
             reps: 25,
             workout: "chest-tris",
             exercises: ['barbell bench press', 'cable fly', 'pushup'],
@@ -69,8 +69,11 @@ export default {
         completeSet(set, targetWeight, targetReps, actualWeight, actualReps) {
             set.completed = !set.completed
 
-            if(actualWeight >= targetWeight && actualReps >= targetReps) {
+            if (actualWeight >= targetWeight && actualReps >= targetReps) {
                 set.success = true;
+            }
+            else{
+                set.success = false;
             }
 
             console.log(targetWeight, targetReps, actualWeight, actualReps)
