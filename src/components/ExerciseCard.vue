@@ -18,16 +18,30 @@
                 </thead>
                 <tr class="set">
                     <td class="set-index">Target</td>
-                    <td class="set-item">{{set.target_reps}}</td>
-                    <td class="set-item"> <input class="set-input" type="number" step=5 v-model="targetWeight"> </td>
+                    <td class="set-item">{{ set.target_reps }}</td>
+                    <td class="set-item"> <input v-if="!set.completed" class="set-input" type="number" step=5
+                            v-model="set.target_weight">
+                        <p v-else class="set-value">{{ set.target_weight }}</p>
+                    </td>
                 </tr>
-                <tr class="set">
+                <tr class="set" v-bind:class="{'set-success': set.success, 'set-failure': !set.success}">
                     <td class="set-index">Actual</td>
-                    <td class="set-item"><input class="set-input" type="number" step=5 v-model="actualReps"> </td>
-                    <td class="set-item"><input class="set-input" type="number" step=5 v-model="actualWeight"> </td>
+                    <td class="set-item"><input v-if="!set.completed" class="set-input" type="number" step=5
+                            v-model="set.actual_reps">
+                        <p v-else class="set-value">{{ set.actual_reps }}</p>
+                    </td>
+                    <td class="set-item"><input v-if="!set.completed" class="set-input" type="number" step=5
+                            v-model="set.actual_weight">
+                        <p v-else class="set-value">{{ set.actual_weight }}</p>
+                    </td>
                 </tr>
+                <tr class="button">
+                    <button v-if="!set.completed" class="set-button"
+                        @click="completeSet(set, set.target_weight, set.target_reps, set.actual_weight, set.actual_reps)">Complete
+                        Set</button>
+                    <button v-else class="secondary-set-button" @click="completeSet(set)">Update Set</button>
 
-                <button @click="saveSet(targetWeight, actualReps, actualWeight, set.index)"> Save</button>
+                </tr>
             </table>
         </div>
 
@@ -44,27 +58,24 @@ export default {
     },
     data() {
         return {
-            sets: [{ index: 1, target_reps: 15, actual_reps: 0, target_weight: 0, actual_weight: 175 }, { index: 2, target_reps: 10, actual_reps: 0, target_weight: 135, actual_weight: 210 }],
+            sets: [{ index: 1, target_reps: 15, actual_reps: 0, target_weight: 0, actual_weight: 175, completed: false, success: false}, { index: 2, target_reps: 10, actual_reps: 0, target_weight: 135, actual_weight: 210, completed: false, success: false }],
             reps: 25,
             workout: "chest-tris",
             exercises: ['barbell bench press', 'cable fly', 'pushup'],
-            targetWeight: 0,
-            actualReps: 0,
-            actualWeight:0,
 
         }
     },
     methods: {
-        saveSet(targetWeight, actualReps, actualWeight, index){
-            for(let i=0; i < this.sets.length; i++)
-            if (this.sets[i].index === index){
-                this.sets[i].target_weight = targetWeight;
-                this.sets[i].actual_reps = actualReps;
-                this.sets[i].actual_weight = actualWeight;
-            }
-            console.log(this.sets[0])
-        }
+        completeSet(set, targetWeight, targetReps, actualWeight, actualReps) {
+            set.completed = !set.completed
 
+            if(actualWeight >= targetWeight && actualReps >= targetReps) {
+                set.success = true;
+            }
+
+            console.log(targetWeight, targetReps, actualWeight, actualReps)
+            console.log(set.success)
+        }
     },
     mounted() {
 
@@ -159,7 +170,7 @@ thead {
     border-radius: 10px;
 }
 
-.set-success{
+.set-success {
     background-color: #D3F8DF;
 }
 
@@ -167,7 +178,16 @@ thead {
     background-color: #FFE4E8;
 }
 
-.set-index {
+.set-index,
+.set-value {
+    font-family: 'roboto';
+    font-weight: 400;
+    color: #475467;
+    border: none !important;
+}
+
+.set-value {
+    margin: 0;
     font-family: 'roboto';
     font-weight: 400;
     color: #475467;
@@ -186,12 +206,57 @@ thead {
 
 .set-input:focus {
     outline: none !important;
-    border:1px solid #1849A9;
+    border: 1px solid #1849A9;
     box-shadow: 0 0 10px #719ECE;
 }
 
 .set-item {
     width: 3em;
+}
+
+
+.button {
+    display: flex;
+    justify-content: center;
+    padding-top: 1em;
+}
+
+.set-button {
+    box-sizing: border-box;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 20px;
+    gap: 8px;
+    width: 50%;
+    height: 2.6em;
+    font-family: 'Roboto';
+    color: white;
+    background: #1849A9;
+    border: 1px solid #1849A9;
+    box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
+    border-radius: 8px;
+}
+
+.secondary-set-button {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 20px;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    gap: 8px;
+    width: 50%;
+    height: 2.6em;
+    font-family: 'Roboto';
+    color: #1849A9;
+    background: white;
+    border: 1px solid #1849A9;
+    box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
+    border-radius: 8px;
 }
 </style>
 
