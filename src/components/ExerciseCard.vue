@@ -1,13 +1,15 @@
 <template>
     <div class="container">
-        <div class="exercise-header">
-            <p class="exercise-name">Barbell Bench Press</p>
-            <muscle-badge title="Chest" primary></muscle-badge>
-            <muscle-badge title="Triceps"></muscle-badge>
-        </div>
-        <div class="output">
-            <p class="output-value">{{ sets.length }} Sets</p>
-            <p class="output-value">{{ reps }} Reps</p>
+        <div class="header-bar">
+            <div class="exercise-header">
+                <p class="exercise-name">Barbell Bench Press</p>
+                <muscle-badge title="Chest" primary></muscle-badge>
+                <muscle-badge title="Triceps"></muscle-badge>
+            </div>
+            <div class="output">
+                <p class="output-value">{{ sets.length }} Sets</p>
+                <p class="output-value">{{ reps }} Reps</p>
+            </div>
         </div>
         <div class="set-table">
             <table class="set-list" v-for="set in sets" :key="set.index">
@@ -15,6 +17,7 @@
                     <th class="header-item">Results</th>
                     <th class="header-item">Reps</th>
                     <th class="header-item">Weight</th>
+                    <th></th>
                 </thead>
                 <tr class="set">
                     <td class="set-index">Target</td>
@@ -23,16 +26,28 @@
                             v-model="set.target_weight">
                         <p v-else class="set-value">{{ set.target_weight }}</p>
                     </td>
+                    <td class="success-icon"></td>
                 </tr>
-                <tr class="set" v-bind:class="{    'set-success': (set.success && set.completed), 'set-failure': (!set.success && set.completed)    }">
+                <tr class="set">
                     <td class="set-index">Actual</td>
                     <td class="set-item"><input v-if="!set.completed" class="set-input" type="number" step=5
                             v-model="set.actual_reps">
-                        <p v-else class="set-value">{{ set.actual_reps }}</p>
+                        <p v-else class="set-value"
+                            v-bind:class="{ 'set-success': (set.success && set.completed), 'set-failure': (!set.success && set.completed) }">
+                            {{ set.actual_reps }}</p>
                     </td>
                     <td class="set-item"><input v-if="!set.completed" class="set-input" type="number" step=5
                             v-model="set.actual_weight">
-                        <p v-else class="set-value">{{ set.actual_weight }}</p>
+                        <p v-else class="set-value"
+                            v-bind:class="{ 'set-success': (set.success && set.completed), 'set-failure': (!set.success && set.completed) }">
+                            {{ set.actual_weight }}</p>
+                    </td>
+                    <td class="success-icon"> <img v-if="(set.success && set.completed)" class="success-icon"
+                            aria-hidden="true" loading="lazy" decoding="async" src="../assets/check-circle-success.svg"
+                            alt="check mark">
+
+                        <img v-else-if="(!set.success && set.completed)" class="failure-icon" aria-hidden="true"
+                            loading="lazy" decoding="async" src="../assets/slash-circle.svg" alt="check mark">
                     </td>
                 </tr>
                 <tr class="button">
@@ -50,11 +65,12 @@
   
 <script>
 import MuscleBadge from './MuscleBadge.vue'
+//import ProgressBar from './ProgressBar.vue'
 export default {
     name: 'ExcerciseCard',
 
     components: {
-        MuscleBadge
+        MuscleBadge,
     },
     data() {
         return {
@@ -72,7 +88,7 @@ export default {
             if (actualWeight >= targetWeight && actualReps >= targetReps) {
                 set.success = true;
             }
-            else{
+            else {
                 set.success = false;
             }
 
@@ -102,6 +118,19 @@ export default {
     border: 1px solid #EAECF0;
     box-shadow: 0px 12px 16px -4px rgba(16, 24, 40, 0.08), 0px 4px 6px -2px rgba(16, 24, 40, 0.03);
     border-radius: 16px;
+}
+
+.header-bar {
+    width: 100%;
+    position: sticky;
+    position: -webkit-sticky;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    background: #FFFFFF;
+    box-shadow: 0px 12px 16px -4px rgba(16, 24, 40, 0.08), 0px 4px 6px -2px rgba(16, 24, 40, 0.03);
+    border-radius: 16px;
+    margin-bottom: 1em;
 }
 
 .exercise-header {
@@ -174,11 +203,11 @@ thead {
 }
 
 .set-success {
-    background-color: #D3F8DF;
+    color: #66C61C !important;
 }
 
 .set-failure {
-    background-color: #FFE4E8;
+    color: #E62E05 !important;
 }
 
 .set-index,
@@ -260,6 +289,21 @@ thead {
     border: 1px solid #1849A9;
     box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
     border-radius: 8px;
+}
+
+.success-icon {
+    width: 1.25em;
+    height: 1.25em;
+    margin: 0;
+    padding: 0;
+}
+
+.failure-icon {
+    width: 1.25em;
+    height: 1.25em;
+    margin: 0;
+    padding: 0;
+    color: #E62E05;
 }
 </style>
 
