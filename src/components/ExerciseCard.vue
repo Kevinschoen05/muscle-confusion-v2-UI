@@ -1,13 +1,15 @@
 <template>
     <div class="container">
-        <div class="exercise-header">
-            <p class="exercise-name">Barbell Bench Press</p>
-            <muscle-badge title="Chest" primary></muscle-badge>
-            <muscle-badge title="Triceps"></muscle-badge>
-        </div>
-        <div class="output">
-            <p class="output-value">{{ sets.length }} Sets</p>
-            <p class="output-value">{{ reps }} Reps</p>
+        <div class="header-bar">
+            <div class="exercise-header">
+                <p class="exercise-name">Barbell Bench Press</p>
+                <muscle-badge title="Chest" primary></muscle-badge>
+                <muscle-badge title="Triceps"></muscle-badge>
+            </div>
+            <div class="output">
+                <p class="output-value">{{ sets.length }} Sets</p>
+                <p class="output-value">{{ reps }} Reps</p>
+            </div>
         </div>
         <div class="set-table">
             <table class="set-list" v-for="set in sets" :key="set.index">
@@ -40,11 +42,13 @@
                             v-bind:class="{ 'set-success': (set.success && set.completed), 'set-failure': (!set.success && set.completed) }">
                             {{ set.actual_weight }}</p>
                     </td>
-                    <td class="success-icon"> <img v-if="(set.success && set.completed)" class="success-icon" aria-hidden="true" loading="lazy" decoding="async"
-                            src="../assets/check-circle-success.svg" alt="check mark">
-                        
-                            <img v-else-if="(!set.success && set.completed)"  class="failure-icon" aria-hidden="true" loading="lazy" decoding="async"
-                            src="../assets/slash-circle.svg" alt="check mark"></td>
+                    <td class="success-icon"> <img v-if="(set.success && set.completed)" class="success-icon"
+                            aria-hidden="true" loading="lazy" decoding="async" src="../assets/check-circle-success.svg"
+                            alt="check mark">
+
+                        <img v-else-if="(!set.success && set.completed)" class="failure-icon" aria-hidden="true"
+                            loading="lazy" decoding="async" src="../assets/slash-circle.svg" alt="check mark">
+                    </td>
                 </tr>
                 <tr class="button">
                     <button v-if="!set.completed" class="set-button"
@@ -113,6 +117,19 @@ export default {
     border: 1px solid #EAECF0;
     box-shadow: 0px 12px 16px -4px rgba(16, 24, 40, 0.08), 0px 4px 6px -2px rgba(16, 24, 40, 0.03);
     border-radius: 16px;
+}
+
+.header-bar {
+    width: 100%;
+    position: sticky;
+    position: -webkit-sticky;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    background: #FFFFFF;
+    box-shadow: 0px 12px 16px -4px rgba(16, 24, 40, 0.08), 0px 4px 6px -2px rgba(16, 24, 40, 0.03);
+    border-radius: 16px;
+    margin-bottom: 1em;
 }
 
 .exercise-header {
