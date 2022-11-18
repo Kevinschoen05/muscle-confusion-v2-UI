@@ -10,7 +10,6 @@
                 <p class="output-value">{{ sets.length }} Sets</p>
                 <p class="output-value">{{ reps }} Reps</p>
             </div>
-            <progress-bar></progress-bar>
         </div>
         <div class="set-table">
             <table class="set-list" v-for="set in sets" :key="set.index">
@@ -66,13 +65,12 @@
   
 <script>
 import MuscleBadge from './MuscleBadge.vue'
-import ProgressBar from './ProgressBar.vue'
+//import ProgressBar from './ProgressBar.vue'
 export default {
     name: 'ExcerciseCard',
 
     components: {
         MuscleBadge,
-        ProgressBar
     },
     data() {
         return {
