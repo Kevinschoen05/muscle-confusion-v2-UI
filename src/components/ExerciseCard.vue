@@ -10,6 +10,8 @@
                 <p class="output-value">{{ sets.length }} Sets</p>
                 <p class="output-value">{{ reps }} Reps</p>
             </div>
+            <progress-bar :sets="setTotal" :completed="completedCounter">
+            </progress-bar>
         </div>
         <div class="set-table">
             <table class="set-list" v-for="set in sets" :key="set.index">
@@ -33,13 +35,13 @@
                     <td class="set-item"><input v-if="!set.completed" class="set-input" type="number" step=5
                             v-model="set.actual_reps">
                         <p v-else class="set-value"
-                            v-bind:class="{ 'set-success': (set.success && set.completed), 'set-failure': (!set.success && set.completed) }">
+                            :class="{ 'set-success': (set.success && set.completed), 'set-failure': (!set.success && set.completed) }">
                             {{ set.actual_reps }}</p>
                     </td>
                     <td class="set-item"><input v-if="!set.completed" class="set-input" type="number" step=5
                             v-model="set.actual_weight">
                         <p v-else class="set-value"
-                            v-bind:class="{ 'set-success': (set.success && set.completed), 'set-failure': (!set.success && set.completed) }">
+                            :class="{ 'set-success': (set.success && set.completed), 'set-failure': (!set.success && set.completed) }">
                             {{ set.actual_weight }}</p>
                     </td>
                     <td class="success-icon"> <img v-if="(set.success && set.completed)" class="success-icon"
@@ -54,7 +56,9 @@
                     <button v-if="!set.completed" class="set-button"
                         @click="completeSet(set, set.target_weight, set.target_reps, set.actual_weight, set.actual_reps)">Complete
                         Set</button>
-                    <button v-else class="secondary-set-button" @click="completeSet(set)">Update Set</button>
+                    <button v-else class="secondary-set-button"
+                        @click="completeSet(set, set.target_weight, set.target_reps, set.actual_weight, set.actual_reps)">Update
+                        Set</button>
 
                 </tr>
             </table>
@@ -65,12 +69,13 @@
   
 <script>
 import MuscleBadge from './MuscleBadge.vue'
-//import ProgressBar from './ProgressBar.vue'
+import ProgressBar from './ProgressBar.vue'
 export default {
     name: 'ExcerciseCard',
 
     components: {
         MuscleBadge,
+        ProgressBar
     },
     data() {
         return {
@@ -78,12 +83,22 @@ export default {
             reps: 25,
             workout: "chest-tris",
             exercises: ['barbell bench press', 'cable fly', 'pushup'],
+            setTotal: 0,
+            completedCounter: 0
 
         }
     },
     methods: {
         completeSet(set, targetWeight, targetReps, actualWeight, actualReps) {
+            this.setTotal = this.sets.length;
             set.completed = !set.completed
+
+            if (set.completed === true) {
+                this.completedCounter++;
+            }
+            else {
+                this.completedCounter--;
+            }
 
             if (actualWeight >= targetWeight && actualReps >= targetReps) {
                 set.success = true;
@@ -94,6 +109,7 @@ export default {
 
             console.log(targetWeight, targetReps, actualWeight, actualReps)
             console.log(set.success)
+            console.log(this.setTotal, this.completedCounter)
         }
     },
     mounted() {
@@ -113,7 +129,6 @@ export default {
     align-items: flex-start;
     margin-top: 1.09375em;
     width: 37em;
-    height: 45em;
     background: #FFFFFF;
     border: 1px solid #EAECF0;
     box-shadow: 0px 12px 16px -4px rgba(16, 24, 40, 0.08), 0px 4px 6px -2px rgba(16, 24, 40, 0.03);

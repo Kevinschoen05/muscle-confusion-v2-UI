@@ -6,10 +6,12 @@
   
 <script>
 
+
 export default {
     name: 'ProgressBar', 
     props: {
-
+        sets: Number,
+        completed: Number
     },
     data() {
         return {
@@ -17,20 +19,22 @@ export default {
         }
     },
     methods: {
-        setProgress(sets){
-            document.getElementById("progress-bar").style.width = (100/sets) + '%';
+        setProgress(sets, completed){
+            document.getElementById("progress-bar").style.width = (completed/sets) * 100 + '%';
         }
     },
     mounted() {
-        this.setProgress(this.sets)
+        this.setProgress(this.sets, this.completed)
+    },
+    updated() {
+        this.setProgress(this.sets, this.completed)
     }
 
 }
 
 </script>
   
-  <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+  <style scoped>
 
 .progress-container {
     width: 100%;
