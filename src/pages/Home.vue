@@ -2,7 +2,6 @@
   <div>
     <header>
     </header>
-
     <body>
       <section id="hero">
         <workout-timeline></workout-timeline>
@@ -45,15 +44,18 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-body {
-  padding: 0;
-  margin: 0;
-}
 
 .test {
   display: flex;
   justify-content: center;
 }
+
+@font-face {
+  font-family: "Roboto";
+  src: local("Roboto"),
+   url(../fonts/roboto-v29-latin-900.woff2) format("truetype");
+}
+
 
 @media only screen and (min-width: 0em) {
   #hero {
@@ -73,6 +75,7 @@ body {
     position: relative;
     z-index: 1;
     min-height: 30vh;
+    font-family: "Roboto";
   }
 
   #hero:before {

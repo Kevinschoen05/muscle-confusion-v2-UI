@@ -122,6 +122,13 @@ export default {
   
   <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
+@font-face {
+  font-family: "Roboto";
+  src: local("Roboto"),
+   url(../fonts/roboto-v29-latin-900.woff2) format("truetype");
+}
+
 .container {
     box-sizing: border-box;
     display: flex;
@@ -156,7 +163,7 @@ export default {
 }
 
 .exercise-name {
-    font-family: 'roboto';
+    font-family: 'Roboto';
     font-size: 20px;
     font-weight: bolder;
     color: #101828
