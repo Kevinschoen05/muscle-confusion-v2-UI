@@ -10,7 +10,12 @@ const routes = [
   {
     path: '/settings',
     component: () => import('../pages/UserSettings.vue')
-  }
+  },
+  {
+    path: '/workoutbuilder',
+    component: () => import('../pages/WorkoutBuilder.vue')
+  },
+
 ]
 
 const router = createRouter({
