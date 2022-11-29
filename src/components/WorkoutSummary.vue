@@ -14,8 +14,8 @@
             <img id="diagram" aria-hidden="true" loading="lazy" decoding="async" :src="getWorkoutImage(this.workout)"
                 alt="">
         </div>
-        <button class="primary-button">Start Workout</button>
-        <button class="secondary-button">Mark Complete</button>
+        <button class="primary-button">Start Preset Workout</button>
+        <button class="secondary-button"  @click="$router.push('/workoutbuilder')">Create Custom Workout</button>
     </div>
 </template>
   

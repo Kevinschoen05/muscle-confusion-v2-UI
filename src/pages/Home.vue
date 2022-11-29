@@ -3,6 +3,7 @@
     <header>
     </header>
     <body>
+      <button class="primary-button" @click="$router.push('settings')">User Settings</button>
       <section id="hero">
         <workout-timeline></workout-timeline>
         <div class="hero-content">
@@ -31,6 +32,12 @@ import WorkoutSummary from '../components/WorkoutSummary.vue';
 import ExerciseCard from '@/components/ExerciseCard.vue';
 export default {
   name: 'HomePage',
+
+  data () {
+    return { 
+      setting: '/settings'
+    }
+  },
   components: {
     WorkoutTimeline,
     WorkoutSummary,
@@ -139,6 +146,24 @@ export default {
     align-content: center;
     align-items: center;
   }
+}
+
+.primary-button {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 20px;
+    gap: 8px;
+    width: 30%;
+    height: 2.6em;
+    font-family: 'Roboto';
+    color: white;
+    background: #1849A9;
+    border: 1px solid #1849A9;
+    box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
+    border-radius: 8px;
 }
 
 /* Tablet */
