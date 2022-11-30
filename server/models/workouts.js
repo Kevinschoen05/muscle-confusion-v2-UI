@@ -2,15 +2,13 @@ import mongoose from 'mongoose'
 const {Schema } = mongoose;
 
 const workoutSchema =  new Schema({
-    title: String, 
+    workoutTitle: {
+        type: String
+    },
     exercises: {
-        primaryMuscleGroup: String,
-        secondaryMuscleGroup: Array,
-        excerciseName: String,
-        
+        type: [
+            Mixed
+        ]
     }
-
-
-
 })
 module.exports = mongoose.model("Workouts", workoutSchema)
