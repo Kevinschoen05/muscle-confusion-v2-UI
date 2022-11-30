@@ -1,0 +1,36 @@
+{
+    "workoutTitle": "Chest and Triceps",
+    "exercises": [
+      {
+        "exerciseName": "Barbell Bench Press",
+        "primaryMuscleGroups": "Chest",
+        "secondaryMuscleGroups": [
+          "triceps",
+          "biceps",
+          "shoulders"
+        ],
+        "targetSets": 4,
+        "targetSetReps": [
+          15,
+          12,
+          10,
+          8
+        ]
+      },
+      {
+        "exerciseName": "Cable Fly",
+        "primaryMuscleGroups": "Chest",
+        "secondaryMuscleGroups": [
+          "triceps",
+          ""
+        ],
+        "targetSets": 4,
+        "targetSetReps": [
+          15,
+          15,
+          15,
+          15
+        ]
+      }
+    ]
+  }
