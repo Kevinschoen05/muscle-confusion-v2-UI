@@ -1,14 +1,11 @@
-import mongoose from 'mongoose'
-const {Schema } = mongoose;
+const mongoose = require('mongoose'); 
 
-const workoutSchema =  new Schema({
+const workoutSchema =  mongoose.Schema({
     workoutTitle: {
         type: String
     },
     exercises: {
-        type: [
-            Mixed
-        ]
+        type: Array
     }
 })
-module.exports = mongoose.model("Workouts", workoutSchema)
+module.exports = mongoose.model("Workout", workoutSchema)

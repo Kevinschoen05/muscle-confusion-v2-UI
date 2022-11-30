@@ -24,5 +24,7 @@ mongoose
   .catch((err) => console.log(err));
 
 
+  app.use('/api', require('./routes/routes'))
+
   //start server
   app.listen(port, () => console.log(`sever running at http://localhost:${port}`))
