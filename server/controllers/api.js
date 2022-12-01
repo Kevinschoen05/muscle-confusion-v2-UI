@@ -1,4 +1,4 @@
-const Workout  = require("../models/workouts");
+const Workout = require("../models/workouts");
 
 
 module.exports = class API {
@@ -10,4 +10,4 @@ module.exports = class API {
           res.status(404).json({ message: err.message });
         }
       }
-}
+};

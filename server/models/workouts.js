@@ -1,10 +1,8 @@
 const mongoose = require('mongoose'); 
 
-const workoutSchema =  mongoose.Schema({
-    workoutTitle: {
-        type: String
-    },
-    exercises: {
+const workoutSchema = mongoose.Schema({
+    workoutTitle: String, 
+    exercises: { 
         type: Array
     }
 })
