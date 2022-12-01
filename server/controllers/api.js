@@ -10,4 +10,13 @@ module.exports = class API {
           res.status(404).json({ message: err.message });
         }
       }
+      static async addWorkout(req, res) {
+        const workout = req.body;
+        try {
+          await Workout.create(workout);
+          res.status(201).json({ message: "Workout Created Successfully!" });
+        } catch (err) {
+          res.status(400).json({ message: err.message });
+        }
+      }
 };
