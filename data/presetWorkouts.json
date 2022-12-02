@@ -3,12 +3,6 @@
     "exercises": [
       {
         "exerciseName": "Barbell Bench Press",
-        "primaryMuscleGroups": "Chest",
-        "secondaryMuscleGroups": [
-          "triceps",
-          "biceps",
-          "shoulders"
-        ],
         "targetSets": 4,
         "targetSetReps": [
           15,
@@ -19,11 +13,6 @@
       },
       {
         "exerciseName": "Cable Fly",
-        "primaryMuscleGroups": "Chest",
-        "secondaryMuscleGroups": [
-          "triceps",
-          ""
-        ],
         "targetSets": 4,
         "targetSetReps": [
           15,
@@ -34,3 +23,17 @@
       }
     ]
   }
+
+  //exercise structure
+
+
+    {
+        "secondaryMuscleGroups": [
+            "triceps",
+            "biceps",
+            "shoulders"
+        ],
+        "_id": "63894e8e183aff5cb54f2208",
+        "exerciseName": "Barbell Bench Press",
+        "primaryMuscleGroups": "Chest"
+    }

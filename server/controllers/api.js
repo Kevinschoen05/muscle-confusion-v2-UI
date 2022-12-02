@@ -1,4 +1,5 @@
 const Workout = require("../models/workouts");
+const Exercise = require("../models/exercises")
 
 
 module.exports = class API {
@@ -17,6 +18,16 @@ module.exports = class API {
           res.status(201).json({ message: "Workout Created Successfully!" });
         } catch (err) {
           res.status(400).json({ message: err.message });
+        }
+      }
+
+      //Exercises
+      static async fetchAllExercises(req, res) {
+        try {
+          const exercises = await Exercise.find();
+          res.status(200).json(exercises);
+        } catch (err) {
+          res.status(404).json({ message: err.message });
         }
       }
 };
