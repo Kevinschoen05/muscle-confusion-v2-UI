@@ -3,8 +3,9 @@
         <h1>Create New Workout</h1>
         <div class="title-input">
             <input type="text" placeholder="Enter Workout Title" v-model="draftWorkoutTitle" @focusout="saveData()">
-            <div class="exercises">
-                <button @click="addExercise()">Add Exercise</button>
+        </div>
+        <div class="exercises">
+                <button @click="addExercise()">Add Exercise</button> 
                 <ul>
                     <li v-for="exercise in draftExerciseList" :key="exercise">
                         <label for="muscle-group">Select Muscle Group</label>
@@ -13,15 +14,15 @@
                             <option v-for="muscleGroup in muscleGroups" :key="muscleGroup" :value="muscleGroup">
                                 {{ muscleGroup }}</option>
                         </select>
-                        <select v-show="muscleGroupSelected" id="exercise-selector" name="exercise-selector">
+                        <select v-show="muscleGroupSelected" id="exercise-selector" name="exercise-selector" v-model="selectedExercise">
                             <option value="Select Exercise" selected disabled hidden> Select Exercise</option>
                             <option v-for="muscleGroupExercise  in muscleGroupExercises" :key="muscleGroupExercise"
                                 :value="muscleGroupExercise">{{ muscleGroupExercise }}</option>
                         </select>
+                        <button @click="updateDraftExercise(exercise, this.selectedExercise)">Save Exercise</button> 
                     </li>
                 </ul>
             </div>
-        </div>
         <button @click="saveData()">Save Workout</button>
         <button @click="testLog()">Test</button>
     </div>
@@ -34,6 +35,7 @@ export default {
             //query needs to be run on mount to pull full list of potential muscle groups
             muscleGroups: ['Chest', 'Back', 'Shoulders'],
             muscleGroupSelected: false,
+            selectedExercise: '',
 
             //once muscleGroup is selected from dropdown, all potential exercises need to be gathered for that exercise //@change also needs to call a function to re-pull exercise list
             muscleGroupExercises: ['Barbell Bench Press', 'Cable Fly'],
@@ -71,12 +73,22 @@ export default {
 
         },
 
-
         addExercise() {
             this.draftExerciseList.push(this.draftExercise)
+            this.draftExercise = { 
+                exerciseName: '',
+                targetSets: 0,
+                targetSetReps: [
+
+                ]
+            }
         },
 
+        //when user saves the exercise, update pre-created draft exercise structure with completed values
+        updateDraftExercise(draftExercise, selectedExercise){
+            draftExercise.exerciseName = selectedExercise
 
+        },
 
         testLog() {
             console.log("saved workout title: " + this.finalWorkout.workoutTitle)
