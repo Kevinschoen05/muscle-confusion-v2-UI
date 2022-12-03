@@ -4,26 +4,25 @@
         <div class="title-input">
             <input type="text" placeholder="Enter Workout Title" v-model="draftWorkoutTitle" @focusout="saveData()">
         </div>
+
+        <div class="workoutbuilder">
+            <label for="muscle-group">Select Muscle Group</label>
+            <select id="muscle-group" name="muscle-group" @change="this.muscleGroupSelected = true">
+                <option value="Select Muscle Group" selected disabled hidden> Select Muscle Group</option>
+                <option v-for="muscleGroup in muscleGroups" :key="muscleGroup" :value="muscleGroup">
+                    {{ muscleGroup }}</option>
+            </select>
+            <select v-show="muscleGroupSelected" id="exercise-selector" name="exercise-selector"
+                v-model="selectedExercise">
+                <option value="Select Exercise" selected disabled hidden> Select Exercise</option>
+                <option v-for="muscleGroupExercise  in muscleGroupExercises" :key="muscleGroupExercise"
+                    :value="muscleGroupExercise">{{ muscleGroupExercise }}</option>
+            </select>
+            <button @click="updateDraftExercise()">Save Exercise</button>
+            <button @click="saveData()">Save Workout</button>
+        </div>
         <div class="exercises">
-                <button @click="addExercise()">Add Exercise</button> 
-                <ul>
-                    <li v-for="exercise in draftExerciseList" :key="exercise">
-                        <label for="muscle-group">Select Muscle Group</label>
-                        <select id="muscle-group" name="muscle-group" @change="this.muscleGroupSelected = true">
-                            <option value="Select Muscle Group" selected disabled hidden> Select Muscle Group</option>
-                            <option v-for="muscleGroup in muscleGroups" :key="muscleGroup" :value="muscleGroup">
-                                {{ muscleGroup }}</option>
-                        </select>
-                        <select v-show="muscleGroupSelected" id="exercise-selector" name="exercise-selector" v-model="selectedExercise">
-                            <option value="Select Exercise" selected disabled hidden> Select Exercise</option>
-                            <option v-for="muscleGroupExercise  in muscleGroupExercises" :key="muscleGroupExercise"
-                                :value="muscleGroupExercise">{{ muscleGroupExercise }}</option>
-                        </select>
-                        <button @click="updateDraftExercise(exercise, this.selectedExercise)">Save Exercise</button> 
-                    </li>
-                </ul>
-            </div>
-        <button @click="saveData()">Save Workout</button>
+        </div>
         <button @click="testLog()">Test</button>
     </div>
 </template>
@@ -41,7 +40,6 @@ export default {
             muscleGroupExercises: ['Barbell Bench Press', 'Cable Fly'],
 
             draftWorkoutTitle: '',
-            draftExerciseList: [],
             draftExercise: {
                 exerciseName: '',
                 targetSets: 0,
@@ -69,30 +67,26 @@ export default {
     methods: {
         saveData() {
             this.finalWorkout.workoutTitle = this.draftWorkoutTitle
-            this.finalWorkout.exercises.push(this.draftExerciseList)
-
-        },
-
-        addExercise() {
-            this.draftExerciseList.push(this.draftExercise)
-            this.draftExercise = { 
+            this.finalWorkout.exercises.push(this.draftExercise)
+            this.draftExercise = {
                 exerciseName: '',
                 targetSets: 0,
                 targetSetReps: [
 
                 ]
             }
+
         },
 
         //when user saves the exercise, update pre-created draft exercise structure with completed values
-        updateDraftExercise(draftExercise, selectedExercise){
-            draftExercise.exerciseName = selectedExercise
+        updateDraftExercise() {
+            this.draftExercise.exerciseName = this.selectedExercise
 
         },
 
         testLog() {
             console.log("saved workout title: " + this.finalWorkout.workoutTitle)
-            console.log(this.draftExerciseList)
+            console.log(this.draftExercise)
             console.log("final workout: " + this.finalWorkout)
         }
     }
