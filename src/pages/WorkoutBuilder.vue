@@ -2,7 +2,7 @@
     <div class="container">
         <h1>Create New Workout</h1>
         <div class="title-input">
-            <input type="text" placeholder="Enter Workout Title" v-model="draftWorkoutTitle" @focusout="saveData()">
+            <input type="text" placeholder="Enter Workout Title" v-model="draftWorkoutTitle">
         </div>
 
         <div class="workoutbuilder">
@@ -12,12 +12,29 @@
                 <option v-for="muscleGroup in muscleGroups" :key="muscleGroup" :value="muscleGroup">
                     {{ muscleGroup }}</option>
             </select>
-            <select v-show="muscleGroupSelected" id="exercise-selector" name="exercise-selector"
-                v-model="selectedExercise">
-                <option value="Select Exercise" selected disabled hidden> Select Exercise</option>
-                <option v-for="muscleGroupExercise  in muscleGroupExercises" :key="muscleGroupExercise"
-                    :value="muscleGroupExercise">{{ muscleGroupExercise }}</option>
-            </select>
+            <br>
+            <div class="exercise-selector" v-show="muscleGroupSelected">
+                <label for="exercise-selector">Select Exercise</label>
+                <select id="exercise-selector" name="exercise-selector" v-model="selectedExercise">
+                    <option value="Select Exercise" selected disabled hidden> Select Exercise</option>
+                    <option v-for="muscleGroupExercise  in muscleGroupExercises" :key="muscleGroupExercise"
+                        :value="muscleGroupExercise">{{ muscleGroupExercise }}</option>
+                </select>
+            </div>
+            <br>
+            <div class='set-reps'>
+                <label for="set-number">Number of Sets</label>
+                <input type="number" name="set-number" v-model="draftExercise.targetSets" @focusout="generateSets()" >
+                <br>
+                <ul class="exercise-sets">
+                    <li v-for="set in draftExercise.targetSetReps" :key="set">
+                        <label for="set-rep-number">Reps: </label>
+                        <input type="number" name="set-rep-number" v-model="set.reps">
+                    </li>
+                </ul>
+            </div>
+
+            <br>
             <button @click="updateDraftExercise()">Save Exercise</button>
             <button @click="saveData()">Save Workout</button>
         </div>
@@ -50,21 +67,17 @@ export default {
 
 
             finalWorkout: {
-                workoutTitle: '',
-                exercises: [
-                    {
-                        exerciseName: '',
-                        targetSets: 0,
-                        targetSetReps: [
-
-                        ]
-                    }
-                ]
+                exercises: []
             }
 
         }
     },
     methods: {
+        generateSets() {
+            for(let i = 0; i < this.draftExercise.targetSets; i++)
+            this.draftExercise.targetSetReps.push({'reps': 0 , 'weight': 0})
+        },
+
         saveData() {
             this.finalWorkout.workoutTitle = this.draftWorkoutTitle
             this.finalWorkout.exercises.push(this.draftExercise)
@@ -75,19 +88,21 @@ export default {
 
                 ]
             }
-
+            console.log(this.finalWorkout)
         },
 
         //when user saves the exercise, update pre-created draft exercise structure with completed values
         updateDraftExercise() {
             this.draftExercise.exerciseName = this.selectedExercise
+            console.log(this.draftExercise.targetSets)
+            console.log(this.draftExercise.targetSetReps)
 
         },
 
         testLog() {
             console.log("saved workout title: " + this.finalWorkout.workoutTitle)
             console.log(this.draftExercise)
-            console.log("final workout: " + this.finalWorkout)
+            console.log("final workout: " + this.finalWorkout.exercises[1].exerciseName)
         }
     }
 }
