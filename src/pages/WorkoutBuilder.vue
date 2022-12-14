@@ -5,7 +5,7 @@
             <input type="text" placeholder="Enter Workout Title" v-model="draftWorkoutTitle">
         </div>
 
-        <div class="workoutbuilder">
+        <div class="workoutBuilder">
             <label for="muscle-group">Select Muscle Group</label>
             <select id="muscle-group" name="muscle-group" @change="this.muscleGroupSelected = true">
                 <option value="Select Muscle Group" selected disabled hidden> Select Muscle Group</option>
@@ -36,9 +36,17 @@
 
             <br>
             <button @click="updateDraftExercise()">Save Exercise</button>
-            <button @click="saveData()">Save Workout</button>
-        </div>
-        <div class="exercises">
+                </div>
+        <div class="finalWorkout">
+            <h1>{{finalWorkout.workoutTitle}}</h1>
+            <div class="finalWorkoutExercise" v-for="exercise in finalWorkout.exercises" :key="exercise">
+                <p>{{exercise.exerciseName}}</p>
+                <ul>
+                    <li v-for="set in exercise.targetSetReps" :key="set">
+                        <p>Reps:{{set.reps}}</p>
+                    </li>
+                </ul>
+            </div>
         </div>
         <button @click="testLog()">Test</button>
     </div>
@@ -96,7 +104,7 @@ export default {
             this.draftExercise.exerciseName = this.selectedExercise
             console.log(this.draftExercise.targetSets)
             console.log(this.draftExercise.targetSetReps)
-
+            this.saveData()
         },
 
         testLog() {
@@ -108,11 +116,16 @@ export default {
 }
 
 
-//TODO - Figure out once muscle group and exercises are selected, how to update draft exercise array with the data. the draft exercise object is created
-// with the 'Add Exercise' button, but it is blank - when the values are selected, this object needs to be updated before the draft exercise list is pushed to the final workout
-// array
+//TODO - add button to the final workout div to 'complete workout' and trigger POST to API call
+// 
 
 </script>
 <style scoped>
+
+.finalWorkoutExercise {
+    width: 100px;
+    height: 150px;
+    background-color: blanchedalmond;
+}
 
 </style>
