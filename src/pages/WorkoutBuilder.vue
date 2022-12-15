@@ -47,11 +47,14 @@
                     </li>
                 </ul>
             </div>
+            <button @click="saveFinalWorkout()">Save Workout</button>
         </div>
         <button @click="testLog()">Test</button>
     </div>
 </template>
 <script>
+import API from "../api";
+
 export default {
     data() {
         return {
@@ -105,6 +108,10 @@ export default {
             console.log(this.draftExercise.targetSets)
             console.log(this.draftExercise.targetSetReps)
             this.saveData()
+        },
+
+       async saveFinalWorkout(){
+         await API.addWorkout(this.finalWorkout);
         },
 
         testLog() {
