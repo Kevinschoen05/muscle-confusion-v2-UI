@@ -17,7 +17,7 @@
                     <Dropdown class="field col" v-model="selectedMuscleGroup" :options="muscleGroups"
                         placeholder="Select Muscle Group" @change="this.muscleGroupSelected = true" />
                     <div class="exercise-selector field col" v-show="muscleGroupSelected">
-                        <Dropdown v-model="selectedExercise" :options="muscleGroupExercises"
+                        <Dropdown v-model="selectedExercise" :options="muscleGroupExercises" optionLabel="exerciseName"
                             placeholder="Select Exercise" @change="this.muscleGroupSelected = true" />
                     </div>
                     <div class="surface-border border-top-1 opacity-50 mb-3 col-12"></div>
@@ -25,7 +25,7 @@
                     <div class='set-reps field mb-4 col-12'>
                         <label for="set-number" class="font-medium text-900">Number of Sets</label>
                         <InputNumber id="set-number" v-model="draftExercise.targetSets" @focusout="generateSets()"
-                            @keydown="generateSets()" :step="1" showButtons />
+                            :step="1" showButtons />
                         <ul class="exercise-sets">
                             <li v-for="set in draftExercise.targetSetReps" :key="set">
                                 <label for="set-rep-number"> Reps: </label>
@@ -41,17 +41,28 @@
             </div>
         </div>
         <Divider layout="vertical" />
-        <div class="finalWorkout">
-            <h1>{{ finalWorkout.workoutTitle }}</h1>
-            <div class="finalWorkoutExercise" v-for="exercise in finalWorkout.exercises" :key="exercise">
-                <p>{{ exercise.exerciseName }}</p>
-                <ul>
-                    <li v-for="set in exercise.targetSetReps" :key="set">
-                        <p>Reps:{{ set.reps }}</p>
-                    </li>
-                </ul>
+
+        <div class="surface-card p-4 shadow-2 border-round">
+            <div class="font-medium text-3xl text-900 mb-3" v-if="draftWorkoutTitle">{{ draftWorkoutTitle }}</div>
+            <div class="font-medium text-3xl text-900 mb-3" v-else>Untitled Workout</div>
+            <div class="surface-border border-top-1 opacity-50 mb-3 col-12"></div>
+            <Accordion>
+                <AccordionTab v-for="exercise in finalWorkout.exercises" :key="exercise">
+                    <template #header>
+                        <p>{{ exercise.exerciseName }}</p>
+                    </template>
+
+                    <ul class="finalWorkoutSetReps">
+                        <li v-for="set in exercise.targetSetReps" :key="set">
+                            <p>Reps: {{ set.reps }}</p>
+                        </li>
+                    </ul>
+                </AccordionTab>
+            </Accordion>
+            <div class="surface-border border-top-1 opacity-50 mb-3 col-12" v-if="finalWorkout.exercises.length > 0">
             </div>
-            <Button label="Save Workout" @click="saveFinalWorkout()" />
+            <Button v-if="finalWorkout.exercises.length > 0" label="Save Workout" class="w-auto mt-3"
+                @click="saveFinalWorkout()"></Button>
         </div>
     </div>
 </template>
@@ -69,11 +80,29 @@ export default {
             selectedExercise: '',
 
             //once muscleGroup is selected from dropdown, all potential exercises need to be gathered for that exercise //@change also needs to call a function to re-pull exercise list
-            muscleGroupExercises: ['Barbell Bench Press', 'Cable Fly'],
+            muscleGroupExercises: [{
+                exerciseName: 'Barbell Bench Press',
+                primaryMuscleGroups: 'Chest',
+                secondaryMuscleGroups: ['Triceps', 'Biceps', 'Shoulders']
+            },
+            {
+                exerciseName: 'Cable Fly',
+                primaryMuscleGroups: 'Chest',
+                secondaryMuscleGroups: ['Triceps', 'Biceps', 'Shoulders']
+            },
+            {
+                exerciseName: 'Deadlift',
+                primaryMuscleGroups: 'Legs',
+                secondaryMuscleGroups: ['Back', 'Biceps', 'Shoulders']
+            },
+
+            ],
 
             draftWorkoutTitle: '',
             draftExercise: {
                 exerciseName: '',
+                primaryMuscleGroups: '',
+                secondaryMuscleGroups: [],
                 targetSets: 0,
                 targetSetReps: [
 
@@ -108,7 +137,9 @@ export default {
 
         //when user saves the exercise, update pre-created draft exercise structure with completed values
         updateDraftExercise() {
-            this.draftExercise.exerciseName = this.selectedExercise
+            this.draftExercise.exerciseName = this.selectedExercise.exerciseName
+            this.draftExercise.primaryMuscleGroups = this.selectedExercise.primaryMuscleGroups
+            this.draftExercise.secondaryMuscleGroups = this.selectedExercise.secondaryMuscleGroups
             console.log(this.draftExercise.targetSets)
             console.log(this.draftExercise.targetSetReps)
             this.saveData()
@@ -125,10 +156,6 @@ export default {
         }
     }
 }
-
-
-//TODO - add button to the final workout div to 'complete workout' and trigger POST to API call
-// 
 
 </script>
 <style scoped>
@@ -150,14 +177,12 @@ export default {
     margin-bottom: 1rem;
 }
 
-.finalWorkout {
-    width: 100%;
+.finalWorkoutSetReps {
+    list-style: none;
+    margin: 1rem;
 }
 
-
-.finalWorkoutExercise {
-    width: 100px;
-    height: 150px;
-    background-color: blanchedalmond;
+.finalWorkout {
+    width: 100%;
 }
 </style>

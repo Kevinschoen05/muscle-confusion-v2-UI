@@ -8,7 +8,7 @@ import './assets/app.css'
 
 
 //primevue theme, core css, and icons
-import 'primevue/resources/themes/lara-light-indigo/theme.css'
+import 'primevue/resources/themes/lara-light-blue/theme.css'
 import 'primevue/resources/primevue.min.css'
 import 'primeicons/primeicons.css' 
 //Primeblocks
@@ -22,7 +22,9 @@ import Toast from 'primevue/toast';
 import Dropdown from 'primevue/dropdown';
 import InputNumber from 'primevue/inputnumber';
 import Divider from 'primevue/divider'
-
+import Chip from 'primevue/chip'
+import Accordion from 'primevue/accordion';
+import AccordionTab from 'primevue/accordiontab';
 
 
 const app = createApp(App);
@@ -37,5 +39,8 @@ app.component('InputText', InputText)
 app.component('InputNumber', InputNumber)
 app.component('Toast', Toast)
 app.component('Divider', Divider)
+app.component('Chip', Chip)
+app.component('Accordion', Accordion)
+app.component('AccordionTab', AccordionTab)
 
 app.mount('#app')

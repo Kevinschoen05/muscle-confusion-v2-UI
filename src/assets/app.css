@@ -2,3 +2,10 @@ body {
     font-family: var(--font-family);
     color: var(--text-color);
 }
+
+.p-accordion-header, .p-accordion-header-link, .p-accordion {
+    background-color: var(--primary-color) !important;
+    background : var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    color: white !important
+}	
