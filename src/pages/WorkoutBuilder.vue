@@ -2,31 +2,45 @@
     <div class="container">
         <div class="workoutBuilder">
             <h1>Create New Workout</h1>
-            <div class="title-input">
-                <span class="p-float-label">
-                    <InputText id="workout-title" type="text" v-model="draftWorkoutTitle" />
-                    <label for="workout-title">Enter Workout Title </label>
-                </span>
+            <p class="m-0 mb-4 p-0 text-600 line-height-3 mr-3">Create a new preset workout by choosing a Muscle Group
+                to focus on
+                and selecting an exercise. Set your target number of sets and reps, and repeat until your workout is
+                complete.
+            </p>
+            <div class="surface-card p-4 shadow-2 border-round">
+                <div class="grid formgrid p-fluid">
+                    <div class="field mb-4 col-12">
+                        <label for="workout-title" class="font-medium text-900">Enter Workout Title</label>
+                        <InputText id="workout-title" type="text" v-model="draftWorkoutTitle" />
+                    </div>
+                    <div class="surface-border border-top-1 opacity-50 mb-3 col-12"></div>
+                    <Dropdown class="field col" v-model="selectedMuscleGroup" :options="muscleGroups"
+                        placeholder="Select Muscle Group" @change="this.muscleGroupSelected = true" />
+                    <div class="exercise-selector field col" v-show="muscleGroupSelected">
+                        <Dropdown v-model="selectedExercise" :options="muscleGroupExercises"
+                            placeholder="Select Exercise" @change="this.muscleGroupSelected = true" />
+                    </div>
+                    <div class="surface-border border-top-1 opacity-50 mb-3 col-12"></div>
+                    <br>
+                    <div class='set-reps field mb-4 col-12'>
+                        <label for="set-number" class="font-medium text-900">Number of Sets</label>
+                        <InputNumber id="set-number" v-model="draftExercise.targetSets" @focusout="generateSets()"
+                            @keydown="generateSets()" :step="1" showButtons />
+                        <ul class="exercise-sets">
+                            <li v-for="set in draftExercise.targetSetReps" :key="set">
+                                <label for="set-rep-number"> Reps: </label>
+                                <InputNumber id="set-rep-number" v-model="set.reps" :step="1" showButtons />
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="surface-border border-top-1 opacity-50 mb-3 col-12"></div>
+                    <div class="col-12">
+                        <Button label="Save Exercise" class="w-auto mt-3" @click="updateDraftExercise()"></Button>
+                    </div>
+                </div>
             </div>
-            <Dropdown v-model="selectedMuscleGroup" :options="muscleGroups" placeholder="Select Muscle Group"
-                @change="this.muscleGroupSelected = true" />
-            <div class="exercise-selector" v-show="muscleGroupSelected">
-                <Dropdown v-model="selectedExercise" :options="muscleGroupExercises" placeholder="Select Exercise"
-                    @change="this.muscleGroupSelected = true" />
-            </div>
-            <br>
-            <div class='set-reps'>
-                <label for="set-number">Number of Sets</label>
-                <InputNumber id="set-number" v-model="draftExercise.targetSets" @focusout="generateSets()" :step="1" showButtons />
-                <ul class="exercise-sets">
-                    <li v-for="set in draftExercise.targetSetReps" :key="set">
-                        <label for="set-rep-number">Reps: </label>
-                        <InputNumber id="set-rep-number" v-model="set.reps" :step="1" showButtons />
-                    </li>
-                </ul>
-            </div>
-            <Button label="Save Exercise" @click="updateDraftExercise()" />
         </div>
+        <Divider layout="vertical" />
         <div class="finalWorkout">
             <h1>{{ finalWorkout.workoutTitle }}</h1>
             <div class="finalWorkoutExercise" v-for="exercise in finalWorkout.exercises" :key="exercise">
@@ -122,19 +136,24 @@ export default {
     display: grid;
     grid-auto-columns: 1fr;
     grid-auto-flow: column;
+    background-color: var(--surface-ground);
+    padding: 3rem
 }
 
-.workoutBuilder {
-    width: 100%
+.exercise-sets {
+    list-style: none;
+    padding-left: 1rem;
+}
+
+#set-rep-number {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
 }
 
 .finalWorkout {
     width: 100%;
 }
 
-#workout-title {
-    width: 80%
-}
 
 .finalWorkoutExercise {
     width: 100px;

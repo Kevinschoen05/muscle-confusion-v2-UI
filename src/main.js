@@ -6,19 +6,6 @@ import router from './router'
 //global stylesheet to use primevue fonts etc
 import './assets/app.css'
 
-//primevue components
-import InputText from 'primevue/inputtext';
-import Button from 'primevue/button';
-import ToastService from 'primevue/toastservice';
-import Toast from 'primevue/toast';
-import Dropdown from 'primevue/dropdown';
-import InputNumber from 'primevue/inputnumber';
-
-
-
-
-
-
 
 //primevue theme, core css, and icons
 import 'primevue/resources/themes/lara-light-indigo/theme.css'
@@ -27,6 +14,14 @@ import 'primeicons/primeicons.css'
 //Primeblocks
 import "primeflex/primeflex.css";
 
+//primevue components
+import InputText from 'primevue/inputtext';
+import Button from 'primevue/button';
+import ToastService from 'primevue/toastservice';
+import Toast from 'primevue/toast';
+import Dropdown from 'primevue/dropdown';
+import InputNumber from 'primevue/inputnumber';
+import Divider from 'primevue/divider'
 
 
 
@@ -40,6 +35,7 @@ app.component('Dropdown', Dropdown)
 app.component('Button', Button)
 app.component('InputText', InputText)
 app.component('InputNumber', InputNumber)
-app.component('Toas', Toast)
+app.component('Toast', Toast)
+app.component('Divider', Divider)
 
 app.mount('#app')
