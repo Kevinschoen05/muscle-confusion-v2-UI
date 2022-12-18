@@ -41,6 +41,7 @@
             </div>
         </div>
         <Divider layout="vertical" />
+        <Toast />
         <div class="surface-card p-4 shadow-2 border-round">
             <div class="font-medium text-3xl text-900 mb-3" v-if="draftWorkoutTitle">{{ draftWorkoutTitle }}</div>
             <div class="font-medium text-3xl text-900 mb-3" v-else>Untitled Workout</div>
@@ -111,6 +112,11 @@ export default {
         }
     },
     methods: {
+
+        showSuccess() {
+            this.$toast.add({severity:'success', summary: 'Workout Added', detail:'Access your workouts in your dashboard', life: 5000});
+        },
+
         generateSets() {
             for (let i = 1; i < this.draftExercise.targetSets + 1; i++)
                 this.draftExercise.targetSetReps.push({ 'index': i, 'reps': 0, 'weight': 0 })
@@ -147,6 +153,7 @@ export default {
 
         async saveFinalWorkout() {
             await API.addWorkout(this.finalWorkout);
+            this.showSuccess();
         },
     }
 }
@@ -154,10 +161,11 @@ export default {
 </script>
 <style scoped>
 .container {
+    height: 100vh;
     display: grid;
+    background-color: var(--surface-ground);
     grid-auto-columns: 1fr;
     grid-auto-flow: column;
-    background-color: var(--surface-ground);
     padding: 3rem
 }
 
