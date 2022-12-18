@@ -15,7 +15,7 @@
                     </div>
                     <div class="surface-border border-top-1 opacity-50 mb-3 col-12"></div>
                     <Dropdown class="field col" v-model="selectedMuscleGroup" :options="muscleGroups"
-                        placeholder="Select Muscle Group" @change="this.muscleGroupSelected = true" />
+                        placeholder="Select Muscle Group" @change="this.muscleGroupSelected = true, this.getExercises(selectedMuscleGroup)" />
                     <div class="exercise-selector field col" v-show="muscleGroupSelected">
                         <Dropdown v-model="selectedExercise" :options="muscleGroupExercises" optionLabel="exerciseName"
                             placeholder="Select Exercise" @change="this.muscleGroupSelected = true" />
@@ -88,21 +88,7 @@ export default {
             selectedExercise: '',
 
             //once muscleGroup is selected from dropdown, all potential exercises need to be gathered for that exercise //@change also needs to call a function to re-pull exercise list
-            muscleGroupExercises: [{
-                exerciseName: 'Barbell Bench Press',
-                primaryMuscleGroup: 'Chest',
-                secondaryMuscleGroups: ['Triceps', 'Biceps', 'Shoulders']
-            },
-            {
-                exerciseName: 'Cable Fly',
-                primaryMuscleGroup: 'Chest',
-                secondaryMuscleGroups: ['Triceps', 'Biceps', 'Shoulders']
-            },
-            {
-                exerciseName: 'Deadlift',
-                primaryMuscleGroup: 'Legs',
-                secondaryMuscleGroups: ['Back', 'Biceps', 'Shoulders']
-            },
+            muscleGroupExercises: [
 
             ],
 
@@ -155,6 +141,10 @@ export default {
 
 
         //API CALLS
+        async getExercises(muscleGroup){
+            this.muscleGroupExercises = await API.getExercisesByMuscleGroup(muscleGroup)
+        },
+
         async saveFinalWorkout() {
             await API.addWorkout(this.finalWorkout);
         },
