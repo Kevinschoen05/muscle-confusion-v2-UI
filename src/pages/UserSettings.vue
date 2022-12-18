@@ -11,9 +11,19 @@
         <section class="preset-workouts">
             <h1 class="settings-title">Customize Preset Workouts</h1>
             <p class="settings-subtitle">Choose Workout to Edit</p>
-            <table v-for='preset in presets' :key="preset.workout"> 
+            <table v-for='preset in presets' :key="preset.workout">
                 <preset-workouts :WorkoutTitle="preset.workout"></preset-workouts>
             </table>
+        </section>
+
+        <section id="primevue">
+
+            <span class="p-float-label">
+                <InputText id="username" type="text" v-model="value" />
+                <label for="username">Username</label>
+            </span>
+            <Button label="Submit" icon="pi pi-check" iconPos="right" />
+
         </section>
     </div>
 </template>
@@ -22,11 +32,11 @@
 import PresetWorkouts from '../components/PresetWorkouts.vue'
 
 export default {
-    components : {
+    components: {
         PresetWorkouts
-    }, 
+    },
 
-    data () {
+    data() {
         return {
             presets: [
                 {
@@ -34,7 +44,7 @@ export default {
                     exercises: ['barbell bench', 'cable fly,', 'pushups']
                 },
                 {
-                workout: 'shoulders',
+                    workout: 'shoulders',
                     exercises: ['barbell press', 'cable lateral raise,', 'cable front raise']
                 }
             ]
@@ -55,7 +65,8 @@ body {
     justify-content: space-around;
 }
 
-.settings-header, .preset-workouts {
+.settings-header,
+.preset-workouts {
     background-color: #fff;
     width: 30%;
     margin-top: 5em;
@@ -81,5 +92,9 @@ body {
     margin-left: 4em;
 
 
+}
+
+#primevue {
+    margin-top: 2rem;
 }
 </style>
