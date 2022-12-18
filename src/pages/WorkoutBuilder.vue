@@ -41,7 +41,6 @@
             </div>
         </div>
         <Divider layout="vertical" />
-
         <div class="surface-card p-4 shadow-2 border-round">
             <div class="font-medium text-3xl text-900 mb-3" v-if="draftWorkoutTitle">{{ draftWorkoutTitle }}</div>
             <div class="font-medium text-3xl text-900 mb-3" v-else>Untitled Workout</div>
@@ -51,12 +50,21 @@
                     <template #header>
                         <p>{{ exercise.exerciseName }}</p>
                     </template>
+                    <div class="chip-row">
+                        <Chip class="mr-2 mb-2 custom-chip-primary">
+                            {{ exercise.primaryMuscleGroup }}
+                        </Chip>
+                        <Chip v-for="musclegroup in exercise.secondaryMuscleGroups" :key="musclegroup"
+                            class="mr-2 mb-2 custom-chip-secondary">
+                            {{ musclegroup }}
+                        </Chip>
+                    </div>
+                    <DataTable :value="exercise.targetSetReps">
+                        <Column field="index" header="Sets"></Column>
+                        <Column field="reps" header="Reps"></Column>
+                    </DataTable>
 
-                    <ul class="finalWorkoutSetReps">
-                        <li v-for="set in exercise.targetSetReps" :key="set">
-                            <p>Reps: {{ set.reps }}</p>
-                        </li>
-                    </ul>
+
                 </AccordionTab>
             </Accordion>
             <div class="surface-border border-top-1 opacity-50 mb-3 col-12" v-if="finalWorkout.exercises.length > 0">
@@ -82,17 +90,17 @@ export default {
             //once muscleGroup is selected from dropdown, all potential exercises need to be gathered for that exercise //@change also needs to call a function to re-pull exercise list
             muscleGroupExercises: [{
                 exerciseName: 'Barbell Bench Press',
-                primaryMuscleGroups: 'Chest',
+                primaryMuscleGroup: 'Chest',
                 secondaryMuscleGroups: ['Triceps', 'Biceps', 'Shoulders']
             },
             {
                 exerciseName: 'Cable Fly',
-                primaryMuscleGroups: 'Chest',
+                primaryMuscleGroup: 'Chest',
                 secondaryMuscleGroups: ['Triceps', 'Biceps', 'Shoulders']
             },
             {
                 exerciseName: 'Deadlift',
-                primaryMuscleGroups: 'Legs',
+                primaryMuscleGroup: 'Legs',
                 secondaryMuscleGroups: ['Back', 'Biceps', 'Shoulders']
             },
 
@@ -101,7 +109,7 @@ export default {
             draftWorkoutTitle: '',
             draftExercise: {
                 exerciseName: '',
-                primaryMuscleGroups: '',
+                primaryMuscleGroup: '',
                 secondaryMuscleGroups: [],
                 targetSets: 0,
                 targetSetReps: [
@@ -118,8 +126,8 @@ export default {
     },
     methods: {
         generateSets() {
-            for (let i = 0; i < this.draftExercise.targetSets; i++)
-                this.draftExercise.targetSetReps.push({ 'reps': 0, 'weight': 0 })
+            for (let i = 1; i < this.draftExercise.targetSets + 1; i++)
+                this.draftExercise.targetSetReps.push({ 'index': i, 'reps': 0, 'weight': 0 })
         },
 
         saveData() {
@@ -138,22 +146,18 @@ export default {
         //when user saves the exercise, update pre-created draft exercise structure with completed values
         updateDraftExercise() {
             this.draftExercise.exerciseName = this.selectedExercise.exerciseName
-            this.draftExercise.primaryMuscleGroups = this.selectedExercise.primaryMuscleGroups
+            this.draftExercise.primaryMuscleGroup = this.selectedExercise.primaryMuscleGroup
             this.draftExercise.secondaryMuscleGroups = this.selectedExercise.secondaryMuscleGroups
             console.log(this.draftExercise.targetSets)
             console.log(this.draftExercise.targetSetReps)
             this.saveData()
         },
 
+
+        //API CALLS
         async saveFinalWorkout() {
             await API.addWorkout(this.finalWorkout);
         },
-
-        testLog() {
-            console.log("saved workout title: " + this.finalWorkout.workoutTitle)
-            console.log(this.draftExercise)
-            console.log("final workout: " + this.finalWorkout.exercises[1].exerciseName)
-        }
     }
 }
 
@@ -179,10 +183,21 @@ export default {
 
 .finalWorkoutSetReps {
     list-style: none;
-    margin: 1rem;
+    column-count: 2;
 }
 
-.finalWorkout {
-    width: 100%;
+/* CHIPS */
+.p-chip.custom-chip-primary {
+    background: var(--primary-color);
+    color: var(--primary-color-text);
+    line-height: 1.5;
+    margin-top: 0.375rem;
+    margin-bottom: 0.375rem;
+}
+
+.p-chip.custom-chip-secondary {
+    line-height: 1.5;
+    margin-top: 0.375rem;
+    margin-bottom: 0.375rem;
 }
 </style>

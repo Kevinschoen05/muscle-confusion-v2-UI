@@ -25,6 +25,9 @@ import Divider from 'primevue/divider'
 import Chip from 'primevue/chip'
 import Accordion from 'primevue/accordion';
 import AccordionTab from 'primevue/accordiontab';
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
+import Row from 'primevue/row'
 
 
 const app = createApp(App);
@@ -42,5 +45,8 @@ app.component('Divider', Divider)
 app.component('Chip', Chip)
 app.component('Accordion', Accordion)
 app.component('AccordionTab', AccordionTab)
+app.component('DataTable', DataTable)
+app.component('Column', Column)
+app.component('Row', Row)
 
 app.mount('#app')
