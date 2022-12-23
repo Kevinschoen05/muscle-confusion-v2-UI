@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../pages/Home.vue'
 
+
 const routes = [
   {
     path: '/',
@@ -9,12 +10,25 @@ const routes = [
   },
   {
     path: '/settings',
+    name: 'user-settings',
     component: () => import('../pages/UserSettings.vue')
   },
   {
     path: '/workoutbuilder',
+    name: 'workout-builder',
     component: () => import('../pages/WorkoutBuilder.vue')
   },
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import('../pages/Login.vue')
+  },
+  {
+    path: '/signup',
+    name: 'signup',
+    component: () => import ('../pages/Signup.vue')
+  }
+
 
 ]
 

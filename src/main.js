@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import PrimeVue from 'primevue/config';
 import router from './router'
+import store from './store/index'
 
 //global stylesheet to use primevue fonts etc
 import './assets/app.css'
@@ -32,6 +33,7 @@ import Row from 'primevue/row'
 
 const app = createApp(App);
 app.use(router)
+app.use(store)
 app.use(PrimeVue)
 app.use(ToastService);
 
