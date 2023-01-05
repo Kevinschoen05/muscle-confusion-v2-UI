@@ -3,7 +3,7 @@
     <header>
     </header>
     <body>
-      <button class="primary-button" @click="$router.push('settings')">User Settings</button>
+      <button class="primary-button" @click="$router.push('workoutBuilder')">Workout Builder</button>
       <section id="hero">
         <workout-timeline></workout-timeline>
         <div class="hero-content">
