@@ -14,12 +14,6 @@
   </template>
   
   <script>
-  import { useStore } from 'vuex'
-  import {useRouter } from 'vue-router'
-
-  const store = useStore()
-  const router = useRouter()
-  
   export default {
     data() {
         return {
@@ -32,14 +26,14 @@
     methods: {
        async handleSubmit(){
             try {
-                await store.dispatch('login', {
-                    email: this.email.value,
-                    password: this.password.value
+                await this.$store.dispatch('login', {
+                    email: this.email,
+                    password: this.password
                 })
-                router.push('/')
+                this.$router.push('/')
             }
             catch (err) {
-                this.error.value = err.message
+                this.error = err.message
             }
         }
     }
