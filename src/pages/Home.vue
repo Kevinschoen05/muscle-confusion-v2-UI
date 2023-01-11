@@ -3,9 +3,7 @@
     <header>
     </header>
     <body>
-      <button class="primary-button" @click="$router.push('settings')">User Settings</button>
       <section id="hero">
-        <workout-timeline></workout-timeline>
         <div class="hero-content">
           <div class="heroText">
             <h1 id="home-h">Lorem ipsum, dolor sit amet consectetur adipisicing elit </h1>
@@ -19,17 +17,14 @@
           <img aria-hidden="true" decoding="async" src="../assets/hero-background.jpeg">
         </picture>
       </section>
-      <div class="test">
-        <exercise-card></exercise-card>
-      </div>
+      <button class="primary-button" @click="$router.push('workoutBuilder')">Workout Builder</button>
+      <button class="primary-button" @click="$router.push('settings')">User Settings</button>
     </body>
   </div>
 </template>
 
 <script>
-import WorkoutTimeline from '../components/Timeline.vue'
 import WorkoutSummary from '../components/WorkoutSummary.vue';
-import ExerciseCard from '@/components/ExerciseCard.vue';
 export default {
   name: 'HomePage',
 
@@ -39,9 +34,7 @@ export default {
     }
   },
   components: {
-    WorkoutTimeline,
     WorkoutSummary,
-    ExerciseCard
   },
   props: {
     msg: String

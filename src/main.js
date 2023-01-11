@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import PrimeVue from 'primevue/config';
 import router from './router'
+import store from './store/index'
 
 //global stylesheet to use primevue fonts etc
 import './assets/app.css'
@@ -28,10 +29,12 @@ import AccordionTab from 'primevue/accordiontab';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Row from 'primevue/row'
+import Checkbox from 'primevue/checkbox'
 
 
 const app = createApp(App);
 app.use(router)
+app.use(store)
 app.use(PrimeVue)
 app.use(ToastService);
 
@@ -48,5 +51,6 @@ app.component('AccordionTab', AccordionTab)
 app.component('DataTable', DataTable)
 app.component('Column', Column)
 app.component('Row', Row)
+app.component('Checkbox', Checkbox)
 
 app.mount('#app')

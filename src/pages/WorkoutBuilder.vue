@@ -106,6 +106,7 @@ export default {
 
 
             finalWorkout: {
+                users: [],
                 exercises: []
             }
 
@@ -132,6 +133,7 @@ export default {
 
                 ]
             }
+            console.log(this.$store.state.user)
             console.log(this.finalWorkout)
         },
 
@@ -155,6 +157,9 @@ export default {
             await API.addWorkout(this.finalWorkout);
             this.showSuccess();
         },
+    },
+    mounted(){
+        this.finalWorkout.users.push(this.$store.state.user.uid)
     }
 }
 
