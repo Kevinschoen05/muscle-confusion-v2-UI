@@ -10,6 +10,7 @@ import {
 const store = createStore({
   state: {
     user: null,
+    userLoggedIn: false
   },
 
   mutations: {

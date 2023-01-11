@@ -29,6 +29,7 @@ import AccordionTab from 'primevue/accordiontab';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Row from 'primevue/row'
+import Checkbox from 'primevue/checkbox'
 
 
 const app = createApp(App);
@@ -50,5 +51,6 @@ app.component('AccordionTab', AccordionTab)
 app.component('DataTable', DataTable)
 app.component('Column', Column)
 app.component('Row', Row)
+app.component('Checkbox', Checkbox)
 
 app.mount('#app')
