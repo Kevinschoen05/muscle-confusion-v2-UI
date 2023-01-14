@@ -30,6 +30,9 @@ import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Row from 'primevue/row'
 import Checkbox from 'primevue/checkbox'
+import Ripple from 'primevue/ripple';
+import StyleClass from 'primevue/styleclass';
+
 
 
 const app = createApp(App);
@@ -37,6 +40,11 @@ app.use(router)
 app.use(store)
 app.use(PrimeVue)
 app.use(ToastService);
+app.use(PrimeVue, {ripple: true});
+
+app.directive('ripple', Ripple);
+app.directive('styleclass', StyleClass);
+
 
 
 app.component('Dropdown', Dropdown)
