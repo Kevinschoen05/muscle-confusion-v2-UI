@@ -11,25 +11,16 @@
         <section class="preset-workouts">
             <h1 class="settings-title">Customize Preset Workouts</h1>
             <p class="settings-subtitle">Choose Workout to Edit</p>
-            <table v-for='preset in presets' :key="preset.workout">
-                <preset-workouts :WorkoutTitle="preset.workout"></preset-workouts>
+            <table v-for='preset in presets' :key="preset.WorkoutTitle">
+                <preset-workouts :WorkoutTitle="preset.workoutTitle"></preset-workouts>
             </table>
-        </section>
-
-        <section id="primevue">
-
-            <span class="p-float-label">
-                <InputText id="username" type="text" v-model="value" />
-                <label for="username">Username</label>
-            </span>
-            <Button label="Submit" icon="pi pi-check" iconPos="right" />
-
         </section>
     </div>
 </template>
 
 <script>
 import PresetWorkouts from '../components/PresetWorkouts.vue'
+import API  from '../api';
 
 export default {
     components: {
@@ -39,16 +30,18 @@ export default {
     data() {
         return {
             presets: [
-                {
-                    workout: 'chest',
-                    exercises: ['barbell bench', 'cable fly,', 'pushups']
-                },
-                {
-                    workout: 'shoulders',
-                    exercises: ['barbell press', 'cable lateral raise,', 'cable front raise']
-                }
+
             ]
         }
+    },
+    methods: { 
+        async getUserPresetWorkouts(){
+          this.presets = await API.getWorkoutsByUserID(this.$store.state.user.uid)
+        }
+    }, 
+
+    mounted(){
+        this.getUserPresetWorkouts()
     }
 }
 

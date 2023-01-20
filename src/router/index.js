@@ -9,9 +9,9 @@ const routes = [
     component: Home
   },
   {
-    path: '/settings',
-    name: 'user-settings',
-    component: () => import('../pages/UserSettings.vue')
+    path: '/dashboard',
+    name: 'user-dashboard',
+    component: () => import('../pages/UserDashboard.vue')
   },
   {
     path: '/workoutbuilder',
