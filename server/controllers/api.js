@@ -6,10 +6,22 @@ module.exports = class API {
   //Workouts
   static async fetchAllWorkouts(req, res) {
     try {
-      const query  = req.query;
       const workouts = await Workout.find();
       res.status(200).json(workouts);
     } catch (err) {
+      res.status(404).json({ message: err.message });
+    }
+  }
+
+  static async fetchWorkoutbyWorkoutId (req, res) {
+    const presetWorkout = req.params.workoutID
+    try {
+      const activeWorkout = await Workout.find({
+        _id: presetWorkout
+      });
+      res.status(200).json(activeWorkout)
+    }
+    catch (err) { 
       res.status(404).json({ message: err.message });
     }
   }
@@ -25,7 +37,7 @@ module.exports = class API {
 
   //USER SPECIFIC REQUESTS
   static async fetchWorkoutsByUserId(req, res) {
-    const user = req.params.userId
+    const user = req.params.userID
     try { 
       const userWorkouts = await Workout.find({
         users: user

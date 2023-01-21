@@ -11,8 +11,8 @@ export default class API {
 
   //USER DATA
 
-  static async getWorkoutsByUserID(userId){
-    const res = await axios.get(`${workout_url}/${userId}`)
+  static async getWorkoutsByUserID(userID){
+    const res = await axios.get(`${workout_url}/users/${userID}`)
     return res.data
   }
 

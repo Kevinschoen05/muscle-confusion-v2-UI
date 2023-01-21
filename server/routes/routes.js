@@ -6,7 +6,8 @@ const API = require("../controllers/api");
 //Workouts 
 router.get("/workouts", API.fetchAllWorkouts);
 router.post("/workouts", API.addWorkout);
-router.get("/workouts/:userId", API.fetchWorkoutsByUserId)
+router.get("/workouts/users/:userID", API.fetchWorkoutsByUserId)
+router.get("/workouts/:workoutID", API.fetchWorkoutbyWorkoutId)
 
 
 //Exercises
