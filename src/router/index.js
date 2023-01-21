@@ -27,6 +27,12 @@ const routes = [
     path: '/signup',
     name: 'signup',
     component: () => import ('../pages/Signup.vue')
+  },
+  {
+    path: '/activeworkout/:workoutID',
+    name: 'active-workout',
+    component: () => import ('../pages/ActiveWorkout.vue')
+
   }
 
 
