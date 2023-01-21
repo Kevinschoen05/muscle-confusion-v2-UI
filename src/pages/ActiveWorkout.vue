@@ -19,20 +19,34 @@
         </button>
       </div>
    </section>
+   <section class="workouts">
+    <ExerciseCard v-for="exercise in presetWorkout" :key="exercise.exercises.exerciseName"></ExerciseCard>
+   </section>
     
 </template>
 
 <script>
+import API from '../api'
+import ExerciseCard from '../components/ExerciseCard.vue'
+
 export default {
+    components: {
+        ExerciseCard
+    },
     data() {
         return {
-
+            presetWorkout: {}
         }
     },
     methods: {
-
+        async getActiveWorkout(){
+            this.presetWorkout = await API.getWorkoutsByWorkoutID(this.$route.params.workoutID)
+            console.log(this.presetWorkout)
+        }
+    },
+    mounted() {
+        this.getActiveWorkout()
     }
-
 }
 
 </script>

@@ -9,6 +9,11 @@ export default class API {
     return res.data;
   }
 
+  static async getWorkoutsByWorkoutID(workoutID){
+    const res = await axios.get(`${workout_url}/${workoutID}`)
+    return res.data
+  }
+
   //USER DATA
 
   static async getWorkoutsByUserID(userID){
