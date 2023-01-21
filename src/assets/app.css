@@ -3,7 +3,7 @@ body {
     color: var(--text-color);
 }
 
-.p-accordion-header, .p-accordion-header-link, .p-accordion {
+.p-accordion-header, .p-accordion-header-link {
     background-color: var(--primary-color) !important;
     background : var(--primary-color) !important;
     border-color: var(--primary-color) !important;

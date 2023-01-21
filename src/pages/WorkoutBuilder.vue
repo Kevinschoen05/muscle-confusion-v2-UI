@@ -47,7 +47,7 @@
             <div class="font-medium text-3xl text-900 mb-3" v-else>Untitled Workout</div>
             <div class="surface-border border-top-1 opacity-50 mb-3 col-12"></div>
             <Accordion>
-                <AccordionTab v-for="exercise in finalWorkout.exercises" :key="exercise">
+                <AccordionTab  v-for="exercise in finalWorkout.exercises" :key="exercise">
                     <template #header>
                         <p>{{ exercise.exerciseName }}</p>
                     </template>
@@ -177,6 +177,10 @@ export default {
 .exercise-sets {
     list-style: none;
     padding-left: 1rem;
+}
+
+.p-accordion-tab{
+    margin-bottom: 1rem;
 }
 
 #set-rep-number {
