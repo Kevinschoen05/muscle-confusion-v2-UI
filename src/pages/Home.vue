@@ -17,8 +17,6 @@
           <img aria-hidden="true" decoding="async" src="../assets/hero-background.jpeg">
         </picture>
       </section>
-      <button class="primary-button" @click="$router.push('workoutBuilder')">Workout Builder</button>
-      <button class="primary-button" @click="$router.push('settings')">User Settings</button>
     </body>
   </div>
 </template>

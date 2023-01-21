@@ -1,77 +1,88 @@
 <template>
     <div class="container">
-        <div class="workoutBuilder">
+        <div class=" p-5 flex flex-column flex-auto">
             <h1>Create New Workout</h1>
             <p class="m-0 mb-4 p-0 text-600 line-height-3 mr-3">Create a new preset workout by choosing a Muscle Group
                 to focus on
                 and selecting an exercise. Set your target number of sets and reps, and repeat until your workout is
                 complete.
             </p>
-            <div class="surface-card p-4 shadow-2 border-round">
-                <div class="grid formgrid p-fluid">
-                    <div class="field mb-4 col-12">
-                        <label for="workout-title" class="font-medium text-900">Enter Workout Title</label>
-                        <InputText id="workout-title" type="text" v-model="draftWorkoutTitle" />
-                    </div>
-                    <div class="surface-border border-top-1 opacity-50 mb-3 col-12"></div>
-                    <Dropdown class="field col" v-model="selectedMuscleGroup" :options="muscleGroups"
-                        placeholder="Select Muscle Group" @change="this.muscleGroupSelected = true, this.getExercises(selectedMuscleGroup)" />
-                    <div class="exercise-selector field col" v-show="muscleGroupSelected">
-                        <Dropdown v-model="selectedExercise" :options="muscleGroupExercises" optionLabel="exerciseName"
-                            placeholder="Select Exercise" @change="this.muscleGroupSelected = true" />
-                    </div>
-                    <div class="surface-border border-top-1 opacity-50 mb-3 col-12"></div>
-                    <br>
-                    <div class='set-reps field mb-4 col-12'>
-                        <label for="set-number" class="font-medium text-900">Number of Sets</label>
-                        <InputNumber id="set-number" v-model="draftExercise.targetSets" @focusout="generateSets()"
-                            :step="1" showButtons />
-                        <ul class="exercise-sets">
-                            <li v-for="set in draftExercise.targetSetReps" :key="set">
-                                <label for="set-rep-number"> Reps: </label>
-                                <InputNumber id="set-rep-number" v-model="set.reps" :step="1" showButtons />
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="surface-border border-top-1 opacity-50 mb-3 col-12"></div>
-                    <div class="col-12">
-                        <Button label="Save Exercise" class="w-auto mt-3" @click="updateDraftExercise()"></Button>
+            <div class="grid">
+                <div class="col-12 lg:col-6">
+                    <div class="surface-card shadow-2 border-round p-4 h-full">
+                        <div class="grid formgrid p-fluid">
+                            <div class="field mb-4 col-12">
+                                <label for="workout-title" class="font-medium text-900">Enter Workout Title</label>
+                                <InputText id="workout-title" type="text" v-model="draftWorkoutTitle" />
+                            </div>
+                            <div class="surface-border border-top-1 opacity-50 mb-3 col-12"></div>
+                            <Dropdown class="field col" v-model="selectedMuscleGroup" :options="muscleGroups"
+                                placeholder="Select Muscle Group"
+                                @change="this.muscleGroupSelected = true, this.getExercises(selectedMuscleGroup)" />
+                            <div class="exercise-selector field col" v-show="muscleGroupSelected">
+                                <Dropdown v-model="selectedExercise" :options="muscleGroupExercises"
+                                    optionLabel="exerciseName" placeholder="Select Exercise"
+                                    @change="this.muscleGroupSelected = true" />
+                            </div>
+                            <div class="surface-border border-top-1 opacity-50 mb-3 col-12"></div>
+                            <br>
+                            <div class='set-reps field mb-4 col-12'>
+                                <label for="set-number" class="font-medium text-900">Number of Sets</label>
+                                <InputNumber id="set-number" v-model="draftExercise.targetSets"
+                                    @focusout="generateSets()" :step="1" showButtons />
+                                <ul class="exercise-sets">
+                                    <li v-for="set in draftExercise.targetSetReps" :key="set">
+                                        <label for="set-rep-number"> Reps: </label>
+                                        <InputNumber id="set-rep-number" v-model="set.reps" :step="1" showButtons />
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="surface-border border-top-1 opacity-50 mb-3 col-12"></div>
+                            <div class="col-12">
+                                <Button label="Save Exercise" class="w-auto mt-3"
+                                    @click="updateDraftExercise()"></Button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <Divider layout="vertical" />
-        <Toast />
-        <div class="surface-card p-4 shadow-2 border-round">
-            <div class="font-medium text-3xl text-900 mb-3" v-if="draftWorkoutTitle">{{ draftWorkoutTitle }}</div>
-            <div class="font-medium text-3xl text-900 mb-3" v-else>Untitled Workout</div>
-            <div class="surface-border border-top-1 opacity-50 mb-3 col-12"></div>
-            <Accordion>
-                <AccordionTab v-for="exercise in finalWorkout.exercises" :key="exercise">
-                    <template #header>
-                        <p>{{ exercise.exerciseName }}</p>
-                    </template>
-                    <div class="chip-row">
-                        <Chip class="mr-2 mb-2 custom-chip-primary">
-                            {{ exercise.primaryMuscleGroup }}
-                        </Chip>
-                        <Chip v-for="musclegroup in exercise.secondaryMuscleGroups" :key="musclegroup"
-                            class="mr-2 mb-2 custom-chip-secondary">
-                            {{ musclegroup }}
-                        </Chip>
+                <Toast />
+                <div class="col-12 lg:col-6">
+                    <div class="surface-card shadow-2 border-round p-4 h-full">
+                        <div class="font-medium text-3xl text-900 mb-3" v-if="draftWorkoutTitle">{{ draftWorkoutTitle }}
+                        </div>
+                        <div class="font-medium text-3xl text-900 mb-3" v-else>Untitled Workout</div>
+                        <div class="surface-border border-top-1 opacity-50 mb-3 col-12"></div>
+                        <Accordion>
+                            <AccordionTab v-for="exercise in finalWorkout.exercises" :key="exercise">
+                                <template #header>
+                                    <p>{{ exercise.exerciseName }}</p>
+                                </template>
+                                <div class="chip-row">
+                                    <Chip class="mr-2 mb-2 custom-chip-primary">
+                                        {{ exercise.primaryMuscleGroup }}
+                                    </Chip>
+                                    <Chip v-for="musclegroup in exercise.secondaryMuscleGroups" :key="musclegroup"
+                                        class="mr-2 mb-2 custom-chip-secondary">
+                                        {{ musclegroup }}
+                                    </Chip>
+                                </div>
+                                <DataTable :value="exercise.targetSetReps">
+                                    <Column field="index" header="Sets"></Column>
+                                    <Column field="reps" header="Reps"></Column>
+                                </DataTable>
+
+
+                            </AccordionTab>
+                        </Accordion>
+                        <div class="surface-border border-top-1 opacity-50 mb-3 col-12"
+                            v-if="finalWorkout.exercises.length > 0">
+                        </div>
+                        <Button v-if="finalWorkout.exercises.length > 0" label="Save Workout" class="w-auto mt-3"
+                            @click="saveFinalWorkout()"></Button>
                     </div>
-                    <DataTable :value="exercise.targetSetReps">
-                        <Column field="index" header="Sets"></Column>
-                        <Column field="reps" header="Reps"></Column>
-                    </DataTable>
+                </div>
 
-
-                </AccordionTab>
-            </Accordion>
-            <div class="surface-border border-top-1 opacity-50 mb-3 col-12" v-if="finalWorkout.exercises.length > 0">
             </div>
-            <Button v-if="finalWorkout.exercises.length > 0" label="Save Workout" class="w-auto mt-3"
-                @click="saveFinalWorkout()"></Button>
         </div>
     </div>
 </template>
@@ -115,7 +126,7 @@ export default {
     methods: {
 
         showSuccess() {
-            this.$toast.add({severity:'success', summary: 'Workout Added', detail:'Access your workouts in your dashboard', life: 5000});
+            this.$toast.add({ severity: 'success', summary: 'Workout Added', detail: 'Access your workouts in your dashboard', life: 5000 });
         },
 
         generateSets() {
@@ -149,7 +160,7 @@ export default {
 
 
         //API CALLS
-        async getExercises(muscleGroup){
+        async getExercises(muscleGroup) {
             this.muscleGroupExercises = await API.getExercisesByMuscleGroup(muscleGroup)
         },
 
@@ -158,7 +169,7 @@ export default {
             this.showSuccess();
         },
     },
-    mounted(){
+    mounted() {
         this.finalWorkout.users.push(this.$store.state.user.uid)
     }
 }
@@ -167,16 +178,17 @@ export default {
 <style scoped>
 .container {
     height: 100vh;
-    display: grid;
     background-color: var(--surface-ground);
-    grid-auto-columns: 1fr;
-    grid-auto-flow: column;
-    padding: 3rem
+    padding: 2rem
 }
 
 .exercise-sets {
     list-style: none;
     padding-left: 1rem;
+}
+
+.p-accordion-tab {
+    margin-bottom: 1rem;
 }
 
 #set-rep-number {

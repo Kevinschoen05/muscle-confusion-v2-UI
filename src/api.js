@@ -3,13 +3,20 @@ const exercise_url = "http://localhost:5001/api/exercises";
 const workout_url = "http://localhost:5001/api/workouts";
 
 export default class API {
-  //add workout
+  //WORKOUTS
   static async addWorkout(workout) {
     const res = await axios.post(workout_url, workout);
     return res.data;
   }
 
-  //exercises
+  //USER DATA
+
+  static async getWorkoutsByUserID(userId){
+    const res = await axios.get(`${workout_url}/${userId}`)
+    return res.data
+  }
+
+  //EXERCISES
 
   static async getExercisesByMuscleGroup(musclegroup){
     const res = await axios.get(`${exercise_url}/${musclegroup}`);
