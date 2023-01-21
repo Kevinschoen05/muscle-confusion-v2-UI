@@ -1,5 +1,6 @@
 const Workout = require("../models/workouts");
 const Exercise = require("../models/exercises");
+const CompletedWorkout = require("../models/completedWorkouts")
 
 module.exports = class API {
   //Workouts
