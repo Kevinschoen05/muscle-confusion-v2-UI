@@ -20,7 +20,7 @@
       </div>
    </section>
    <section class="workouts">
-    <ExerciseCard v-for="exercise in presetWorkout" :key="exercise.exercises.exerciseName"></ExerciseCard>
+    <ExerciseCard></ExerciseCard>
    </section>
     
 </template>
@@ -35,7 +35,8 @@ export default {
     },
     data() {
         return {
-            presetWorkout: {}
+            presetWorkout: {},
+            activeWorkout: {}
         }
     },
     methods: {

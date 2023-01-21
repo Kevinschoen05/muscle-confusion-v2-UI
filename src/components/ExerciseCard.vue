@@ -2,7 +2,7 @@
     <div class="container">
         <div class="header-bar">
             <div class="exercise-header">
-                <p class="exercise-name">Barbell Bench Press</p>
+                <p class="exercise-name"></p>
                 <muscle-badge title="Chest" primary></muscle-badge>
                 <muscle-badge title="Triceps"></muscle-badge>
             </div>
@@ -77,12 +77,14 @@ export default {
         MuscleBadge,
         ProgressBar
     },
+
+    props: ["exercises"],
+
     data() {
         return {
             sets: [{ index: 1, target_reps: 15, actual_reps: 0, target_weight: 0, actual_weight: 175, completed: false, success: false }, { index: 2, target_reps: 10, actual_reps: 0, target_weight: 135, actual_weight: 210, completed: false, success: false }],
             reps: 25,
             workout: "chest-tris",
-            exercises: ['barbell bench press', 'cable fly', 'pushup'],
             setTotal: 0,
             completedCounter: 0
 
@@ -122,11 +124,10 @@ export default {
   
   <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
 @font-face {
-  font-family: "Roboto";
-  src: local("Roboto"),
-   url(../fonts/roboto-v29-latin-900.woff2) format("truetype");
+    font-family: "Roboto";
+    src: local("Roboto"),
+        url(../fonts/roboto-v29-latin-900.woff2) format("truetype");
 }
 
 .container {
