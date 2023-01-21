@@ -36,6 +36,17 @@
                             <span class="text-green-500 font-medium ">+%12</span>
                         </div>
                     </div>
+                    <div class="border-bottom-1 md:border-right-1 md:border-bottom-none surface-border flex-auto p-3">
+                        <div class="flex align-items-center mb-3">
+                            <i class="pi pi-users text-cyan-500 text-xl mr-2"></i>
+                            <span class="text-500 font-medium">Customers</span>
+                        </div>
+                        <span class="block text-900 font-medium mb-4 text-xl">25100</span>
+                        <div class="flex align-items-center">
+                            <i class="pi pi-arrow-up text-green-500 text-xl mr-2"></i>
+                            <span class="text-green-500 font-medium ">+%12</span>
+                        </div>
+                    </div>
                     <div class="flex-auto p-3">
                         <div class="flex align-items-center mb-3">
                             <i class="pi pi-users text-purple-500 text-xl mr-2"></i>
@@ -47,6 +58,7 @@
                             <span class="text-green-500 font-medium ">+20</span>
                         </div>
                     </div>
+                    
                 </div>
             </div>
             <div class="col-12 lg:col-6">
@@ -151,26 +163,24 @@
                                     </a>
                                 </div>
                             </div>
-                            <span class="block text-500 font-medium ml-7 md:ml-5 mt-2 md:mt-0">20 mins ago</span>
+                            <span class="block text-500 font-medium ml-7 md:ml-5 mt-2 md:mt-0">Last Completed: 20 mins ago</span>
                         </li>
                     </ul>
                 </div>
             </div>
             <div class="col-12 lg:col-4">
                 <div class="surface-card border-round shadow-2 p-4 text-center">
-                    <img src="images/blocks/illustration/windows.svg" alt="Image" class="mx-auto block mb-4">
-                    <div class="text-900 font-medium mb-3 text-xl">Title Placeholder</div>
-                    <p class="mt-0 mb-4 p-0 line-height-3">Nunc mi ipsum faucibus vitae aliquet nec. Lacus sed viverra
-                        tellus in hac habitasse platea dictumst.</p>
-                    <Button label="Learn More" icon="pi pi-arrow-right p-button-rounded"></Button>
+                    <img src="../assets/weightlift.png" alt="Image" class="mx-auto block mb-4 h-3 w-3" >
+                    <div class="text-900 font-medium mb-3 text-xl">Add New Exercises</div>
+                    <p class="mt-0 mb-4 p-0 line-height-3">Add new exercises that can be used in any of your workouts.</p>
+                    <Button label="Create Here" icon="pi pi-arrow-right p-button-rounded"></Button>
                 </div>
             </div>
-            <div class="col-12 lg:col-4">
+            <div class="col-12 lg:col-4"> 
                 <div class="surface-card border-round shadow-2 p-4 text-center">
-                    <img src="images/blocks/illustration/security.svg" alt="Image" class="mx-auto block mb-4">
-                    <div class="text-900 font-medium mb-3 text-xl">Title Placeholder</div>
-                    <p class="mt-0 mb-4 p-0 line-height-3">Nunc mi ipsum faucibus vitae aliquet nec. Lacus sed viverra
-                        tellus in hac habitasse platea dictumst.</p>
+                    <img src="../assets/rise.png" alt="Image" class="mx-auto block mb-4  h-3 w-3">
+                    <div class="text-900 font-medium mb-3 text-xl">Check your Progress</div>
+                    <p class="mt-0 mb-4 p-0 line-height-3">View your workout breakdowns and <br>track your progress.</p>
                     <Button label="Learn More" icon="pi pi-arrow-right p-button-rounded"></Button>
                 </div>
             </div>
