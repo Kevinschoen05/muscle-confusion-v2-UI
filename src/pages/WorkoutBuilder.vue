@@ -136,7 +136,7 @@ export default {
         generateSets() {
             for (let i = 1; i < this.draftExercise.targetSets + 1; i++){
                 this.draftExercise.targetSetReps.push({ 'index': i, 'reps': 0, 'weight': 0 })
-                this.draftExercise.actualSetReps.push({ 'index': i, 'reps': 0, 'weight': 0 })
+                this.draftExercise.actualSetReps.push({ 'index': i, 'reps': 0, 'weight': 0, 'completed': false, 'success': false })
             }
         },
 

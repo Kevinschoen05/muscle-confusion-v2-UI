@@ -2,19 +2,20 @@
     <div class="container">
         <div class="header-bar">
             <div class="exercise-header">
-                <p class="exercise-name"></p>
-                <muscle-badge title="Chest" primary></muscle-badge>
-                <muscle-badge title="Triceps"></muscle-badge>
+                <p class="exercise-name">{{ exerciseName }}</p>
+                <muscle-badge :title="primaryMuscleGroup" primary></muscle-badge>
+                <muscle-badge v-for="muscleGroups in secondaryMuscleGroups" :key="muscleGroups"
+                    :title="muscleGroups"></muscle-badge>
             </div>
             <div class="output">
-                <p class="output-value">{{ sets.length }} Sets</p>
-                <p class="output-value">{{ reps }} Reps</p>
+                <p class="output-value"> {{ targetSets }} Sets</p>
+                <p class="output-value"> {{totalTargetReps}} Reps</p>
             </div>
             <progress-bar :sets="setTotal" :completed="completedCounter">
             </progress-bar>
         </div>
         <div class="set-table">
-            <table class="set-list" v-for="set in sets" :key="set.index">
+            <table class="set-list" v-for="set in targetSetReps" :key="set.index">
                 <thead class="header">
                     <th class="header-item">Results</th>
                     <th class="header-item">Reps</th>
@@ -23,7 +24,7 @@
                 </thead>
                 <tr class="set">
                     <td class="set-index">Target</td>
-                    <td class="set-item">{{ set.target_reps }}</td>
+                    <td class="set-item">{{ set.reps }}</td>
                     <td class="set-item"> <input v-if="!set.completed" class="set-input" type="number" step=5
                             v-model="set.target_weight">
                         <p v-else class="set-value">{{ set.target_weight }}</p>
@@ -78,12 +79,21 @@ export default {
         ProgressBar
     },
 
-    props: ["exercises"],
+    props: {
+        exerciseName: String,
+        primaryMuscleGroup: String,
+        secondaryMuscleGroups: Array,
+        targetSets: Number,
+        targetSetReps: Array,
+        actualSets: Number, 
+        actualSetReps: Array
+
+    },
 
     data() {
         return {
-            sets: [{ index: 1, target_reps: 15, actual_reps: 0, target_weight: 0, actual_weight: 175, completed: false, success: false }, { index: 2, target_reps: 10, actual_reps: 0, target_weight: 135, actual_weight: 210, completed: false, success: false }],
-            reps: 25,
+            //sets: [{ index: 1, target_reps: 15, actual_reps: 0, target_weight: 0, actual_weight: 175, completed: false, success: false }, { index: 2, target_reps: 10, actual_reps: 0, target_weight: 135, actual_weight: 210, completed: false, success: false }],
+            totalTargetReps: 0,
             workout: "chest-tris",
             setTotal: 0,
             completedCounter: 0
@@ -91,6 +101,12 @@ export default {
         }
     },
     methods: {
+        calculateTotalReps(){
+            this.targetSetReps.forEach( set => {
+                this.totalTargetReps += set.reps
+            })
+            
+        },
         completeSet(set, targetWeight, targetReps, actualWeight, actualReps) {
             this.setTotal = this.sets.length;
             set.completed = !set.completed
@@ -115,7 +131,7 @@ export default {
         }
     },
     mounted() {
-
+        this.calculateTotalReps()
     }
 
 }
