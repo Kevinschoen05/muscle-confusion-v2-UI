@@ -31,9 +31,9 @@
                                 <InputNumber id="set-number" v-model="draftExercise.targetSets"
                                     @focusout="generateSets()" :step="1" showButtons />
                                 <ul class="exercise-sets">
-                                    <li v-for="set in draftExercise.targetSetReps" :key="set">
+                                    <li v-for="set in draftExercise.sets" :key="set">
                                         <label for="set-rep-number"> Reps: </label>
-                                        <InputNumber id="set-rep-number" v-model="set.reps" :step="1" showButtons />
+                                        <InputNumber id="set-rep-number" v-model="set.target_reps" :step="1" showButtons />
                                     </li>
                                 </ul>
                             </div>
@@ -110,13 +110,7 @@ export default {
                 primaryMuscleGroup: '',
                 secondaryMuscleGroups: [],
                 targetSets: 0,
-                targetSetReps: [
-
-                ],
-                actualSets: 0,
-                actualSetReps: [
-
-                ]
+                sets: []
             },
 
 
@@ -135,8 +129,7 @@ export default {
 
         generateSets() {
             for (let i = 1; i < this.draftExercise.targetSets + 1; i++){
-                this.draftExercise.targetSetReps.push({ 'index': i, 'reps': 0, 'weight': 0 })
-                this.draftExercise.actualSetReps.push({ 'index': i, 'reps': 0, 'weight': 0, 'completed': false, 'success': false })
+                this.draftExercise.sets.push({'index': i, target_reps: 0, actual_reps: 0, target_weight: 0, actual_weight: 0, completed: false, success: false  })
             }
         },
 
@@ -146,13 +139,7 @@ export default {
             this.draftExercise = {
                 exerciseName: '',
                 targetSets: 0,
-                targetSetReps: [
-
-                ],
-                actualSets: 0,
-                actualSetReps: [
-
-                ]
+                sets: []
             }
             console.log(this.$store.state.user)
             console.log(this.finalWorkout)

@@ -22,9 +22,7 @@
         :primaryMuscleGroup="exercise.primaryMuscleGroup"
         :secondaryMuscleGroups="exercise.secondaryMuscleGroups"
         :targetSets="exercise.targetSets"
-        :targetSetReps="exercise.targetSetReps"
-        :actualSets="exercise.actualSets"
-        :actualSetReps="exercise.actualSetReps"
+        :sets="exercise.sets"
         ></ExerciseCard>
     </section>
     <button @click="debug()">debug</button>
@@ -51,7 +49,7 @@ export default {
             this.exercises = this.activeWorkout[0].exercises
         },
         debug() {
-            console.log(this.exercises[0])
+            console.log(this.exercises)
         }
     },
     mounted() {

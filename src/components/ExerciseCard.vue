@@ -11,11 +11,9 @@
                 <p class="output-value"> {{ targetSets }} Sets</p>
                 <p class="output-value"> {{totalTargetReps}} Reps</p>
             </div>
-            <progress-bar :sets="setTotal" :completed="completedCounter">
-            </progress-bar>
         </div>
         <div class="set-table">
-            <table class="set-list" v-for="set in targetSetReps" :key="set.index">
+            <table class="set-list" v-for="set in sets" :key="set.index">
                 <thead class="header">
                     <th class="header-item">Results</th>
                     <th class="header-item">Reps</th>
@@ -24,7 +22,7 @@
                 </thead>
                 <tr class="set">
                     <td class="set-index">Target</td>
-                    <td class="set-item">{{ set.reps }}</td>
+                    <td class="set-item">{{ set.target_reps }}</td>
                     <td class="set-item"> <input v-if="!set.completed" class="set-input" type="number" step=5
                             v-model="set.target_weight">
                         <p v-else class="set-value">{{ set.target_weight }}</p>
@@ -70,13 +68,11 @@
   
 <script>
 import MuscleBadge from './MuscleBadge.vue'
-import ProgressBar from './ProgressBar.vue'
 export default {
     name: 'ExcerciseCard',
 
     components: {
         MuscleBadge,
-        ProgressBar
     },
 
     props: {
@@ -84,9 +80,7 @@ export default {
         primaryMuscleGroup: String,
         secondaryMuscleGroups: Array,
         targetSets: Number,
-        targetSetReps: Array,
-        actualSets: Number, 
-        actualSetReps: Array
+        sets: Array
 
     },
 
@@ -102,8 +96,8 @@ export default {
     },
     methods: {
         calculateTotalReps(){
-            this.targetSetReps.forEach( set => {
-                this.totalTargetReps += set.reps
+            this.sets.forEach( set => {
+                this.totalTargetReps += set.target_reps
             })
             
         },
