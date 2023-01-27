@@ -62,7 +62,6 @@
                 </tr>
             </table>
         </div>
-
     </div>
 </template>
   
@@ -73,8 +72,7 @@ export default {
 
     components: {
         MuscleBadge,
-    },
-
+    }, 
     props: {
         exerciseName: String,
         primaryMuscleGroup: String,
@@ -86,12 +84,19 @@ export default {
 
     data() {
         return {
-            //sets: [{ index: 1, target_reps: 15, actual_reps: 0, target_weight: 0, actual_weight: 175, completed: false, success: false }, { index: 2, target_reps: 10, actual_reps: 0, target_weight: 135, actual_weight: 210, completed: false, success: false }],
             totalTargetReps: 0,
-            workout: "chest-tris",
             setTotal: 0,
-            completedCounter: 0
+            completedCounter: 0,
 
+        }
+    },
+
+    watch: {
+        sets: {
+            handler(){
+                this.completeExercise()
+            },
+            deep: true 
         }
     },
     methods: {
@@ -118,10 +123,24 @@ export default {
             else {
                 set.success = false;
             }
-
+            console.log("set "+  set.completed)
             console.log(targetWeight, targetReps, actualWeight, actualReps)
             console.log(set.success)
             console.log(this.setTotal, this.completedCounter)
+        },
+
+        completeExercise() {
+            let exerciseComplete = true 
+            for(let i = 0; i < this.sets.length; i++ )
+            {
+                if(this.sets[i].completed === false ){
+                    exerciseComplete = false 
+                }
+            }
+
+            if (exerciseComplete === true ){
+                this.$emit("exerciseComplete", exerciseComplete )
+            }
         }
     },
     mounted() {

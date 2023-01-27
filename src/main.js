@@ -32,6 +32,8 @@ import Row from 'primevue/row'
 import Checkbox from 'primevue/checkbox'
 import Ripple from 'primevue/ripple';
 import StyleClass from 'primevue/styleclass';
+import ToggleButton from 'primevue/togglebutton';
+
 
 
 
@@ -60,5 +62,6 @@ app.component('DataTable', DataTable)
 app.component('Column', Column)
 app.component('Row', Row)
 app.component('Checkbox', Checkbox)
+app.component('ToggleButton', ToggleButton)
 
 app.mount('#app')

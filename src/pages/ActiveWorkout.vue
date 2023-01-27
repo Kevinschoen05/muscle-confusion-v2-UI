@@ -17,7 +17,7 @@
         </div>
     </section>
     <section class="workouts">
-        <ExerciseCard v-for="exercise in exercises" :key="exercise" 
+        <ExerciseCard v-for="exercise in exercises" :key="exercise" @exercise-complete="handleCompletedExercise(exercise)"
         :exerciseName=exercise.exerciseName
         :primaryMuscleGroup="exercise.primaryMuscleGroup"
         :secondaryMuscleGroups="exercise.secondaryMuscleGroups"
@@ -25,6 +25,7 @@
         :sets="exercise.sets"
         ></ExerciseCard>
     </section>
+    <Button label="Complete Workout" class="w-auto mt-3"></Button>
     <button @click="debug()">debug</button>
 
 </template>
@@ -41,9 +42,16 @@ export default {
         return {
             activeWorkout: {},
             exercises: [],
+            completedExercises: [],
         }
     },
+
     methods: {
+        handleCompletedExercise(exercise){
+            this.completedExercises.push(exercise)
+            console.log("completed exercises array: " + this.completedExercises)
+        },
+
         async getActiveWorkout() {
             this.activeWorkout = await API.getWorkoutsByWorkoutID(this.$route.params.workoutID)
             this.exercises = this.activeWorkout[0].exercises

@@ -155,7 +155,7 @@
                             <div class="flex align-items-start mr-0 lg:mr-5">
                                 <div>
                                     <span class="text-900 font-medium block mb-2">{{ workout.workoutTitle }}</span>
-                                    <div class="text-700 mb-2"> {{ presetWorkouts.length }} Total Exercises</div>
+                                    <div class="text-700 mb-2"> {{  }} Total Exercises</div>
                                     <a class="text-blue-500 cursor-pointer">
                                         <i class="pi pi-github text-sm mr-2"></i>
                                         <span>Chip Row</span>
