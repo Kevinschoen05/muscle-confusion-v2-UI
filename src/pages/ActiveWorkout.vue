@@ -25,7 +25,7 @@
         :sets="exercise.sets"
         ></ExerciseCard>
     </section>
-    <Button label="Complete Workout" class="w-auto mt-3"></Button>
+    <Button label="Complete Workout" class="w-auto mt-3" @click="saveCompletedWorkout(this.completedExercises)"></Button>
     <button @click="debug()">debug</button>
 
 </template>
@@ -56,8 +56,21 @@ export default {
             this.activeWorkout = await API.getWorkoutsByWorkoutID(this.$route.params.workoutID)
             this.exercises = this.activeWorkout[0].exercises
         },
+
+        async saveCompletedWorkout(completedExercises) {
+            let completedWorkout = {
+                workoutID: this.activeWorkout[0]._id,
+                workoutTitle: this.activeWorkout[0].workoutTitle,
+                workoutDuration: "2 hours", 
+                users: this.activeWorkout[0].users,
+                exercises: completedExercises
+            }
+
+            await API.addCompletedWorkout(completedWorkout)
+        },
         debug() {
             console.log(this.exercises)
+            console.log(this.activeWorkout)
         }
     },
     mounted() {
