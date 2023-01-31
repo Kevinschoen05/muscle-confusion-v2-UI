@@ -147,6 +147,7 @@ export default {
 
         //when user saves the exercise, update pre-created draft exercise structure with completed values
         updateDraftExercise() {
+            this.draftExercise.id = this.selectedExercise._id
             this.draftExercise.exerciseName = this.selectedExercise.exerciseName
             this.draftExercise.primaryMuscleGroup = this.selectedExercise.primaryMuscleGroup
             this.draftExercise.secondaryMuscleGroups = this.selectedExercise.secondaryMuscleGroups
