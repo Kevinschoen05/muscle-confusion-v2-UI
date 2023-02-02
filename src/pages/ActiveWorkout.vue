@@ -3,17 +3,14 @@
         <section class="timer">
             <div class="stopwatch__time">
                 <h1 class="stopwatch__time-show">
-                    <span class="minutes">00</span>:<span class="seconds">00</span>.<span class="milliseconds">00</span>
+                    <span class="hours">{{ timerHours }}</span>:<span class="minutes">{{ timerMinutes }}</span>:<span class="seconds">{{ timerSeconds
+                    }}</span>.<span class="milliseconds">{{ timerMilliseconds }}</span>
                 </h1>
             </div>
             <div class="stopwatch__btns">
-                <button class="stopwatch__btns-b stopwatch__btns-reset">Reset</button>
-                <button class="stopwatch__btns-b stopwatch__btns-start">Start</button>
-                <button class="stopwatch__btns-b stopwatch__btns-stop hidden">
+                <button class="stopwatch__btns-b stopwatch__btns-start" @click="startTimer()">Start</button>
+                <button class="stopwatch__btns-b stopwatch__btns-stop " @click="stopTimer()">
                     Stop
-                </button>
-                <button class="stopwatch__btns-b stopwatch__btns-resume hidden">
-                    Resume
                 </button>
             </div>
         </section>
@@ -43,10 +40,43 @@ export default {
             activeWorkout: {},
             exercises: [],
             completedExercises: [],
+
+            timerHours: 0,
+            timerMilliseconds: 0,
+            timerSeconds: 0,
+            timerMinutes: 0,
+            interval: null
         }
     },
 
     methods: {
+        startTimer() {
+            if (this.interval !== null) {
+                clearInterval(this.interval);
+            }
+            this.interval = setInterval(this.calculateTimer, 10);
+        },
+
+        stopTimer(){
+            clearInterval(this.interval);
+        },
+
+        calculateTimer() {
+            this.timerMilliseconds += 10;
+            if (this.timerMilliseconds == 1000) {
+                this.timerMilliseconds = 0;
+                this.timerSeconds++;
+                if (this.timerSeconds == 60) {
+                    this.timerSeconds = 0;
+                    this.timerMinutes++;
+                    if (this.timerMinutes == 60) {
+                        this.timerMinutes = 0;
+                        this.timerHours++;
+                    }
+                }
+            }
+        },
+
         handleCompletedExercise(exercise) {
             this.completedExercises.push(exercise)
             console.log("completed exercises array: " + this.completedExercises)
@@ -61,7 +91,7 @@ export default {
             let completedWorkout = {
                 workoutID: this.activeWorkout[0]._id,
                 workoutTitle: this.activeWorkout[0].workoutTitle,
-                workoutDuration: "2 hours",
+                workoutDuration: this.timerMinutes + ":" + this.timerSeconds + ":" + this.timerMilliseconds,
                 users: this.activeWorkout[0].users,
                 exercises: completedExercises
             }
@@ -80,11 +110,10 @@ export default {
 
 </script>
 <style scoped>
-.comtainer { 
-    display: flex; 
-    justify-content: center;
-    align-content: center;
+.container {
+    margin-left: 25%
 }
+
 .stopwatch {
     width: 80%;
     height: 25rem;
@@ -119,13 +148,13 @@ export default {
 
 .stopwatch__btns-stop {
     background-color: #ffffff;
-    color: #ff4a4a;
+    color: #E62E05;
     box-shadow: rgba(50, 50, 93, 0.35) 0px 2px 5px -1px, rgba(0, 0, 0, 0.5) 0px 1px 3px -1px;
 }
 
 .stopwatch__btns-resume {
     background-color: #ffffff;
-    color: #3ab0ff;
+    color: #1849A9;
     box-shadow: rgba(50, 50, 93, 0.35) 0px 2px 5px -1px, rgba(0, 0, 0, 0.5) 0px 1px 3px -1px;
 }
 
@@ -154,6 +183,4 @@ export default {
 .hidden {
     display: none;
 }
-
-
 </style>
