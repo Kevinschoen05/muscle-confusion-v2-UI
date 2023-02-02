@@ -1,33 +1,33 @@
 <template>
-    <section class="timer">
-        <div class="stopwatch__time">
-            <h1 class="stopwatch__time-show">
-                <span class="minutes">00</span>:<span class="seconds">00</span>.<span class="milliseconds">00</span>
-            </h1>
-        </div>
-        <div class="stopwatch__btns">
-            <button class="stopwatch__btns-b stopwatch__btns-reset">Reset</button>
-            <button class="stopwatch__btns-b stopwatch__btns-start">Start</button>
-            <button class="stopwatch__btns-b stopwatch__btns-stop hidden">
-                Stop
-            </button>
-            <button class="stopwatch__btns-b stopwatch__btns-resume hidden">
-                Resume
-            </button>
-        </div>
-    </section>
-    <section class="workouts">
-        <ExerciseCard v-for="exercise in exercises" :key="exercise" @exercise-complete="handleCompletedExercise(exercise)"
-        :exerciseName=exercise.exerciseName
-        :primaryMuscleGroup="exercise.primaryMuscleGroup"
-        :secondaryMuscleGroups="exercise.secondaryMuscleGroups"
-        :targetSets="exercise.targetSets"
-        :sets="exercise.sets"
-        ></ExerciseCard>
-    </section>
-    <Button label="Complete Workout" class="w-auto mt-3" @click="saveCompletedWorkout(this.completedExercises)"></Button>
-    <button @click="debug()">debug</button>
-
+    <div class="container">
+        <section class="timer">
+            <div class="stopwatch__time">
+                <h1 class="stopwatch__time-show">
+                    <span class="minutes">00</span>:<span class="seconds">00</span>.<span class="milliseconds">00</span>
+                </h1>
+            </div>
+            <div class="stopwatch__btns">
+                <button class="stopwatch__btns-b stopwatch__btns-reset">Reset</button>
+                <button class="stopwatch__btns-b stopwatch__btns-start">Start</button>
+                <button class="stopwatch__btns-b stopwatch__btns-stop hidden">
+                    Stop
+                </button>
+                <button class="stopwatch__btns-b stopwatch__btns-resume hidden">
+                    Resume
+                </button>
+            </div>
+        </section>
+        <section class="workouts">
+            <ExerciseCard v-for="exercise in exercises" :key="exercise"
+                @exercise-complete="handleCompletedExercise(exercise)" :exerciseName=exercise.exerciseName
+                :primaryMuscleGroup="exercise.primaryMuscleGroup"
+                :secondaryMuscleGroups="exercise.secondaryMuscleGroups" :targetSets="exercise.targetSets"
+                :sets="exercise.sets"></ExerciseCard>
+        </section>
+        <Button label="Complete Workout" class="w-auto mt-3"
+            @click="saveCompletedWorkout(this.completedExercises)"></Button>
+        <button @click="debug()">debug</button>
+    </div>
 </template>
 
 <script>
@@ -47,7 +47,7 @@ export default {
     },
 
     methods: {
-        handleCompletedExercise(exercise){
+        handleCompletedExercise(exercise) {
             this.completedExercises.push(exercise)
             console.log("completed exercises array: " + this.completedExercises)
         },
@@ -61,7 +61,7 @@ export default {
             let completedWorkout = {
                 workoutID: this.activeWorkout[0]._id,
                 workoutTitle: this.activeWorkout[0].workoutTitle,
-                workoutDuration: "2 hours", 
+                workoutDuration: "2 hours",
                 users: this.activeWorkout[0].users,
                 exercises: completedExercises
             }
@@ -80,6 +80,11 @@ export default {
 
 </script>
 <style scoped>
+.comtainer { 
+    display: flex; 
+    justify-content: center;
+    align-content: center;
+}
 .stopwatch {
     width: 80%;
     height: 25rem;
@@ -149,4 +154,6 @@ export default {
 .hidden {
     display: none;
 }
+
+
 </style>
