@@ -64,7 +64,7 @@
             <div class="col-12 lg:col-6">
                 <div class="surface-card shadow-2 border-round p-4 h-full">
                     <div class="flex align-items-center justify-content-between mb-3">
-                        <div class="text-900 font-medium text-xl">Team Activity</div>
+                        <div class="text-900 font-medium text-xl">Recent Activity</div>
                         <div>
                             <Button icon="pi pi-ellipsis-v" class="p-button-text p-button-plain p-button-rounded"
                                 @click="$refs.menu1.toggle($event)"></Button>
@@ -74,7 +74,6 @@
                         <li
                             class="py-3 border-bottom-1 surface-border flex md:align-items-start md:justify-content-between flex-column md:flex-row">
                             <div class="flex align-items-start mr-0 lg:mr-5">
-                                <img src="images/blocks/avatars/circle-big/avatar-f-1.png" class="mr-3 w-3rem h-3rem" />
                                 <div>
                                     <span class="text-900 font-medium block mb-2">Jane Cooper</span>
                                     <div class="text-700 mb-2">responded to an issue.</div>
@@ -89,7 +88,6 @@
                         <li
                             class="py-3 border-bottom-1 surface-border flex md:align-items-start md:justify-content-between flex-column md:flex-row">
                             <div class="flex align-items-start mr-0 lg:mr-5">
-                                <img src="images/blocks/avatars/circle-big/avatar-m-1.png" class="mr-3 w-3rem h-3rem" />
                                 <div>
                                     <span class="text-900 font-medium block mb-2">Robert Fox</span>
                                     <div class="text-700">changed team size from <span class="text-900">5</span> to
@@ -102,7 +100,6 @@
                         <li
                             class="py-3 border-bottom-1 surface-border flex md:align-items-start md:justify-content-between flex-column md:flex-row">
                             <div class="flex align-items-start mr-0 lg:mr-5">
-                                <img src="images/blocks/avatars/circle-big/avatar-f-2.png" class="mr-3 w-3rem h-3rem" />
                                 <div>
                                     <span class="text-900 font-medium block mb-2">Kristin Watson Cooper</span>
                                     <div class="text-700 mb-2">created a Q4 presentation to an issue.</div>
@@ -117,7 +114,6 @@
                         <li
                             class="py-3 border-bottom-1 surface-border flex md:align-items-start md:justify-content-between flex-column md:flex-row">
                             <div class="flex align-items-start mr-0 lg:mr-5">
-                                <img src="images/blocks/avatars/circle-big/avatar-f-3.png" class="mr-3 w-3rem h-3rem" />
                                 <div>
                                     <span class="text-900 font-medium block mb-2">Annette Black</span>
                                     <div class="text-700">added <span class="text-900">Nico Greenberg</span> to <span
@@ -128,7 +124,6 @@
                         </li>
                         <li class="py-3 flex md:align-items-start md:justify-content-between flex-column md:flex-row">
                             <div class="flex align-items-start mr-0 lg:mr-5">
-                                <img src="images/blocks/avatars/circle-big/avatar-m-2.png" class="mr-3 w-3rem h-3rem" />
                                 <div>
                                     <span class="text-900 font-medium block mb-2">Floyd Miles</span>
                                     <div class="text-700">has refunded a blue t-shirt for <span
@@ -209,6 +204,9 @@ export default {
 
     data() {
         return {
+            completedWorkouts: [
+
+            ],
             presetWorkouts: [
 
             ]
@@ -225,14 +223,18 @@ export default {
         //API CALLS
         async getUserPresetWorkouts() {
             this.presetWorkouts = await API.getWorkoutsByUserID(this.$store.state.user.uid)
-            console.log(this.presetWorkouts)
+            console.log("preset Workouts: " + this.presetWorkouts)
+        },
+
+        async getUserCompletedWorkouts(){
+            this.completedWorkouts = await API.getCompletedWorkoutsByUserID(this.$store.state.user.uid)
+            console.log("completed Workouts: " + this.completedWorkouts)
         }
-
-
     },
 
     mounted() {
         this.getUserPresetWorkouts()
+        this.getUserCompletedWorkouts()
     }
 }
 

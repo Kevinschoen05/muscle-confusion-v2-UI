@@ -1,7 +1,7 @@
 import axios from "axios";
 const exercise_url = "http://localhost:5001/api/exercises";
 const workout_url = "http://localhost:5001/api/workouts";
-const completedWorkout_url = "http://localhost:5001/api/completedWorkouts";
+const completedWorkout_url = "http://localhost:5001/api/completedworkouts";
 
 export default class API {
   //WORKOUTS
@@ -22,10 +22,16 @@ export default class API {
     return res.data
   }
 
+
   //USER DATA
 
   static async getWorkoutsByUserID(userID){
     const res = await axios.get(`${workout_url}/users/${userID}`)
+    return res.data
+  }
+
+  static async getCompletedWorkoutsByUserID(userID){
+    const res = await axios.get(`${completedWorkout_url}/users/${userID}`)
     return res.data
   }
 

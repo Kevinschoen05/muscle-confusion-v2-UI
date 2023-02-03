@@ -68,8 +68,19 @@ module.exports = class API {
     catch (err) { 
       res.status(404).json({ message: err.message });
     }
+  }
 
-
+  static async fetchCompletedWorkoutsByUserId(req, res){ 
+    const user = req.params.userID
+    try {
+      const userCompletedWorkouts = await CompletedWorkout.find({
+        users: user
+      });
+      res.status(200).json(userCompletedWorkouts);
+    }
+    catch (err){
+      res.satus(404).json({ massage: err.message});
+    }
   }
 
   //EXERCISES

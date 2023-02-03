@@ -12,6 +12,7 @@ router.get("/workouts/:workoutID", API.fetchWorkoutbyWorkoutId)
 
 //Completed Workouts
 router.get("/completedWorkouts", API.fetchAllCompletedWorkouts)
+router.get("/completedWorkouts/users/:userID", API.fetchCompletedWorkoutsByUserId)
 router.post("/completedWorkouts", API.addCompletedWorkout)
 
 //Exercises
