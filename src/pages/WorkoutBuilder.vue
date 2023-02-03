@@ -66,9 +66,9 @@
                                         {{ musclegroup }}
                                     </Chip>
                                 </div>
-                                <DataTable :value="exercise.targetSetReps">
+                                <DataTable :value="exercise.sets">
                                     <Column field="index" header="Sets"></Column>
-                                    <Column field="reps" header="Reps"></Column>
+                                    <Column field="target_reps" header="Reps"></Column>
                                 </DataTable>
 
 
