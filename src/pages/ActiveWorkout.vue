@@ -1,10 +1,12 @@
 <template>
     <div class="container">
-        <section class="timer">
+        <div class=" workout p-5 flex flex-column flex-auto align-items-center">
+        <section class="timer flex flex-column flex-auto align-items-center">
             <div class="stopwatch__time">
                 <h1 class="stopwatch__time-show">
-                    <span class="hours">{{ timerHours }}</span>:<span class="minutes">{{ timerMinutes }}</span>:<span class="seconds">{{ timerSeconds
-                    }}</span>.<span class="milliseconds">{{ timerMilliseconds }}</span>
+                    <span class="hours">{{ timerHours }}</span>:<span class="minutes">{{ timerMinutes }}</span>:<span
+                        class="seconds">{{ timerSeconds
+                        }}</span>.<span class="milliseconds">{{ timerMilliseconds }}</span>
                 </h1>
             </div>
             <div class="stopwatch__btns">
@@ -15,15 +17,19 @@
             </div>
         </section>
         <section class="workouts">
-            <ExerciseCard v-for="exercise in exercises" :key="exercise"
-                @exercise-complete="handleCompletedExercise(exercise)" :exerciseName=exercise.exerciseName
-                :primaryMuscleGroup="exercise.primaryMuscleGroup"
-                :secondaryMuscleGroups="exercise.secondaryMuscleGroups" :targetSets="exercise.targetSets"
-                :sets="exercise.sets"></ExerciseCard>
+            <ul class="list-none p-0 m-0">
+                <ExerciseCard v-for="exercise in exercises" :key="exercise"
+                    @exercise-complete="handleCompletedExercise(exercise)" :exerciseName=exercise.exerciseName
+                    :primaryMuscleGroup="exercise.primaryMuscleGroup"
+                    :secondaryMuscleGroups="exercise.secondaryMuscleGroups" :targetSets="exercise.targetSets"
+                    :sets="exercise.sets"></ExerciseCard>
+            </ul>
+
         </section>
         <Button label="Complete Workout" class="w-auto mt-3"
             @click="saveCompletedWorkout(this.completedExercises)"></Button>
         <button @click="debug()">debug</button>
+        </div>
     </div>
 </template>
 
@@ -57,7 +63,7 @@ export default {
             this.interval = setInterval(this.calculateTimer, 10);
         },
 
-        stopTimer(){
+        stopTimer() {
             clearInterval(this.interval);
         },
 
@@ -110,9 +116,6 @@ export default {
 
 </script>
 <style scoped>
-.container {
-    margin-left: 25%
-}
 
 .stopwatch {
     width: 80%;
