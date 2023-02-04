@@ -75,7 +75,7 @@
                             <div class="flex align-items-start mr-0 lg:mr-5">
                                 <div>
                                     <span class="text-900 font-medium block mb-2">{{workout.workoutTitle}}</span>
-                                    <div class="text-700 mb-2">responded to an issue.</div>
+                                    <div class="text-700 mb-2">Completed by: {{this.$store.state.user.email}}</div>
                                     <a class="text-blue-500 cursor-pointer">
                                         <i class="pi pi-github text-sm mr-2"></i>
                                         <span>Issue #1185</span>
@@ -93,7 +93,7 @@
                         <div class="text-900 font-medium text-xl">Preset Workouts</div>
                         <div>
                             <Button icon="pi pi-ellipsis-v" class="p-button-text p-button-plain p-button-rounded"
-                                @click="$refs.menu1.toggle($event)"></Button>
+                                ></Button>
                         </div>
                     </div>
                     <ul class="list-none p-0 m-0">
@@ -121,7 +121,7 @@
                 <div class="surface-card border-round shadow-2 p-4 text-center">
                     <img src="../assets/weightlift.png" alt="Image" class="mx-auto block mb-4 h-3 w-3">
                     <div class="text-900 font-medium mb-3 text-xl">Add New Exercises</div>
-                    <p class="mt-0 mb-4 p-0 line-height-3">Add new exercises that can be used in any of your workouts.
+                    <p class="mt-0 mb-4 p-0 line-height-3">Add new exercises 
                     </p>
                     <Button label="Create Here" icon="pi pi-arrow-right p-button-rounded"></Button>
                 </div>
@@ -150,16 +150,25 @@
 import API from '../api';
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+import  advanced from"dayjs/plugin/advancedFormat";
+
 
 dayjs.extend(relativeTime);
+dayjs.extend(timezone)
+dayjs.extend(utc)
+dayjs.extend(advanced)
+dayjs.tz.setDefault('America/New_York');
+
 export default {
     
-    components: {
-
-    },
-
     data() {
         return {
+            schedule: [
+
+            ],
+
             completedWorkouts: [
 
             ],
@@ -201,6 +210,7 @@ export default {
     mounted() {
         this.getUserPresetWorkouts()
         this.getUserCompletedWorkouts()
+        this.getUpcomingSchedule()
     }
 }
 
