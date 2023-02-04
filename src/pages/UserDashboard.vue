@@ -58,26 +58,23 @@
                             <span class="text-green-500 font-medium ">+20</span>
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
             <div class="col-12 lg:col-6">
                 <div class="surface-card shadow-2 border-round p-4 h-full">
                     <div class="flex align-items-center justify-content-between mb-3">
-                        <div class="text-900 font-medium text-xl">Team Activity</div>
+                        <div class="text-900 font-medium text-xl">Recent Activity</div>
                         <div>
                             <Button icon="pi pi-ellipsis-v" class="p-button-text p-button-plain p-button-rounded"
                                 @click="$refs.menu1.toggle($event)"></Button>
-                            <Menu ref="menu1" :popup="true" :model="items"></Menu>
                         </div>
                     </div>
                     <ul class="list-none p-0 m-0">
-                        <li
-                            class="py-3 border-bottom-1 surface-border flex md:align-items-start md:justify-content-between flex-column md:flex-row">
+                        <li v-for="workout in completedWorkouts" :key="workout._id" class="py-3 border-bottom-1 surface-border flex md:align-items-start md:justify-content-between flex-column md:flex-row">
                             <div class="flex align-items-start mr-0 lg:mr-5">
-                                <img src="images/blocks/avatars/circle-big/avatar-f-1.png" class="mr-3 w-3rem h-3rem" />
                                 <div>
-                                    <span class="text-900 font-medium block mb-2">Jane Cooper</span>
+                                    <span class="text-900 font-medium block mb-2">{{workout.workoutTitle}}</span>
                                     <div class="text-700 mb-2">responded to an issue.</div>
                                     <a class="text-blue-500 cursor-pointer">
                                         <i class="pi pi-github text-sm mr-2"></i>
@@ -85,57 +82,7 @@
                                     </a>
                                 </div>
                             </div>
-                            <span class="block text-500 font-medium ml-7 md:ml-5 mt-2 md:mt-0">14 mins ago</span>
-                        </li>
-                        <li
-                            class="py-3 border-bottom-1 surface-border flex md:align-items-start md:justify-content-between flex-column md:flex-row">
-                            <div class="flex align-items-start mr-0 lg:mr-5">
-                                <img src="images/blocks/avatars/circle-big/avatar-m-1.png" class="mr-3 w-3rem h-3rem" />
-                                <div>
-                                    <span class="text-900 font-medium block mb-2">Robert Fox</span>
-                                    <div class="text-700">changed team size from <span class="text-900">5</span> to
-                                        <span class="text-900">6</span>.</div>
-                                </div>
-                            </div>
-                            <span class="block text-500 font-medium ml-7 md:ml-5 mt-2 md:mt-0">20 mins ago</span>
-                        </li>
-                        <li
-                            class="py-3 border-bottom-1 surface-border flex md:align-items-start md:justify-content-between flex-column md:flex-row">
-                            <div class="flex align-items-start mr-0 lg:mr-5">
-                                <img src="images/blocks/avatars/circle-big/avatar-f-2.png" class="mr-3 w-3rem h-3rem" />
-                                <div>
-                                    <span class="text-900 font-medium block mb-2">Kristin Watson Cooper</span>
-                                    <div class="text-700 mb-2">created a Q4 presentation to an issue.</div>
-                                    <a class="text-blue-500 cursor-pointer">
-                                        <i class="pi pi-file-pdf text-sm mr-2"></i>
-                                        <span>q4_presentation.pdf</span>
-                                    </a>
-                                </div>
-                            </div>
-                            <span class="block text-500 font-medium ml-7 md:ml-5 mt-2 md:mt-0">38 mins ago</span>
-                        </li>
-                        <li
-                            class="py-3 border-bottom-1 surface-border flex md:align-items-start md:justify-content-between flex-column md:flex-row">
-                            <div class="flex align-items-start mr-0 lg:mr-5">
-                                <img src="images/blocks/avatars/circle-big/avatar-f-3.png" class="mr-3 w-3rem h-3rem" />
-                                <div>
-                                    <span class="text-900 font-medium block mb-2">Annette Black</span>
-                                    <div class="text-700">added <span class="text-900">Nico Greenberg</span> to <span
-                                            class="text-blue-500">Watchlist Tier-1</span>.</div>
-                                </div>
-                            </div>
-                            <span class="block text-500 font-medium ml-7 md:ml-5 mt-2 md:mt-0">1 day ago</span>
-                        </li>
-                        <li class="py-3 flex md:align-items-start md:justify-content-between flex-column md:flex-row">
-                            <div class="flex align-items-start mr-0 lg:mr-5">
-                                <img src="images/blocks/avatars/circle-big/avatar-m-2.png" class="mr-3 w-3rem h-3rem" />
-                                <div>
-                                    <span class="text-900 font-medium block mb-2">Floyd Miles</span>
-                                    <div class="text-700">has refunded a blue t-shirt for <span
-                                            class="text-blue-500">79$</span>.</div>
-                                </div>
-                            </div>
-                            <span class="block text-500 font-medium ml-7 md:ml-5 mt-2 md:mt-0">4 days ago</span>
+                            <span class="block text-500 font-medium ml-7 md:ml-5 mt-2 md:mt-0">{{workout.relativeTime}}</span>
                         </li>
                     </ul>
                 </div>
@@ -147,50 +94,52 @@
                         <div>
                             <Button icon="pi pi-ellipsis-v" class="p-button-text p-button-plain p-button-rounded"
                                 @click="$refs.menu1.toggle($event)"></Button>
-                            <Menu ref="menu1" :popup="true" :model="items"></Menu>
                         </div>
                     </div>
                     <ul class="list-none p-0 m-0">
-                        <li v-for="workout in presetWorkouts" :key="workout.workoutTitle"
+                        <li v-for="workout in presetWorkouts" :key="workout._id"
                             class="py-3 border-bottom-1 surface-border flex md:align-items-start md:justify-content-between flex-column md:flex-row">
                             <div class="flex align-items-start mr-0 lg:mr-5">
                                 <div>
-                                    <span class="text-900 font-medium block mb-2">{{workout.workoutTitle}}</span>
-                                    <div class="text-700 mb-2"> {{presetWorkouts.length}} Total Exercises</div>
+                                    <span class="text-900 font-medium block mb-2">{{ workout.workoutTitle }}</span>
+                                    <div class="text-700 mb-2"> {{ workout.exercises.length }} Total Exercises</div>
                                     <a class="text-blue-500 cursor-pointer">
                                         <i class="pi pi-github text-sm mr-2"></i>
                                         <span>Chip Row</span>
                                     </a>
                                 </div>
                             </div>
-                            <span class="block text-500 font-medium ml-7 md:ml-5 mt-2 md:mt-0">Last Completed: 20 mins ago</span>
+                            <div class="mt-3 lg:mt-0">
+                                    <Button  @click="this.startActiveWorkout(workout._id)" icon="pi pi-play" class="p-button-rounded mr-2"></Button>
+                                    <Button icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"></Button>
+                                </div>
                         </li>
                     </ul>
                 </div>
             </div>
             <div class="col-12 lg:col-4">
                 <div class="surface-card border-round shadow-2 p-4 text-center">
-                    <img src="../assets/weightlift.png" alt="Image" class="mx-auto block mb-4 h-3 w-3" >
+                    <img src="../assets/weightlift.png" alt="Image" class="mx-auto block mb-4 h-3 w-3">
                     <div class="text-900 font-medium mb-3 text-xl">Add New Exercises</div>
-                    <p class="mt-0 mb-4 p-0 line-height-3">Add new exercises that can be used in any of your workouts.</p>
+                    <p class="mt-0 mb-4 p-0 line-height-3">Add new exercises that can be used in any of your workouts.
+                    </p>
                     <Button label="Create Here" icon="pi pi-arrow-right p-button-rounded"></Button>
-                </div>
-            </div>
-            <div class="col-12 lg:col-4"> 
-                <div class="surface-card border-round shadow-2 p-4 text-center">
-                    <img src="../assets/rise.png" alt="Image" class="mx-auto block mb-4  h-3 w-3">
-                    <div class="text-900 font-medium mb-3 text-xl">Check your Progress</div>
-                    <p class="mt-0 mb-4 p-0 line-height-3">View your workout breakdowns and <br>track your progress.</p>
-                    <Button label="Learn More" icon="pi pi-arrow-right p-button-rounded"></Button>
                 </div>
             </div>
             <div class="col-12 lg:col-4">
                 <div class="surface-card border-round shadow-2 p-4 text-center">
-                    <img src="images/blocks/illustration/live-collaboration.svg" alt="Image" class="mx-auto block mb-4">
-                    <div class="text-900 font-medium mb-3 text-xl">Title Placeholder</div>
-                    <p class="mt-0 mb-4 p-0 line-height-3">Nunc mi ipsum faucibus vitae aliquet nec. Lacus sed viverra
-                        tellus in hac habitasse platea dictumst.</p>
-                    <Button label="Learn More" icon="pi pi-arrow-right p-button-rounded"></Button>
+                    <img src="../assets/rise.png" alt="Image" class="mx-auto block mb-4  h-3 w-3">
+                    <div class="text-900 font-medium mb-3 text-xl">Track your Progress</div>
+                    <p class="mt-0 mb-4 p-0 line-height-3">View your workout breakdowns</p>
+                    <Button label="View Stats" icon="pi pi-arrow-right p-button-rounded"></Button>
+                </div>
+            </div>
+            <div class="col-12 lg:col-4">
+                <div class="surface-card border-round shadow-2 p-4 text-center">
+                    <img src="../assets/trophy.png" alt="Image" class="mx-auto block mb-4  h-3 w-3">
+                    <div class="text-900 font-medium mb-3 text-xl">Compete With Friends</div>
+                    <p class="mt-0 mb-4 p-0 line-height-3">View your head to head results</p>
+                    <Button label="View Matchups" icon="pi pi-arrow-right p-button-rounded"></Button>
                 </div>
             </div>
         </div>
@@ -199,27 +148,59 @@
 
 <script>
 import API from '../api';
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
 
+dayjs.extend(relativeTime);
 export default {
+    
     components: {
 
     },
 
     data() {
         return {
+            completedWorkouts: [
+
+            ],
             presetWorkouts: [
 
             ]
         }
     },
     methods: {
+        startActiveWorkout(workoutID){
+            this.$router.push({
+        name: "active-workout",
+        link: "/activeworkout/",
+        params: { workoutID: workoutID },
+      });
+        },
+
+        getActivityFeedRelativeTime(){
+            for (var i = 0; i < this.completedWorkouts.length; i++)
+            {
+              this.completedWorkouts[i].relativeTime = ( dayjs().to(dayjs(this.completedWorkouts[i].completionDate),   ))
+              console.log(this.completedWorkouts[i].relativeTime)
+            }
+        },
+        //API CALLS
         async getUserPresetWorkouts() {
             this.presetWorkouts = await API.getWorkoutsByUserID(this.$store.state.user.uid)
+            console.log("preset Workouts: " + this.presetWorkouts)
+        },
+
+        async getUserCompletedWorkouts(){
+            this.completedWorkouts = await API.getCompletedWorkoutsByUserID(this.$store.state.user.uid)
+            console.log("completed Workouts: " + this.completedWorkouts)
+            this.getActivityFeedRelativeTime()
+
         }
     },
 
     mounted() {
         this.getUserPresetWorkouts()
+        this.getUserCompletedWorkouts()
     }
 }
 

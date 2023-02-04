@@ -1,15 +1,27 @@
 const Workout = require("../models/workouts");
 const Exercise = require("../models/exercises");
-const CompletedWorkout = require("../models/completedWorkouts")
+const CompletedWorkout = require("../models/completedWorkouts");
 
 module.exports = class API {
   //Workouts
   static async fetchAllWorkouts(req, res) {
     try {
-      const query  = req.query;
       const workouts = await Workout.find();
       res.status(200).json(workouts);
     } catch (err) {
+      res.status(404).json({ message: err.message });
+    }
+  }
+
+  static async fetchWorkoutbyWorkoutId (req, res) {
+    const presetWorkout = req.params.workoutID
+    try {
+      const activeWorkout = await Workout.find({
+        _id: presetWorkout
+      });
+      res.status(200).json(activeWorkout)
+    }
+    catch (err) { 
       res.status(404).json({ message: err.message });
     }
   }
@@ -23,9 +35,30 @@ module.exports = class API {
     }
   }
 
+  //COMPLETED WORKOUTS
+
+  static async fetchAllCompletedWorkouts(req, res) {
+    try {
+      const workouts = await CompletedWorkout.find();
+      res.status(200).json(workouts);
+    } catch (err) {
+      res.status(404).json({ message: err.message });
+    }
+  }
+
+  static async addCompletedWorkout(req, res) {
+    const workout = req.body;
+    try { 
+      await CompletedWorkout.create(workout);
+      res.status(201).json({message: "Completed Workout Created Successfully"})
+    } catch (err){
+      res.status(400).json({message: err.message});
+    }
+  }
+
   //USER SPECIFIC REQUESTS
   static async fetchWorkoutsByUserId(req, res) {
-    const user = req.params.userId
+    const user = req.params.userID
     try { 
       const userWorkouts = await Workout.find({
         users: user
@@ -35,8 +68,19 @@ module.exports = class API {
     catch (err) { 
       res.status(404).json({ message: err.message });
     }
+  }
 
-
+  static async fetchCompletedWorkoutsByUserId(req, res){ 
+    const user = req.params.userID
+    try {
+      const userCompletedWorkouts = await CompletedWorkout.find({
+        users: user
+      });
+      res.status(200).json(userCompletedWorkouts);
+    }
+    catch (err){
+      res.satus(404).json({ massage: err.message});
+    }
   }
 
   //EXERCISES

@@ -2,16 +2,15 @@
     <div class="container">
         <div class="header-bar">
             <div class="exercise-header">
-                <p class="exercise-name">Barbell Bench Press</p>
-                <muscle-badge title="Chest" primary></muscle-badge>
-                <muscle-badge title="Triceps"></muscle-badge>
+                <p class="exercise-name">{{ exerciseName }}</p>
+                <muscle-badge :title="primaryMuscleGroup" primary></muscle-badge>
+                <muscle-badge v-for="muscleGroups in secondaryMuscleGroups" :key="muscleGroups"
+                    :title="muscleGroups"></muscle-badge>
             </div>
             <div class="output">
-                <p class="output-value">{{ sets.length }} Sets</p>
-                <p class="output-value">{{ reps }} Reps</p>
+                <p class="output-value"> {{ targetSets }} Sets</p>
+                <p class="output-value"> {{totalTargetReps}} Reps</p>
             </div>
-            <progress-bar :sets="setTotal" :completed="completedCounter">
-            </progress-bar>
         </div>
         <div class="set-table">
             <table class="set-list" v-for="set in sets" :key="set.index">
@@ -63,32 +62,50 @@
                 </tr>
             </table>
         </div>
-
     </div>
 </template>
   
 <script>
 import MuscleBadge from './MuscleBadge.vue'
-import ProgressBar from './ProgressBar.vue'
 export default {
     name: 'ExcerciseCard',
 
     components: {
         MuscleBadge,
-        ProgressBar
+    }, 
+    props: {
+        exerciseName: String,
+        primaryMuscleGroup: String,
+        secondaryMuscleGroups: Array,
+        targetSets: Number,
+        sets: Array
+
     },
+
     data() {
         return {
-            sets: [{ index: 1, target_reps: 15, actual_reps: 0, target_weight: 0, actual_weight: 175, completed: false, success: false }, { index: 2, target_reps: 10, actual_reps: 0, target_weight: 135, actual_weight: 210, completed: false, success: false }],
-            reps: 25,
-            workout: "chest-tris",
-            exercises: ['barbell bench press', 'cable fly', 'pushup'],
+            totalTargetReps: 0,
             setTotal: 0,
-            completedCounter: 0
+            completedCounter: 0,
 
         }
     },
+
+    watch: {
+        sets: {
+            handler(){
+                this.completeExercise()
+            },
+            deep: true 
+        }
+    },
     methods: {
+        calculateTotalReps(){
+            this.sets.forEach( set => {
+                this.totalTargetReps += set.target_reps
+            })
+            
+        },
         completeSet(set, targetWeight, targetReps, actualWeight, actualReps) {
             this.setTotal = this.sets.length;
             set.completed = !set.completed
@@ -106,14 +123,28 @@ export default {
             else {
                 set.success = false;
             }
-
+            console.log("set "+  set.completed)
             console.log(targetWeight, targetReps, actualWeight, actualReps)
             console.log(set.success)
             console.log(this.setTotal, this.completedCounter)
+        },
+
+        completeExercise() {
+            let exerciseComplete = true 
+            for(let i = 0; i < this.sets.length; i++ )
+            {
+                if(this.sets[i].completed === false ){
+                    exerciseComplete = false 
+                }
+            }
+
+            if (exerciseComplete === true ){
+                this.$emit("exerciseComplete", exerciseComplete )
+            }
         }
     },
     mounted() {
-
+        this.calculateTotalReps()
     }
 
 }
@@ -122,11 +153,10 @@ export default {
   
   <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
 @font-face {
-  font-family: "Roboto";
-  src: local("Roboto"),
-   url(../fonts/roboto-v29-latin-900.woff2) format("truetype");
+    font-family: "Roboto";
+    src: local("Roboto"),
+        url(../fonts/roboto-v29-latin-900.woff2) format("truetype");
 }
 
 .container {

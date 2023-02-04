@@ -3,6 +3,7 @@ import App from './App.vue'
 import PrimeVue from 'primevue/config';
 import router from './router'
 import store from './store/index'
+import dayjs from 'dayjs'
 
 //global stylesheet to use primevue fonts etc
 import './assets/app.css'
@@ -32,6 +33,8 @@ import Row from 'primevue/row'
 import Checkbox from 'primevue/checkbox'
 import Ripple from 'primevue/ripple';
 import StyleClass from 'primevue/styleclass';
+import ToggleButton from 'primevue/togglebutton';
+
 
 
 
@@ -46,6 +49,7 @@ app.directive('ripple', Ripple);
 app.directive('styleclass', StyleClass);
 
 
+app.config.globalProperties.$dayjs = dayjs;
 
 app.component('Dropdown', Dropdown)
 app.component('Button', Button)
@@ -60,5 +64,6 @@ app.component('DataTable', DataTable)
 app.component('Column', Column)
 app.component('Row', Row)
 app.component('Checkbox', Checkbox)
+app.component('ToggleButton', ToggleButton)
 
 app.mount('#app')

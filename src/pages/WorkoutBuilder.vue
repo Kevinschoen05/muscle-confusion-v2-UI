@@ -31,9 +31,9 @@
                                 <InputNumber id="set-number" v-model="draftExercise.targetSets"
                                     @focusout="generateSets()" :step="1" showButtons />
                                 <ul class="exercise-sets">
-                                    <li v-for="set in draftExercise.targetSetReps" :key="set">
+                                    <li v-for="set in draftExercise.sets" :key="set">
                                         <label for="set-rep-number"> Reps: </label>
-                                        <InputNumber id="set-rep-number" v-model="set.reps" :step="1" showButtons />
+                                        <InputNumber id="set-rep-number" v-model="set.target_reps" :step="1" showButtons />
                                     </li>
                                 </ul>
                             </div>
@@ -66,9 +66,9 @@
                                         {{ musclegroup }}
                                     </Chip>
                                 </div>
-                                <DataTable :value="exercise.targetSetReps">
+                                <DataTable :value="exercise.sets">
                                     <Column field="index" header="Sets"></Column>
-                                    <Column field="reps" header="Reps"></Column>
+                                    <Column field="target_reps" header="Reps"></Column>
                                 </DataTable>
 
 
@@ -110,9 +110,7 @@ export default {
                 primaryMuscleGroup: '',
                 secondaryMuscleGroups: [],
                 targetSets: 0,
-                targetSetReps: [
-
-                ]
+                sets: []
             },
 
 
@@ -130,8 +128,9 @@ export default {
         },
 
         generateSets() {
-            for (let i = 1; i < this.draftExercise.targetSets + 1; i++)
-                this.draftExercise.targetSetReps.push({ 'index': i, 'reps': 0, 'weight': 0 })
+            for (let i = 1; i < this.draftExercise.targetSets + 1; i++){
+                this.draftExercise.sets.push({'index': i, target_reps: 0, actual_reps: 0, target_weight: 0, actual_weight: 0, completed: false, success: false  })
+            }
         },
 
         saveData() {
@@ -140,9 +139,7 @@ export default {
             this.draftExercise = {
                 exerciseName: '',
                 targetSets: 0,
-                targetSetReps: [
-
-                ]
+                sets: []
             }
             console.log(this.$store.state.user)
             console.log(this.finalWorkout)
@@ -150,6 +147,7 @@ export default {
 
         //when user saves the exercise, update pre-created draft exercise structure with completed values
         updateDraftExercise() {
+            this.draftExercise.id = this.selectedExercise._id
             this.draftExercise.exerciseName = this.selectedExercise.exerciseName
             this.draftExercise.primaryMuscleGroup = this.selectedExercise.primaryMuscleGroup
             this.draftExercise.secondaryMuscleGroups = this.selectedExercise.secondaryMuscleGroups

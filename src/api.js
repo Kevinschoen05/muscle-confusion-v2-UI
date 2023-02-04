@@ -1,6 +1,7 @@
 import axios from "axios";
 const exercise_url = "http://localhost:5001/api/exercises";
 const workout_url = "http://localhost:5001/api/workouts";
+const completedWorkout_url = "http://localhost:5001/api/completedworkouts";
 
 export default class API {
   //WORKOUTS
@@ -9,10 +10,28 @@ export default class API {
     return res.data;
   }
 
+  static async getWorkoutsByWorkoutID(workoutID){
+    const res = await axios.get(`${workout_url}/${workoutID}`)
+    return res.data
+  }
+
+
+  //COMPLETED WORKOUTS 
+  static async addCompletedWorkout(workout) {
+    const res = await axios.post(completedWorkout_url, workout)
+    return res.data
+  }
+
+
   //USER DATA
 
-  static async getWorkoutsByUserID(userId){
-    const res = await axios.get(`${workout_url}/${userId}`)
+  static async getWorkoutsByUserID(userID){
+    const res = await axios.get(`${workout_url}/users/${userID}`)
+    return res.data
+  }
+
+  static async getCompletedWorkoutsByUserID(userID){
+    const res = await axios.get(`${completedWorkout_url}/users/${userID}`)
     return res.data
   }
 
