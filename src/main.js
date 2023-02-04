@@ -3,6 +3,7 @@ import App from './App.vue'
 import PrimeVue from 'primevue/config';
 import router from './router'
 import store from './store/index'
+import dayjs from 'dayjs'
 
 //global stylesheet to use primevue fonts etc
 import './assets/app.css'
@@ -48,6 +49,7 @@ app.directive('ripple', Ripple);
 app.directive('styleclass', StyleClass);
 
 
+app.config.globalProperties.$dayjs = dayjs;
 
 app.component('Dropdown', Dropdown)
 app.component('Button', Button)

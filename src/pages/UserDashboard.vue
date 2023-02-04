@@ -71,11 +71,10 @@
                         </div>
                     </div>
                     <ul class="list-none p-0 m-0">
-                        <li
-                            class="py-3 border-bottom-1 surface-border flex md:align-items-start md:justify-content-between flex-column md:flex-row">
+                        <li v-for="workout in completedWorkouts" :key="workout._id" class="py-3 border-bottom-1 surface-border flex md:align-items-start md:justify-content-between flex-column md:flex-row">
                             <div class="flex align-items-start mr-0 lg:mr-5">
                                 <div>
-                                    <span class="text-900 font-medium block mb-2">Jane Cooper</span>
+                                    <span class="text-900 font-medium block mb-2">{{workout.workoutTitle}}</span>
                                     <div class="text-700 mb-2">responded to an issue.</div>
                                     <a class="text-blue-500 cursor-pointer">
                                         <i class="pi pi-github text-sm mr-2"></i>
@@ -83,54 +82,7 @@
                                     </a>
                                 </div>
                             </div>
-                            <span class="block text-500 font-medium ml-7 md:ml-5 mt-2 md:mt-0">14 mins ago</span>
-                        </li>
-                        <li
-                            class="py-3 border-bottom-1 surface-border flex md:align-items-start md:justify-content-between flex-column md:flex-row">
-                            <div class="flex align-items-start mr-0 lg:mr-5">
-                                <div>
-                                    <span class="text-900 font-medium block mb-2">Robert Fox</span>
-                                    <div class="text-700">changed team size from <span class="text-900">5</span> to
-                                        <span class="text-900">6</span>.
-                                    </div>
-                                </div>
-                            </div>
-                            <span class="block text-500 font-medium ml-7 md:ml-5 mt-2 md:mt-0">20 mins ago</span>
-                        </li>
-                        <li
-                            class="py-3 border-bottom-1 surface-border flex md:align-items-start md:justify-content-between flex-column md:flex-row">
-                            <div class="flex align-items-start mr-0 lg:mr-5">
-                                <div>
-                                    <span class="text-900 font-medium block mb-2">Kristin Watson Cooper</span>
-                                    <div class="text-700 mb-2">created a Q4 presentation to an issue.</div>
-                                    <a class="text-blue-500 cursor-pointer">
-                                        <i class="pi pi-file-pdf text-sm mr-2"></i>
-                                        <span>q4_presentation.pdf</span>
-                                    </a>
-                                </div>
-                            </div>
-                            <span class="block text-500 font-medium ml-7 md:ml-5 mt-2 md:mt-0">38 mins ago</span>
-                        </li>
-                        <li
-                            class="py-3 border-bottom-1 surface-border flex md:align-items-start md:justify-content-between flex-column md:flex-row">
-                            <div class="flex align-items-start mr-0 lg:mr-5">
-                                <div>
-                                    <span class="text-900 font-medium block mb-2">Annette Black</span>
-                                    <div class="text-700">added <span class="text-900">Nico Greenberg</span> to <span
-                                            class="text-blue-500">Watchlist Tier-1</span>.</div>
-                                </div>
-                            </div>
-                            <span class="block text-500 font-medium ml-7 md:ml-5 mt-2 md:mt-0">1 day ago</span>
-                        </li>
-                        <li class="py-3 flex md:align-items-start md:justify-content-between flex-column md:flex-row">
-                            <div class="flex align-items-start mr-0 lg:mr-5">
-                                <div>
-                                    <span class="text-900 font-medium block mb-2">Floyd Miles</span>
-                                    <div class="text-700">has refunded a blue t-shirt for <span
-                                            class="text-blue-500">79$</span>.</div>
-                                </div>
-                            </div>
-                            <span class="block text-500 font-medium ml-7 md:ml-5 mt-2 md:mt-0">4 days ago</span>
+                            <span class="block text-500 font-medium ml-7 md:ml-5 mt-2 md:mt-0">{{workout.relativeTime}}</span>
                         </li>
                     </ul>
                 </div>
@@ -145,12 +97,12 @@
                         </div>
                     </div>
                     <ul class="list-none p-0 m-0">
-                        <li v-for="workout in presetWorkouts" :key="workout.workoutTitle"
+                        <li v-for="workout in presetWorkouts" :key="workout._id"
                             class="py-3 border-bottom-1 surface-border flex md:align-items-start md:justify-content-between flex-column md:flex-row">
                             <div class="flex align-items-start mr-0 lg:mr-5">
                                 <div>
                                     <span class="text-900 font-medium block mb-2">{{ workout.workoutTitle }}</span>
-                                    <div class="text-700 mb-2"> {{  }} Total Exercises</div>
+                                    <div class="text-700 mb-2"> {{ workout.exercises.length }} Total Exercises</div>
                                     <a class="text-blue-500 cursor-pointer">
                                         <i class="pi pi-github text-sm mr-2"></i>
                                         <span>Chip Row</span>
@@ -196,8 +148,12 @@
 
 <script>
 import API from '../api';
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
 
+dayjs.extend(relativeTime);
 export default {
+    
     components: {
 
     },
@@ -220,6 +176,14 @@ export default {
         params: { workoutID: workoutID },
       });
         },
+
+        getActivityFeedRelativeTime(){
+            for (var i = 0; i < this.completedWorkouts.length; i++)
+            {
+              this.completedWorkouts[i].relativeTime = ( dayjs().to(dayjs(this.completedWorkouts[i].completionDate),   ))
+              console.log(this.completedWorkouts[i].relativeTime)
+            }
+        },
         //API CALLS
         async getUserPresetWorkouts() {
             this.presetWorkouts = await API.getWorkoutsByUserID(this.$store.state.user.uid)
@@ -229,6 +193,8 @@ export default {
         async getUserCompletedWorkouts(){
             this.completedWorkouts = await API.getCompletedWorkoutsByUserID(this.$store.state.user.uid)
             console.log("completed Workouts: " + this.completedWorkouts)
+            this.getActivityFeedRelativeTime()
+
         }
     },
 
