@@ -1,6 +1,7 @@
 const Workout = require("../models/workouts");
 const Exercise = require("../models/exercises");
 const CompletedWorkout = require("../models/completedWorkouts");
+const UserSchedule = require("../models/userSchedule")
 
 module.exports = class API {
   //Workouts
@@ -79,7 +80,30 @@ module.exports = class API {
       res.status(200).json(userCompletedWorkouts);
     }
     catch (err){
-      res.satus(404).json({ massage: err.message});
+      res.satus(404).json({ message: err.message});
+    }
+  }
+
+  static async fetchUserSchedule(req, res){
+    const user = req.params.userID
+    try{
+      const userSchedule = await UserSchedule.find({
+        user: user
+      })
+      res.status(200).json(userSchedule);
+    }
+    catch (err){
+      res.status(404).json({message : err.message});
+    }
+  }
+
+  static async createUserSchedule(req, res) {
+    const userSchedule = req.body;
+    try { 
+      await UserSchedule.create(userSchedule);
+      res.status(201).json({message: "Completed Workout Created Successfully"})
+    } catch (err){
+      res.status(400).json({message: err.message});
     }
   }
 

@@ -166,7 +166,7 @@ export default {
     data() {
         return {
             schedule: [
-
+                
             ],
 
             completedWorkouts: [
@@ -184,6 +184,11 @@ export default {
         link: "/activeworkout/",
         params: { workoutID: workoutID },
       });
+        },
+
+        getUserSchedule(){
+
+
         },
 
         getActivityFeedRelativeTime(){
@@ -210,7 +215,7 @@ export default {
     mounted() {
         this.getUserPresetWorkouts()
         this.getUserCompletedWorkouts()
-        this.getUpcomingSchedule()
+        this.getUserSchedule()
     }
 }
 

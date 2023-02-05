@@ -19,5 +19,9 @@ router.post("/completedWorkouts", API.addCompletedWorkout)
 router.get("/exercises", API.fetchAllExercises)
 router.get("/exercises/:primaryMuscleGroup", API.fetchExercisesByMuscleGroup)
 
+//User Specific
+router.get("/userSchedule/users/:userID", API.fetchUserSchedule)
+router.post("/userSchedule", API.createUserSchedule)
+
 
 module.exports = router;
