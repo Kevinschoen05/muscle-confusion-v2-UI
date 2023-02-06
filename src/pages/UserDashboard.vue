@@ -3,62 +3,13 @@
         <div class="grid">
             <div class="col-12">
                 <div class="surface-card shadow-2 border-round flex p-3 flex-column md:flex-row">
-                    <div class="border-bottom-1 md:border-right-1 md:border-bottom-none surface-border flex-auto p-3">
-                        <div class="flex align-items-center mb-3">
-                            <i class="pi pi-shopping-cart text-blue-500 text-xl mr-2"></i>
-                            <span class="text-500 font-medium">Orders</span>
-                        </div>
-                        <span class="block text-900 font-medium mb-4 text-xl">152 New</span>
-                        <div class="flex align-items-center">
-                            <i class="pi pi-arrow-down text-pink-500 text-xl mr-2"></i>
-                            <span class="text-pink-500 font-medium ">-25</span>
-                        </div>
-                    </div>
-                    <div class="border-bottom-1 md:border-right-1 md:border-bottom-none surface-border flex-auto p-3">
-                        <div class="flex align-items-center mb-3">
-                            <i class="pi pi-shopping-cart text-orange-500 text-xl mr-2"></i>
-                            <span class="text-500 font-medium">Revenue</span>
-                        </div>
-                        <span class="block text-900 font-medium mb-4 text-xl">$1500</span>
-                        <div class="flex align-items-center">
-                            <i class="pi pi-arrow-up text-green-500 text-xl mr-2"></i>
-                            <span class="text-green-500 font-medium ">+15</span>
-                        </div>
-                    </div>
-                    <div class="border-bottom-1 md:border-right-1 md:border-bottom-none surface-border flex-auto p-3">
-                        <div class="flex align-items-center mb-3">
-                            <i class="pi pi-users text-cyan-500 text-xl mr-2"></i>
-                            <span class="text-500 font-medium">Customers</span>
-                        </div>
-                        <span class="block text-900 font-medium mb-4 text-xl">25100</span>
-                        <div class="flex align-items-center">
-                            <i class="pi pi-arrow-up text-green-500 text-xl mr-2"></i>
-                            <span class="text-green-500 font-medium ">+%12</span>
-                        </div>
-                    </div>
-                    <div class="border-bottom-1 md:border-right-1 md:border-bottom-none surface-border flex-auto p-3">
-                        <div class="flex align-items-center mb-3">
-                            <i class="pi pi-users text-cyan-500 text-xl mr-2"></i>
-                            <span class="text-500 font-medium">Customers</span>
-                        </div>
-                        <span class="block text-900 font-medium mb-4 text-xl">25100</span>
-                        <div class="flex align-items-center">
-                            <i class="pi pi-arrow-up text-green-500 text-xl mr-2"></i>
-                            <span class="text-green-500 font-medium ">+%12</span>
-                        </div>
-                    </div>
-                    <div class="flex-auto p-3">
-                        <div class="flex align-items-center mb-3">
-                            <i class="pi pi-users text-purple-500 text-xl mr-2"></i>
-                            <span class="text-500 font-medium">Comments</span>
-                        </div>
-                        <span class="block text-900 font-medium mb-4 text-xl">72</span>
-                        <div class="flex align-items-center">
-                            <i class="pi pi-arrow-up text-green-500 text-xl mr-2"></i>
-                            <span class="text-green-500 font-medium ">+20</span>
-                        </div>
-                    </div>
-
+                    <ScheduleCard v-for="day in schedule" 
+                        :key="day.date" 
+                        :date="day.date"
+                        :workoutTitle="day.workoutTitle"
+                        :today="today"    >
+                    </ScheduleCard>
+                        
                 </div>
             </div>
             <div class="col-12 lg:col-6">
@@ -71,18 +22,20 @@
                         </div>
                     </div>
                     <ul class="list-none p-0 m-0">
-                        <li v-for="workout in completedWorkouts" :key="workout._id" class="py-3 border-bottom-1 surface-border flex md:align-items-start md:justify-content-between flex-column md:flex-row">
+                        <li v-for="workout in completedWorkouts" :key="workout._id"
+                            class="py-3 border-bottom-1 surface-border flex md:align-items-start md:justify-content-between flex-column md:flex-row">
                             <div class="flex align-items-start mr-0 lg:mr-5">
                                 <div>
-                                    <span class="text-900 font-medium block mb-2">{{workout.workoutTitle}}</span>
-                                    <div class="text-700 mb-2">Completed by: {{this.$store.state.user.email}}</div>
+                                    <span class="text-900 font-medium block mb-2">{{ workout.workoutTitle }}</span>
+                                    <div class="text-700 mb-2">Completed by: {{ this.$store.state.user.email }}</div>
                                     <a class="text-blue-500 cursor-pointer">
                                         <i class="pi pi-github text-sm mr-2"></i>
                                         <span>Issue #1185</span>
                                     </a>
                                 </div>
                             </div>
-                            <span class="block text-500 font-medium ml-7 md:ml-5 mt-2 md:mt-0">{{workout.relativeTime}}</span>
+                            <span class="block text-500 font-medium ml-7 md:ml-5 mt-2 md:mt-0">{{ workout.relativeTime
+                            }}</span>
                         </li>
                     </ul>
                 </div>
@@ -92,8 +45,8 @@
                     <div class="flex align-items-center justify-content-between mb-3">
                         <div class="text-900 font-medium text-xl">Preset Workouts</div>
                         <div>
-                            <Button icon="pi pi-ellipsis-v" class="p-button-text p-button-plain p-button-rounded"
-                                ></Button>
+                            <Button icon="pi pi-ellipsis-v"
+                                class="p-button-text p-button-plain p-button-rounded"></Button>
                         </div>
                     </div>
                     <ul class="list-none p-0 m-0">
@@ -110,9 +63,10 @@
                                 </div>
                             </div>
                             <div class="mt-3 lg:mt-0">
-                                    <Button  @click="this.startActiveWorkout(workout._id)" icon="pi pi-play" class="p-button-rounded mr-2"></Button>
-                                    <Button icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"></Button>
-                                </div>
+                                <Button @click="this.startActiveWorkout(workout._id)" icon="pi pi-play"
+                                    class="p-button-rounded mr-2"></Button>
+                                <Button icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"></Button>
+                            </div>
                         </li>
                     </ul>
                 </div>
@@ -121,9 +75,9 @@
                 <div class="surface-card border-round shadow-2 p-4 text-center">
                     <img src="../assets/weightlift.png" alt="Image" class="mx-auto block mb-4 h-3 w-3">
                     <div class="text-900 font-medium mb-3 text-xl">Add New Exercises</div>
-                    <p class="mt-0 mb-4 p-0 line-height-3">Add new exercises 
+                    <p class="mt-0 mb-4 p-0 line-height-3">Add new exercises
                     </p>
-                    <Button label="Create Here" icon="pi pi-arrow-right p-button-rounded"></Button>
+                    <Button label="Create Here" icon="pi pi-arrow-right p-button-rounded" @click="debug()"></Button>
                 </div>
             </div>
             <div class="col-12 lg:col-4">
@@ -152,23 +106,29 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
-import  advanced from"dayjs/plugin/advancedFormat";
+import advanced from "dayjs/plugin/advancedFormat";
+import localizedFormat from "dayjs/plugin/localizedFormat"
+import ScheduleCard from '../components/ScheduleCard.vue'
 
 
 dayjs.extend(relativeTime);
 dayjs.extend(timezone)
 dayjs.extend(utc)
 dayjs.extend(advanced)
+dayjs.extend(localizedFormat)
 dayjs.tz.setDefault('America/New_York');
 
 export default {
-    
+    components: {
+        ScheduleCard
+    },
     data() {
         return {
-            schedule: [
-                
-            ],
+            today: dayjs().tz().format('MM/DD/YYYY h:mm:ss z'),
 
+            schedule: [
+
+            ],
             completedWorkouts: [
 
             ],
@@ -178,24 +138,24 @@ export default {
         }
     },
     methods: {
-        startActiveWorkout(workoutID){
+        displayUserSchedule() {
+            for (var i = 0; i < this.schedule.length; i++) {
+                this.schedule[i].date = dayjs(this.schedule[i].date).format('LL')
+            }
+        },
+
+        startActiveWorkout(workoutID) {
             this.$router.push({
-        name: "active-workout",
-        link: "/activeworkout/",
-        params: { workoutID: workoutID },
-      });
+                name: "active-workout",
+                link: "/activeworkout/",
+                params: { workoutID: workoutID },
+            });
         },
 
-        getUserSchedule(){
-
-
-        },
-
-        getActivityFeedRelativeTime(){
-            for (var i = 0; i < this.completedWorkouts.length; i++)
-            {
-              this.completedWorkouts[i].relativeTime = ( dayjs().to(dayjs(this.completedWorkouts[i].completionDate),   ))
-              console.log(this.completedWorkouts[i].relativeTime)
+        getActivityFeedRelativeTime() {
+            for (var i = 0; i < this.completedWorkouts.length; i++) {
+                this.completedWorkouts[i].relativeTime = (dayjs().to(dayjs(this.completedWorkouts[i].completionDate),))
+                console.log(this.completedWorkouts[i].relativeTime)
             }
         },
         //API CALLS
@@ -204,12 +164,19 @@ export default {
             console.log("preset Workouts: " + this.presetWorkouts)
         },
 
-        async getUserCompletedWorkouts(){
+        async getUserCompletedWorkouts() {
             this.completedWorkouts = await API.getCompletedWorkoutsByUserID(this.$store.state.user.uid)
             console.log("completed Workouts: " + this.completedWorkouts)
             this.getActivityFeedRelativeTime()
 
+        },
+        async getUserSchedule() {
+            let scheduleObject = await API.getUserSchedule(this.$store.state.user.uid)
+
+            this.schedule = scheduleObject[0].schedule
+            this.displayUserSchedule()
         }
+
     },
 
     mounted() {
