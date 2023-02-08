@@ -3,13 +3,10 @@
         <div class="grid">
             <div class="col-12">
                 <div class="surface-card shadow-2 border-round flex p-3 flex-column md:flex-row">
-                    <ScheduleCard v-for="day in schedule" 
-                        :key="day.date" 
-                        :date="day.date"
-                        :workoutTitle="day.workoutTitle"
-                        :today="today"    >
+                    <ScheduleCard v-for="day in schedule" :key="day.date" :date="day.date"
+                        :workoutTitle="day.workoutTitle" :today="today">
                     </ScheduleCard>
-                        
+
                 </div>
             </div>
             <div class="col-12 lg:col-6">
@@ -22,21 +19,9 @@
                         </div>
                     </div>
                     <ul class="list-none p-0 m-0">
-                        <li v-for="workout in completedWorkouts" :key="workout._id"
-                            class="py-3 border-bottom-1 surface-border flex md:align-items-start md:justify-content-between flex-column md:flex-row">
-                            <div class="flex align-items-start mr-0 lg:mr-5">
-                                <div>
-                                    <span class="text-900 font-medium block mb-2">{{ workout.workoutTitle }}</span>
-                                    <div class="text-700 mb-2">Completed by: {{ this.$store.state.user.email }}</div>
-                                    <a class="text-blue-500 cursor-pointer">
-                                        <i class="pi pi-github text-sm mr-2"></i>
-                                        <span>Issue #1185</span>
-                                    </a>
-                                </div>
-                            </div>
-                            <span class="block text-500 font-medium ml-7 md:ml-5 mt-2 md:mt-0">{{ workout.relativeTime
-                            }}</span>
-                        </li>
+                        <ActivityFeed v-for="workout in completedWorkouts" :key="workout._id"
+                            :workoutTitle="workout.workoutTitle" :userEmail="this.$store.state.user.email"
+                            :relativeTime="workout.relativeTime"></ActivityFeed>
                     </ul>
                 </div>
             </div>
@@ -50,24 +35,9 @@
                         </div>
                     </div>
                     <ul class="list-none p-0 m-0">
-                        <li v-for="workout in presetWorkouts" :key="workout._id"
-                            class="py-3 border-bottom-1 surface-border flex md:align-items-start md:justify-content-between flex-column md:flex-row">
-                            <div class="flex align-items-start mr-0 lg:mr-5">
-                                <div>
-                                    <span class="text-900 font-medium block mb-2">{{ workout.workoutTitle }}</span>
-                                    <div class="text-700 mb-2"> {{ workout.exercises.length }} Total Exercises</div>
-                                    <a class="text-blue-500 cursor-pointer">
-                                        <i class="pi pi-github text-sm mr-2"></i>
-                                        <span>Chip Row</span>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="mt-3 lg:mt-0">
-                                <Button @click="this.startActiveWorkout(workout._id)" icon="pi pi-play"
-                                    class="p-button-rounded mr-2"></Button>
-                                <Button icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"></Button>
-                            </div>
-                        </li>
+                        <PresetWorkouts v-for="workout in presetWorkouts" :key="workout._id"
+                            :workoutTitle="workout.workoutTitle" :totalExercises="workout.exercises.lengh"
+                            :workoutID="workout._id"></PresetWorkouts>
                     </ul>
                 </div>
             </div>
@@ -108,7 +78,10 @@ import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import advanced from "dayjs/plugin/advancedFormat";
 import localizedFormat from "dayjs/plugin/localizedFormat"
+
 import ScheduleCard from '../components/ScheduleCard.vue'
+import PresetWorkouts from '../components/PresetWorkouts.vue'
+import ActivityFeed from '../components/ActivityFeed.vue'
 
 
 dayjs.extend(relativeTime);
@@ -120,7 +93,9 @@ dayjs.tz.setDefault('America/New_York');
 
 export default {
     components: {
-        ScheduleCard
+        ScheduleCard,
+        PresetWorkouts,
+        ActivityFeed
     },
     data() {
         return {
