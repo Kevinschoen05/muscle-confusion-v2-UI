@@ -4,7 +4,7 @@
             <div class="col-12">
                 <div class="surface-card shadow-2 border-round flex p-3 flex-column md:flex-row">
                     <ScheduleCard v-for="day in schedule" :key="day.date" :date="day.date"
-                        :workoutTitle="day.workoutTitle" :today="today">
+                        :workoutTitle="day.workoutTitle"  :workoutID="day.workoutID" :today="today">
                     </ScheduleCard>
 
                 </div>
@@ -113,6 +113,11 @@ export default {
         }
     },
     methods: {
+
+        debug(){
+            console.log(this.schedule)
+        },
+
         displayUserSchedule() {
             for (var i = 0; i < this.schedule.length; i++) {
                 this.schedule[i].date = dayjs(this.schedule[i].date).format('LL')
@@ -147,7 +152,6 @@ export default {
         },
         async getUserSchedule() {
             let scheduleObject = await API.getUserSchedule(this.$store.state.user.uid)
-
             this.schedule = scheduleObject[0].schedule
             this.displayUserSchedule()
         }
@@ -167,40 +171,6 @@ export default {
 <style>
 body {
     background-color: #f5f5f5;
-}
-
-.settings-row {
-    display: flex;
-    justify-content: space-around;
-}
-
-.settings-header,
-.preset-workouts {
-    background-color: #fff;
-    width: 30%;
-    margin-top: 5em;
-    border: 1px solid #EAECF0;
-    box-shadow: 0px 12px 16px -4px rgba(16, 24, 40, 0.08), 0px 4px 6px -2px rgba(16, 24, 40, 0.03);
-    border-radius: 16px;
-}
-
-.settings-title {
-    font-family: 'Roboto';
-    font-size: 30px;
-    font-weight: 600;
-    line-height: 38px;
-    color: #101828;
-    margin-left: 2em;
-}
-
-.settings-subtitle {
-    font-family: 'Roboto';
-    font-size: 16px;
-    font-weight: 400;
-    color: #475467;
-    margin-left: 4em;
-
-
 }
 
 #primevue {

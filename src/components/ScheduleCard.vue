@@ -5,7 +5,8 @@
         </div>
         <span class="block text-900 font-medium mb-4 text-xl">{{ workoutTitle }}</span>
         <div class="flex align-items-center">
-            <Button></Button>
+            <Button v-if="!workoutID" label="Set Workout"></Button>
+            <Button v-else label="Update Workout"></Button>
         </div>
     </div>
 </template>
@@ -22,6 +23,7 @@ export default {
         date: String,
         today: String,
         workoutTitle: String,
+        workoutID: String
 
     },
 
