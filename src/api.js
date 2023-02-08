@@ -41,6 +41,12 @@ export default class API {
     return res.data
   }
 
+  static async updateUserSchedule(userID){
+    const res = await axios.put(`${userSchedule_url}/users/${userID}`)
+    return res.data
+
+  }
+
   //EXERCISES
 
   static async getExercisesByMuscleGroup(musclegroup){

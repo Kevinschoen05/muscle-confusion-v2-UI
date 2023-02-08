@@ -83,6 +83,8 @@ module.exports = class API {
     }
   }
 
+  //USER SCHEDULE
+
   static async fetchUserSchedule(req, res) {
     const user = req.params.userID;
     try {
@@ -123,6 +125,8 @@ module.exports = class API {
       res.status(400).json({ message: err.message });
     }
   }
+
+  
 
   //EXERCISES
   static async fetchAllExercises(req, res) {

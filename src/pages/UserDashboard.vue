@@ -78,6 +78,7 @@ import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import advanced from "dayjs/plugin/advancedFormat";
 import localizedFormat from "dayjs/plugin/localizedFormat"
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore"
 
 import ScheduleCard from '../components/ScheduleCard.vue'
 import PresetWorkouts from '../components/PresetWorkouts.vue'
@@ -89,6 +90,7 @@ dayjs.extend(timezone)
 dayjs.extend(utc)
 dayjs.extend(advanced)
 dayjs.extend(localizedFormat)
+dayjs.extend(isSameOrBefore)
 dayjs.tz.setDefault('America/New_York');
 
 export default {
@@ -135,7 +137,6 @@ export default {
         getActivityFeedRelativeTime() {
             for (var i = 0; i < this.completedWorkouts.length; i++) {
                 this.completedWorkouts[i].relativeTime = (dayjs().to(dayjs(this.completedWorkouts[i].completionDate),))
-                console.log(this.completedWorkouts[i].relativeTime)
             }
         },
         //API CALLS
@@ -153,8 +154,15 @@ export default {
         async getUserSchedule() {
             let scheduleObject = await API.getUserSchedule(this.$store.state.user.uid)
             this.schedule = scheduleObject[0].schedule
+           /* for (var i = 0; i < this.schedule.length; i++) {
+                if ( dayjs(this.schedule[i].date).isSameOrBefore(this.today)){
+                    this.schedule.splice(i, i, '')
+                    console.log(this.schedule)
+                }
+            } */
             this.displayUserSchedule()
         }
+
 
     },
 
