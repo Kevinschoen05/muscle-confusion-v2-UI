@@ -36,7 +36,7 @@
                     </div>
                     <ul class="list-none p-0 m-0">
                         <PresetWorkouts v-for="workout in presetWorkouts" :key="workout._id"
-                            :workoutTitle="workout.workoutTitle" :totalExercises="workout.exercises.lengh"
+                            :workoutTitle="workout.workoutTitle" :totalExercises="workout.exercises.length"
                             :workoutID="workout._id"></PresetWorkouts>
                     </ul>
                 </div>
