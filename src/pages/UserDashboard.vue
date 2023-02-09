@@ -79,6 +79,8 @@ import timezone from "dayjs/plugin/timezone";
 import advanced from "dayjs/plugin/advancedFormat";
 import localizedFormat from "dayjs/plugin/localizedFormat"
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore"
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter"
+import isToday from "dayjs/plugin/isToday"
 
 import ScheduleCard from '../components/ScheduleCard.vue'
 import PresetWorkouts from '../components/PresetWorkouts.vue'
@@ -91,6 +93,8 @@ dayjs.extend(utc)
 dayjs.extend(advanced)
 dayjs.extend(localizedFormat)
 dayjs.extend(isSameOrBefore)
+dayjs.extend(isSameOrAfter)
+dayjs.extend(isToday)
 dayjs.tz.setDefault('America/New_York');
 
 export default {
@@ -117,7 +121,7 @@ export default {
     methods: {
 
         debug(){
-            console.log(this.schedule)
+            console.log(this.today )
         },
 
         displayUserSchedule() {
@@ -153,13 +157,37 @@ export default {
         },
         async getUserSchedule() {
             let scheduleObject = await API.getUserSchedule(this.$store.state.user.uid)
-            this.schedule = scheduleObject[0].schedule
-           /* for (var i = 0; i < this.schedule.length; i++) {
-                if ( dayjs(this.schedule[i].date).isSameOrBefore(this.today)){
-                    this.schedule.splice(i, i, '')
-                    console.log(this.schedule)
+            let savedSchedule = scheduleObject[0].schedule
+            let updatedSchedule = [];
+
+
+
+            //remove past days from schedule
+
+            for (var i = 0; i < savedSchedule.length; i++) {
+                console.log(savedSchedule[i].date)
+                if ( dayjs(savedSchedule[i].date).isToday() || dayjs(savedSchedule[i].date).isSameOrAfter(this.today)){
+                    updatedSchedule.push(savedSchedule[i])
                 }
-            } */
+            } 
+            //add new placeholder days to end of schedule
+
+            let latestDate = updatedSchedule.at(-1).date
+            let increment = 1;
+            console.log(latestDate)
+
+            while(updatedSchedule.length < 5 ){
+                updatedSchedule.push({
+                    date: dayjs(latestDate).add(increment, 'day'),
+                    workoutID: '',
+                    workoutTItle: '',
+                    completed: false
+                })
+                increment++
+            }
+
+            this.schedule = updatedSchedule
+
             this.displayUserSchedule()
         }
 
