@@ -35,6 +35,8 @@ import Ripple from 'primevue/ripple';
 import StyleClass from 'primevue/styleclass';
 import ToggleButton from 'primevue/togglebutton';
 import Dialog from 'primevue/dialog'
+import SelectButton from 'primevue/selectbutton';
+
 
 
 
@@ -67,5 +69,6 @@ app.component('Row', Row)
 app.component('Checkbox', Checkbox)
 app.component('ToggleButton', ToggleButton)
 app.component('Dialog', Dialog)
+app.component('SelectButton', SelectButton)
 
 app.mount('#app')

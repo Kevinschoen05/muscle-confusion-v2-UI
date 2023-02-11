@@ -4,7 +4,8 @@
             <div class="col-12">
                 <div class="surface-card shadow-2 border-round flex p-3 flex-column md:flex-row">
                     <ScheduleCard v-for="day in schedule" :key="day.date" :date="day.date"
-                        :workoutTitle="day.workoutTitle"  :workoutID="day.workoutID" :today="today">
+                        @update-schedule="UserScheduleUpdate"      
+                        :workoutTitle="day.workoutTitle"  :workoutID="day.workoutID" :today="today" :presetWorkouts="presetWorkouts">
                     </ScheduleCard>
 
                 </div>
@@ -78,7 +79,6 @@ import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import advanced from "dayjs/plugin/advancedFormat";
 import localizedFormat from "dayjs/plugin/localizedFormat"
-import isSameOrBefore from "dayjs/plugin/isSameOrBefore"
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter"
 import isToday from "dayjs/plugin/isToday"
 
@@ -92,7 +92,6 @@ dayjs.extend(timezone)
 dayjs.extend(utc)
 dayjs.extend(advanced)
 dayjs.extend(localizedFormat)
-dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
 dayjs.extend(isToday)
 dayjs.tz.setDefault('America/New_York');
@@ -143,7 +142,20 @@ export default {
                 this.completedWorkouts[i].relativeTime = (dayjs().to(dayjs(this.completedWorkouts[i].completionDate),))
             }
         },
+
+        //component handlers
+
+        UserScheduleUpdate({ date, workoutID, workoutTitle}){
+            console.log("from parent: " + date + workoutID + workoutTitle)
+        },
+
         //API CALLS
+
+        async updateUserSchedule(){
+            
+            await API.updateUserSchedule(this.$store.state.user.uid,)
+        },
+
         async getUserPresetWorkouts() {
             this.presetWorkouts = await API.getWorkoutsByUserID(this.$store.state.user.uid)
             console.log("preset Workouts: " + this.presetWorkouts)
