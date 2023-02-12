@@ -89,9 +89,12 @@ module.exports = class API {
     const user = req.params.userID;
     try {
       const userSchedule = await UserSchedule.find({
-        user: user,
-      });
-      res.status(200).json(userSchedule);
+        user: user
+      }
+      );
+
+      let response = userSchedule[0].toObject()
+      res.status(200).json(response);
     } catch (err) {
       res.status(404).json({ message: err.message });
     }

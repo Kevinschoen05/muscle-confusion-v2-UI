@@ -7,8 +7,8 @@
         <span v-if="!workoutID" class="block text-900 font-medium mb-4 text-xl">Rest Day</span>
         <span v-else class="block text-900 font-medium mb-4 text-xl">{{ workoutTitle }}</span>
         <div class="flex align-items-bottom">
-            <Button v-if="!workoutID" label="Set Workout" @click="visible2 = true"></Button>
-            <Button v-else label="Update Workout" @click="visible2 = true"></Button>
+            <Button v-if="!workoutID" label="Set Workout" @click="visible2 = true" class="p-button-sm"></Button>
+            <Button v-else label="Update Workout" @click="visible2 = true" class="p-button-sm"></Button>
         </div>
     </div>
     <Dialog v-model:visible="visible2" appendTo="body" :modal="true"

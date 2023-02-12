@@ -117,10 +117,11 @@ export default {
             ]
         }
     },
+
     methods: {
 
         debug(){
-            console.log(this.today )
+            console.log(this.schedule )
         },
 
         displayUserSchedule() {
@@ -147,13 +148,22 @@ export default {
 
         UserScheduleUpdate({ date, workoutID, workoutTitle}){
             console.log("from parent: " + date + workoutID + workoutTitle)
+            this.updateUserSchedule(date, workoutID, workoutTitle)
         },
 
         //API CALLS
 
-        async updateUserSchedule(){
-            
-            await API.updateUserSchedule(this.$store.state.user.uid,)
+        async updateUserSchedule(date, workoutID, workoutTitle){
+            for(var i = 0; i < this.schedule.length; i++){
+                if(this.schedule[i].date === date){
+                    this.schedule[i].workoutID = workoutID
+                    this.schedule[i].workoutTitle = workoutTitle
+                }
+            }
+            console.log("schedule after update: " + this.schedule)
+            let body = this.schedule
+            console.log(body)
+            await API.updateUserSchedule(this.$store.state.user.uid, body)
         },
 
         async getUserPresetWorkouts() {
@@ -169,9 +179,10 @@ export default {
         },
         async getUserSchedule() {
             let scheduleObject = await API.getUserSchedule(this.$store.state.user.uid)
-            let savedSchedule = scheduleObject[0].schedule
+            console.log("schedule object on getUserSchedule: " + scheduleObject)
+            let savedSchedule = scheduleObject.schedule
+            console.log(savedSchedule)
             let updatedSchedule = [];
-
 
 
             //remove past days from schedule
@@ -192,16 +203,21 @@ export default {
                 updatedSchedule.push({
                     date: dayjs(latestDate).add(increment, 'day'),
                     workoutID: '',
-                    workoutTItle: '',
+                    workoutTitle: '',
                     completed: false
                 })
                 increment++
             }
 
+            console.log(updatedSchedule)
+           
             this.schedule = updatedSchedule
-
+            savedSchedule = []
+            updatedSchedule = []
             this.displayUserSchedule()
-        }
+
+            
+        },
 
 
     },
