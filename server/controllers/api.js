@@ -152,4 +152,14 @@ module.exports = class API {
       res.status(404).json({ message: err.message });
     }
   }
+
+  static async addExercise(req, res){
+    const exercise = req.body;
+    try {
+      await Exercise.create(exercise);
+      res.status(201).json({ message: "Exercise Created Successfully!" });
+    } catch (err) {
+      res.status(400).json({ message: err.message });
+    }
+  }
 };

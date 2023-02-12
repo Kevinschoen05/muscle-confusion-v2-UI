@@ -48,7 +48,7 @@
                     <div class="text-900 font-medium mb-3 text-xl">Add New Exercises</div>
                     <p class="mt-0 mb-4 p-0 line-height-3">Add new exercises
                     </p>
-                    <Button label="Create Here" icon="pi pi-arrow-right p-button-rounded" @click="debug()"></Button>
+                    <Button label="Create Here" icon="pi pi-arrow-right p-button-rounded" @click="createNewExercise()"></Button>
                 </div>
             </div>
             <div class="col-12 lg:col-4">
@@ -56,7 +56,7 @@
                     <img src="../assets/rise.png" alt="Image" class="mx-auto block mb-4  h-3 w-3">
                     <div class="text-900 font-medium mb-3 text-xl">Track your Progress</div>
                     <p class="mt-0 mb-4 p-0 line-height-3">View your workout breakdowns</p>
-                    <Button label="View Stats" icon="pi pi-arrow-right p-button-rounded"></Button>
+                    <Button label="View Stats" icon="pi pi-arrow-right p-button-rounded" @click="debug()"></Button>
                 </div>
             </div>
             <div class="col-12 lg:col-4">
@@ -135,6 +135,13 @@ export default {
                 name: "active-workout",
                 link: "/activeworkout/",
                 params: { workoutID: workoutID },
+            });
+        },
+
+        createNewExercise(){
+            this.$router.push({
+                name: "exercise-builder",
+                link: "/exercisebuilder",
             });
         },
 
