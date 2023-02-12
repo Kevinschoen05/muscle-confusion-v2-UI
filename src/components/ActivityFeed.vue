@@ -3,30 +3,28 @@
         <div class="flex align-items-start mr-0 lg:mr-5">
             <div>
                 <span class="text-900 font-medium block mb-2">{{ workoutTitle }}</span>
-                <div class="text-700 mb-2"> {{ totalExercises }} Total Exercises</div>
+                <div class="text-700 mb-2">Completed by: {{ userEmail }}</div>
                 <a class="text-blue-500 cursor-pointer">
                     <i class="pi pi-github text-sm mr-2"></i>
-                    <span>Chip Row</span>
+                    <span>Issue #1185</span>
                 </a>
             </div>
         </div>
-        <div class="mt-3 lg:mt-0">
-            <Button @click="this.startActiveWorkout(workoutID)" icon="pi pi-play"
-                class="p-button-rounded mr-2"></Button>
-            <Button icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"></Button>
-        </div>
+        <span class="block text-500 font-medium ml-7 md:ml-5 mt-2 md:mt-0">{{relativeTime
+        }}</span>
     </li>
 </template>
   
 <script>
 
 export default {
-    name: 'PresetWorkouts',
+    name: 'ActivityFeed',
 
     props: {
-        workoutTitle: String, 
-        totalExercises: Number,
-        workoutID: String
+        workoutTitle: String,
+        userEmail: String,
+        workoutID: String,
+        relativeTime: String
     },
 
     data() {
@@ -38,13 +36,7 @@ export default {
 
     },
     methods: {
-        startActiveWorkout(workoutID) {
-            this.$router.push({
-                name: "active-workout",
-                link: "/activeworkout/",
-                params: { workoutID: workoutID },
-            });
-        },
+
     },
     mounted() {
 

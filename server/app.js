@@ -5,6 +5,9 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const history = require('connect-history-api-fallback');
 
+mongoose.set('useFindAndModify', false);
+
+
 const app = express();
 const port = process.env.PORT || 5001;
 

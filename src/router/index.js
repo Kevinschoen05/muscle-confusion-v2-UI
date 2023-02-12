@@ -19,6 +19,11 @@ const routes = [
     component: () => import('../pages/WorkoutBuilder.vue')
   },
   {
+    path: '/exercisebuilder',
+    name: 'exercise-builder',
+    component: () => import('../pages/ExerciseBuilder.vue')
+  },
+  {
     path: '/login',
     name: 'login',
     component: () => import('../pages/Login.vue')
