@@ -49,13 +49,18 @@ export default class API {
 
   //EXERCISES
 
+  static async addExercise(exercise){
+    const res = await axios.post(`${exercise_url}`, exercise)
+    return res.data;
+  }
+
   static async getExercisesByMuscleGroup(musclegroup) {
     const res = await axios.get(`${exercise_url}/${musclegroup}`);
     return res.data;
   }
 
-  static async getPrimaryMuscleGroups(){
-    const res = await axios.get(`${exercise_url}/primaryMuscleGroups`)
+  static async getMuscleGroups(){
+    const res = await axios.get(`${exercise_url}/muscleGroups`)
     return res.data;
   }
 }

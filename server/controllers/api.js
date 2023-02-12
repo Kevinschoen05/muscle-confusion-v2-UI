@@ -163,12 +163,12 @@ module.exports = class API {
     }
   }
 
-  static async getPrimaryMuscleGroups(req, res){
+  static async getMuscleGroups(req, res){
     const query = Exercise.find()
     try{
        const muscleGroups = await query.distinct(
           'primaryMuscleGroup', function(error, ids){
-            
+
           }
       )
        res.status(200).json(muscleGroups);
