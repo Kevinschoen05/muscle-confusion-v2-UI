@@ -162,4 +162,19 @@ module.exports = class API {
       res.status(400).json({ message: err.message });
     }
   }
+
+  static async getPrimaryMuscleGroups(req, res){
+    const query = Exercise.find()
+    try{
+       const muscleGroups = await query.distinct(
+          'primaryMuscleGroup', function(error, ids){
+            
+          }
+      )
+       res.status(200).json(muscleGroups);
+    }   catch (err) {
+      res.status(400).json({ message: err.message });
+    }   
+
+  }
 };

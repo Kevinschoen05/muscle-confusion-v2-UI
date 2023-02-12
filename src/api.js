@@ -53,4 +53,9 @@ export default class API {
     const res = await axios.get(`${exercise_url}/${musclegroup}`);
     return res.data;
   }
+
+  static async getPrimaryMuscleGroups(){
+    const res = await axios.get(`${exercise_url}/primaryMuscleGroups`)
+    return res.data;
+  }
 }
