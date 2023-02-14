@@ -4,14 +4,14 @@
             <div class="col-12">
                 <div class="surface-card shadow-2 border-round flex p-3 flex-column md:flex-row">
                     <ScheduleCard v-for="day in schedule" :key="day.date" :date="day.date"
-                        @update-schedule="UserScheduleUpdate"      
-                        :workoutTitle="day.workoutTitle"  :workoutID="day.workoutID" :today="today" :presetWorkouts="presetWorkouts">
+                        @update-schedule="UserScheduleUpdate" :workoutTitle="day.workoutTitle"
+                        :workoutID="day.workoutID" :today="today" :presetWorkouts="presetWorkouts">
                     </ScheduleCard>
 
                 </div>
             </div>
             <div class="col-12 lg:col-6">
-                <div class="surface-card shadow-2 border-round p-4 h-full">
+                <div class="surface-card shadow-2 border-round h-30rem p-4 overflow-auto">
                     <div class="flex align-items-center justify-content-between mb-3">
                         <div class="text-900 font-medium text-xl">Recent Activity</div>
                         <div>
@@ -19,15 +19,15 @@
                                 @click="$refs.menu1.toggle($event)"></Button>
                         </div>
                     </div>
-                    <ul class="list-none p-0 m-0">
-                        <ActivityFeed v-for="workout in completedWorkouts" :key="workout._id"
-                            :workoutTitle="workout.workoutTitle" :userEmail="this.$store.state.user.email"
-                            :relativeTime="workout.relativeTime"></ActivityFeed>
-                    </ul>
+                        <ul class="list-none p-0 m-0">
+                            <ActivityFeed v-for="workout in completedWorkouts" :key="workout._id"
+                                :workoutTitle="workout.workoutTitle" :userEmail="this.$store.state.user.email"
+                                :relativeTime="workout.relativeTime"></ActivityFeed>
+                        </ul>
                 </div>
             </div>
             <div class="col-12 lg:col-6">
-                <div class="surface-card shadow-2 border-round p-4 h-full">
+                <div class="surface-card shadow-2 border-round p-4 h-30rem overflow-auto">
                     <div class="flex align-items-center justify-content-between mb-3">
                         <div class="text-900 font-medium text-xl">Preset Workouts</div>
                         <div>
@@ -35,11 +35,11 @@
                                 class="p-button-text p-button-plain p-button-rounded"></Button>
                         </div>
                     </div>
-                    <ul class="list-none p-0 m-0">
-                        <PresetWorkouts v-for="workout in presetWorkouts" :key="workout._id"
-                            :workoutTitle="workout.workoutTitle" :totalExercises="workout.exercises.length"
-                            :workoutID="workout._id"></PresetWorkouts>
-                    </ul>
+                        <ul class="list-none p-0 m-0 ">
+                            <PresetWorkouts v-for="workout in presetWorkouts" :key="workout._id"
+                                :workoutTitle="workout.workoutTitle" :totalExercises="workout.exercises.length"
+                                :workoutID="workout._id"></PresetWorkouts>
+                        </ul>
                 </div>
             </div>
             <div class="col-12 lg:col-4">
@@ -48,7 +48,8 @@
                     <div class="text-900 font-medium mb-3 text-xl">Add New Exercises</div>
                     <p class="mt-0 mb-4 p-0 line-height-3">Add new exercises
                     </p>
-                    <Button label="Create Here" icon="pi pi-arrow-right p-button-rounded" @click="createNewExercise()"></Button>
+                    <Button label="Create Here" icon="pi pi-arrow-right p-button-rounded"
+                        @click="createNewExercise()"></Button>
                 </div>
             </div>
             <div class="col-12 lg:col-4">
@@ -120,8 +121,8 @@ export default {
 
     methods: {
 
-        debug(){
-            console.log(this.schedule )
+        debug() {
+            console.log(this.schedule)
         },
 
         displayUserSchedule() {
@@ -138,7 +139,7 @@ export default {
             });
         },
 
-        createNewExercise(){
+        createNewExercise() {
             this.$router.push({
                 name: "exercise-builder",
                 link: "/exercisebuilder",
@@ -153,16 +154,16 @@ export default {
 
         //component handlers
 
-        UserScheduleUpdate({ date, workoutID, workoutTitle}){
+        UserScheduleUpdate({ date, workoutID, workoutTitle }) {
             console.log("from parent: " + date + workoutID + workoutTitle)
             this.updateUserSchedule(date, workoutID, workoutTitle)
         },
 
         //API CALLS
 
-        async updateUserSchedule(date, workoutID, workoutTitle){
-            for(var i = 0; i < this.schedule.length; i++){
-                if(this.schedule[i].date === date){
+        async updateUserSchedule(date, workoutID, workoutTitle) {
+            for (var i = 0; i < this.schedule.length; i++) {
+                if (this.schedule[i].date === date) {
                     this.schedule[i].workoutID = workoutID
                     this.schedule[i].workoutTitle = workoutTitle
                 }
@@ -196,17 +197,17 @@ export default {
 
             for (var i = 0; i < savedSchedule.length; i++) {
                 console.log(savedSchedule[i].date)
-                if ( dayjs(savedSchedule[i].date).isToday() || dayjs(savedSchedule[i].date).isSameOrAfter(this.today)){
+                if (dayjs(savedSchedule[i].date).isToday() || dayjs(savedSchedule[i].date).isSameOrAfter(this.today)) {
                     updatedSchedule.push(savedSchedule[i])
                 }
-            } 
+            }
             //add new placeholder days to end of schedule
 
             let latestDate = updatedSchedule.at(-1).date
             let increment = 1;
             console.log(latestDate)
 
-            while(updatedSchedule.length < 5 ){
+            while (updatedSchedule.length < 5) {
                 updatedSchedule.push({
                     date: dayjs(latestDate).add(increment, 'day'),
                     workoutID: '',
@@ -217,13 +218,13 @@ export default {
             }
 
             console.log(updatedSchedule)
-           
+
             this.schedule = updatedSchedule
             savedSchedule = []
             updatedSchedule = []
             this.displayUserSchedule()
 
-            
+
         },
 
 
