@@ -2,7 +2,10 @@
     <div class="p-5 flex flex-column flex-auto">
         <div class="grid">
             <div class="col-12">
-                <div class="surface-card shadow-2 border-round flex p-3 flex-column md:flex-row">
+                <div class="surface-card pl-4 pt-4 pb-4 border-bottom-none">
+                    <div class="text-900 font-medium text-xl">Upcoming Schedule</div>
+                </div> 
+                <div class="surface-card   border-top-none border-noround-top border-round flex p-3 flex-column md:flex-row">
                     <ScheduleCard v-for="day in schedule" :key="day.date" :date="day.date"
                         @update-schedule="UserScheduleUpdate" :workoutTitle="day.workoutTitle"
                         :workoutID="day.workoutID" :today="today" :presetWorkouts="presetWorkouts">

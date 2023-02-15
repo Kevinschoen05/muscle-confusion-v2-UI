@@ -3,7 +3,6 @@
         <div class="header-bar w-auto">
             <div class="exercise-header">
                 <p class="exercise-name">{{ exerciseName }}</p>
-
             </div>
             <div class=" flex justify-content-between align-content-center align-items-center w-auto">
                 <muscle-badge :title="primaryMuscleGroup" primary></muscle-badge>
