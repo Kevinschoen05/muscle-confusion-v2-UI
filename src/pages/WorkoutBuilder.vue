@@ -71,7 +71,6 @@
                                     <Column field="target_reps" header="Reps"></Column>
                                 </DataTable>
 
-
                             </AccordionTab>
                         </Accordion>
                         <div class="surface-border border-top-1 opacity-50 mb-3 col-12"
@@ -166,9 +165,22 @@ export default {
             await API.addWorkout(this.finalWorkout);
             this.showSuccess();
         },
+
+        async getMuscleGroups() {
+            this.muscleGroups = await API.getMuscleGroups()
+            for (var i = 0; i < this.muscleGroups.length; i++) {
+                this.selectedSecondaryMuscleGroups.push({
+                    name: this.muscleGroups[i],
+                    selected: false
+                })
+            }
+
+        },
+
     },
     mounted() {
         this.finalWorkout.users.push(this.$store.state.user.uid)
+        this.getMuscleGroups()
     }
 }
 
