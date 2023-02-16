@@ -74,7 +74,7 @@
 
                                     </WorkoutBuilderTable>
                                 </ul>
-
+                                <Button  label="Delete Exercise" class=" p-button-danger w-auto mt-3" @click="deleteExercise(exercise.id)"></Button>
                             </AccordionTab>
                         </Accordion>
                         <div class="surface-border border-top-1 opacity-50 mb-3 col-12"
@@ -163,16 +163,21 @@ export default {
             this.saveData()
         },
 
+        deleteExercise(exerciseID){
+            for(var i = 0; i < this.finalWorkout.exercises.length; i++){
+                if (this.finalWorkout.exercises[i].id === exerciseID){
+                    let index = this.finalWorkout.exercises.indexOf(this.finalWorkout.exercises[i])
+                    this.finalWorkout.exercises.splice(index, 1)
+                    console.log(this.finalWorkout)
+                }
+            }
+        },
+
         //COMPONENT HANDLERS
 
         handleDeleteSet({exerciseID, set}) {
-            console.log(exerciseID, set)
-            for(var i = 0; i < this.finalWorkout.exercises.length; i++){
-                if(this.finalWorkout.exercises[i].id === exerciseID && this.finalWorkout.exercises[i].sets.index === set){
-                    this.finalWorkout.splice(this.finalWorkout[i])
-                }
-            }
-            console.log(this.finalWorkout)
+
+            console.log("ignore, WIP" + exerciseID + set )
         },
 
 
