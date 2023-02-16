@@ -1,43 +1,102 @@
 <template>
-    <div class="container">
-        <h1>Today's Workout</h1>
-        <h2>{{ workout }}</h2>
-        <div class="divider"></div>
-        <ul class="exercise-list">
-            <li v-for="exercise in exercises" :key="exercise.item">
-                <img aria-hidden="true" loading="lazy" decoding="async" src="../assets/check-circle.svg"
-                    alt="check mark" width="20" height="20">
-                <span>{{ exercise }}</span>
-            </li>
+
+    <div class="surface-card border-round shadow-2 p-4">
+        <div class="text-900 font-medium mb-3 text-xl">Today's Workout</div>
+        <p class="mt-0 mb-4 p-0 line-height-3"> {{ workout.workoutTitle }}</p>
+        <ul>
+            <li v-for="exercise in exercises" :key="exercise.id"> <img aria-hidden="true" loading="lazy"
+                    decoding="async" src="../assets/check-circle.svg" alt="check mark" width="20"
+                    height="20">{{ exercise.exerciseName }}</li>
         </ul>
-        <div class="diagram-container">
-            <img id="diagram" aria-hidden="true" loading="lazy" decoding="async" :src="getWorkoutImage(this.workout)"
-                alt="">
-        </div>
-        <button class="primary-button">Start Preset Workout</button>
-        <button class="secondary-button"  @click="$router.push('/workoutbuilder')">Create Custom Workout</button>
+        <Button label="Start Workout" @click="startActiveWorkout(workout.workoutID)"></Button>
+        <Button class="p-button-outlined" @click="startWorkoutBuilder" label="Build New Workout"></Button>
+
     </div>
 </template>
   
 <script>
+import API from "../api"
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+import advanced from "dayjs/plugin/advancedFormat";
+import localizedFormat from "dayjs/plugin/localizedFormat"
+
+
+dayjs.extend(timezone)
+dayjs.extend(utc)
+dayjs.extend(advanced)
+dayjs.extend(localizedFormat)
+dayjs.tz.setDefault('America/New_York');
 
 export default {
     name: 'WorkoutSummary',
     data() {
         return {
-            workout: "chest-tris",
-            exercises: ['barbell bench press', 'cable fly', 'pushup']
+            today: dayjs().tz().format('LL'),
+            workout: [],
+            exercises: [],
+            userSchedule: []
+        }
+    },
+    watch: {
+        workout: {
+            handler() {
+                this.getWorkoutDetails()
+            }
         }
     },
     methods: {
-        getWorkoutImage(workout){
+
+
+        getTodaysWorkout() {
+            for (var i = 0; i < this.userSchedule.length; i++) {
+                if (this.userSchedule[i].date === this.today) {
+                    this.workout = this.userSchedule[i]
+                }
+            }
+        },
+
+        startActiveWorkout(workoutID) {
+            this.$router.push({
+                name: "active-workout",
+                link: "/activeworkout/",
+                params: { workoutID: workoutID },
+            });
+        },
+
+        startWorkoutBuilder(){
+            this.$router.push({
+                name: "workout-builder",
+                link: "/workoutbuilder"
+            });
+        },
+
+        //API CALLS
+        async getUserSchedule() {
+            let scheduleObject = await API.getUserSchedule(this.$store.state.user.uid)
+            this.userSchedule = scheduleObject.schedule
+            this.getTodaysWorkout()
+
+        },
+
+        async getWorkoutDetails() {
+            let workoutObject = await API.getWorkoutsByWorkoutID(this.workout.workoutID)
+            console.log(workoutObject)
+            this.exercises = workoutObject[0].exercises
+
+        }
+
+
+        /* getWorkoutImage(workout){
              return require('../assets/workout-images/'+ workout  +'.png')
         }
-        
+        */
 
     },
     mounted() {
-        this.getWorkoutImage(this.workout)
+        //this.getWorkoutImage(this.workout)
+        this.getUserSchedule()
     }
 
 }
@@ -153,13 +212,13 @@ ul li img {
 
 .diagram-container {
     display: flex;
-    justify-content:center ;
+    justify-content: center;
     font-size: 20px;
     width: 100%;
     height: 100%;
 }
 
-#diagram { 
+#diagram {
     height: 10em;
     width: 10em;
     padding-right: 2em;
