@@ -5,8 +5,9 @@
         <p class="mt-0 mb-4 p-0 line-height-3"> {{ workout.workoutTitle }}</p>
         <ul>
             <li v-for="exercise in exercises" :key="exercise.id"> <img aria-hidden="true" loading="lazy"
-                    decoding="async" src="../assets/check-circle.svg" alt="check mark" width="20"
-                    height="20">{{ exercise.exerciseName }}</li>
+                    decoding="async" src="../assets/check-circle.svg" alt="check mark" width="20" height="20">{{
+                            exercise.exerciseName
+                    }}</li>
         </ul>
         <Button label="Start Workout" @click="startActiveWorkout(workout.workoutID)"></Button>
         <Button class="p-button-outlined" @click="startWorkoutBuilder" label="Build New Workout"></Button>
@@ -65,7 +66,7 @@ export default {
             });
         },
 
-        startWorkoutBuilder(){
+        startWorkoutBuilder() {
             this.$router.push({
                 name: "workout-builder",
                 link: "/workoutbuilder"
