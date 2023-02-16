@@ -52,7 +52,7 @@ export default {
                     email: this.email,
                     password: this.password,
                 })
-                this.$router.push('/')
+                this.$router.push('/home')
                 this.$store.state.userLoggedIn = true
             }
             catch (err) {

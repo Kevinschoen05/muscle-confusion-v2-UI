@@ -1,30 +1,42 @@
 const express = require("express");
 const router = express.Router();
-const API = require("../controllers/api");
+const WorkoutAPI = require("../controllers/workoutController")
+const CompletedWorkoutAPI = require("../controllers/completedWorkoutController")
+const ExerciseAPI = require('../controllers/exerciseController')
+const UserSpecificAPI = require('../controllers/userSpecificController')
 
 
 //Workouts 
-router.get("/workouts", API.fetchAllWorkouts);
-router.post("/workouts", API.addWorkout);
-router.get("/workouts/users/:userID", API.fetchWorkoutsByUserId)
-router.get("/workouts/:workoutID", API.fetchWorkoutbyWorkoutId)
+router.get("/workouts", WorkoutAPI.fetchAllWorkouts);
+router.get("/workouts/:workoutID", WorkoutAPI.fetchWorkoutbyWorkoutId)
+
+router.post("/workouts", WorkoutAPI.addWorkout);
+
 
 
 //Completed Workouts
-router.get("/completedWorkouts", API.fetchAllCompletedWorkouts)
-router.get("/completedWorkouts/users/:userID", API.fetchCompletedWorkoutsByUserId)
-router.post("/completedWorkouts", API.addCompletedWorkout)
+router.get("/completedWorkouts", CompletedWorkoutAPI.fetchAllCompletedWorkouts)
+
+router.post("/completedWorkouts", CompletedWorkoutAPI.addCompletedWorkout)
 
 //Exercises
-router.get("/exercises", API.fetchAllExercises)
-router.post("/exercises", API.addExercise)
-router.get("/exercises/muscleGroups", API.getMuscleGroups)
-router.get("/exercises/:primaryMuscleGroup", API.fetchExercisesByMuscleGroup)
+router.get("/exercises", ExerciseAPI.fetchAllExercises)
+router.get("/exercises/muscleGroups", ExerciseAPI.getMuscleGroups)
+router.get("/exercises/:primaryMuscleGroup", ExerciseAPI.fetchExercisesByMuscleGroup)
+
+router.post("/exercises", ExerciseAPI.addExercise)
+
 
 //User Specific
-router.get("/userSchedule/users/:userID", API.fetchUserSchedule)
-router.post("/userSchedule", API.createUserSchedule)
-router.put("/userSchedule/users/:userID", API.updateUserSchedule)
+router.get("/userSchedule/users/:userID", UserSpecificAPI.fetchUserSchedule)
+router.get("/workouts/users/:userID", UserSpecificAPI.fetchWorkoutsByUserId)
+router.get("/completedWorkouts/users/:userID", UserSpecificAPI.fetchCompletedWorkoutsByUserId)
+
+router.post("/userSchedule", UserSpecificAPI.createUserSchedule)
+
+router.put("/userSchedule/users/:userID", UserSpecificAPI.updateUserSchedule)
+
+
 
 
 module.exports = router;

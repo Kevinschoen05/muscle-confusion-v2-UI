@@ -1,36 +1,41 @@
 <template>
-    <div class="container">
-        <div class=" workout p-5 flex flex-column flex-auto align-items-center">
-        <section class="timer flex flex-column flex-auto align-items-center">
-            <div class="stopwatch__time">
-                <h1 class="stopwatch__time-show">
-                    <span class="hours">{{ timerHours }}</span>:<span class="minutes">{{ timerMinutes }}</span>:<span
-                        class="seconds">{{ timerSeconds
-                        }}</span>.<span class="milliseconds">{{ timerMilliseconds }}</span>
-                </h1>
+    <div class="surface-ground">
+        <div class="grid">
+            <section class="timer flex flex-column flex-auto align-items-center">
+                <div class="stopwatch__time">
+                    <h1 class="stopwatch__time-show">
+                        <span class="hours">{{ timerHours }}</span>:<span class="minutes">{{ timerMinutes
+                        }}</span>:<span class="seconds">{{ timerSeconds
+}}</span>.<span class="milliseconds">{{ timerMilliseconds }}</span>
+                    </h1>
+                </div>
+                <div class="stopwatch__btns">
+                    <button class="stopwatch__btns-b stopwatch__btns-start" @click="startTimer()">Start</button>
+                    <button class="stopwatch__btns-b stopwatch__btns-stop " @click="stopTimer()">
+                        Stop
+                    </button>
+                </div>
+            </section>
+            <div class="col-12 p-3 flex flex-column flex-auto align-items-center">
+                <ul class="list-none p-0 m-0">
+                    <ExerciseCard v-for="exercise in exercises" :key="exercise"
+                        @exercise-complete="handleCompletedExercise(exercise)" :exerciseName=exercise.exerciseName
+                        :primaryMuscleGroup="exercise.primaryMuscleGroup"
+                        :secondaryMuscleGroups="exercise.secondaryMuscleGroups" :targetSets="exercise.targetSets"
+                        :sets="exercise.sets"></ExerciseCard>
+                </ul>
             </div>
-            <div class="stopwatch__btns">
-                <button class="stopwatch__btns-b stopwatch__btns-start" @click="startTimer()">Start</button>
-                <button class="stopwatch__btns-b stopwatch__btns-stop " @click="stopTimer()">
-                    Stop
-                </button>
+            <div class="flex flex-column flex-auto align-items-center">
+                <Button label="Complete Workout" class=" flex align-items-center"
+                    @click="saveCompletedWorkout(this.completedExercises)"></Button>
             </div>
-        </section>
-        <section class="workouts">
-            <ul class="list-none p-0 m-0">
-                <ExerciseCard v-for="exercise in exercises" :key="exercise"
-                    @exercise-complete="handleCompletedExercise(exercise)" :exerciseName=exercise.exerciseName
-                    :primaryMuscleGroup="exercise.primaryMuscleGroup"
-                    :secondaryMuscleGroups="exercise.secondaryMuscleGroups" :targetSets="exercise.targetSets"
-                    :sets="exercise.sets"></ExerciseCard>
-            </ul>
-
-        </section>
-        <Button label="Complete Workout" class="w-auto mt-3"
-            @click="saveCompletedWorkout(this.completedExercises)"></Button>
-        <button @click="debug()">debug</button>
         </div>
     </div>
+
+
+
+
+
 </template>
 
 <script>
@@ -116,7 +121,6 @@ export default {
 
 </script>
 <style scoped>
-
 .stopwatch {
     width: 80%;
     height: 25rem;

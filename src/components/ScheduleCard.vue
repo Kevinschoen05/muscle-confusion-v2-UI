@@ -7,8 +7,10 @@
         <span v-if="!workoutID" class="block text-900 font-medium mb-4 text-xl">Rest Day</span>
         <span v-else class="block text-900 font-medium mb-4 text-xl">{{ workoutTitle }}</span>
         <div class="flex align-items-bottom">
-            <Button v-if="!workoutID" label="Set Workout" @click="visible2 = true" class="p-button-sm"></Button>
-            <Button v-else label="Update Workout" @click="visible2 = true" class="p-button-sm"></Button>
+            <Button v-if="!workoutID" label="Set Workout" @click="visible2 = true"
+                class="p-button-sm p-button"></Button>
+            <Button v-else label="Update Workout" @click="visible2 = true" class="p-button-sm p-button"></Button>
+            <Button v-if="workoutID" @click="this.startActiveWorkout(workoutID)" icon="pi pi-play" class="p-button-success ml-3"></Button>
         </div>
     </div>
     <Dialog v-model:visible="visible2" appendTo="body" :modal="true"
@@ -31,12 +33,14 @@
                     </div>
                 </div>
                 <div class="mt-3 lg:mt-0">
-                    <Button icon="pi pi-check" @click="visible2 = false , updateUserSchedule( date , workout._id, workout.workoutTitle)" label="Select"></Button>
+                    <Button icon="pi pi-check"
+                        @click="visible2 = false, updateUserSchedule(date, workout._id, workout.workoutTitle)"
+                        label="Select"></Button>
                 </div>
             </li>
         </ul>
         <template #footer>
-            <div >
+            <div>
                 <Button icon="pi pi-times" @click="visible2 = false" label="Cancel"
                     class="p-button-outlined w-full"></Button>
             </div>
@@ -67,11 +71,18 @@ export default {
         }
     },
     methods: {
-        updateUserSchedule(date, workoutID, workoutTitle){
-            console.log( "from component: " + workoutID)
-            this.$emit("updateSchedule", {date: date,workoutID: workoutID, workoutTitle: workoutTitle})
+        updateUserSchedule(date, workoutID, workoutTitle) {
+            console.log("from component: " + workoutID)
+            this.$emit("updateSchedule", { date: date, workoutID: workoutID, workoutTitle: workoutTitle })
 
-        }
+        },
+        startActiveWorkout(workoutID) {
+            this.$router.push({
+                name: "active-workout",
+                link: "/activeworkout/",
+                params: { workoutID: workoutID },
+            });
+        },
     },
 
 }

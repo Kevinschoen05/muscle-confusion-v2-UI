@@ -12,8 +12,8 @@
         </div>
         <div class="mt-3 lg:mt-0">
             <Button @click="this.startActiveWorkout(workoutID)" icon="pi pi-play"
-                class="p-button-rounded mr-2"></Button>
-            <Button icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"></Button>
+                class="p-button-rounded p-button-success mr-2"></Button>
+            <Button icon="pi pi-pencil" class="p-button-rounded p-button mr-2"></Button>
         </div>
     </li>
 </template>

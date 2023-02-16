@@ -1,7 +1,5 @@
 <template>
   <div>
-    <header>
-    </header>
     <body>
       <section id="hero">
         <div class="hero-content">
@@ -28,8 +26,8 @@ export default {
 
   data () {
     return { 
-      setting: '/settings'
-    }
+      
+        }
   },
   components: {
     WorkoutSummary,

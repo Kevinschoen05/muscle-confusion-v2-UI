@@ -1,13 +1,15 @@
 <template>
-    <div class="container">
-        <div class="header-bar">
+    <div class="container shadow-2 border-round surface-card  w-auto mb-3 flex-column justify-content-between flex">
+        <div class="header-bar w-auto">
             <div class="exercise-header">
                 <p class="exercise-name">{{ exerciseName }}</p>
+            </div>
+            <div class=" flex justify-content-between align-content-center align-items-center w-auto">
                 <muscle-badge :title="primaryMuscleGroup" primary></muscle-badge>
                 <muscle-badge v-for="muscleGroups in secondaryMuscleGroups" :key="muscleGroups"
                     :title="muscleGroups"></muscle-badge>
             </div>
-            <div class="output">
+            <div class="output w-auto">
                 <p class="output-value"> {{ targetSets }} Sets</p>
                 <p class="output-value"> {{totalTargetReps}} Reps</p>
             </div>
@@ -165,7 +167,6 @@ export default {
     flex-direction: column;
     align-items: flex-start;
     margin-top: 1.09375em;
-    width: 37em;
     background: #FFFFFF;
     border: 1px solid #EAECF0;
     box-shadow: 0px 12px 16px -4px rgba(16, 24, 40, 0.08), 0px 4px 6px -2px rgba(16, 24, 40, 0.03);
@@ -173,7 +174,6 @@ export default {
 }
 
 .header-bar {
-    width: 100%;
     position: sticky;
     position: -webkit-sticky;
     top: 0;
@@ -200,7 +200,6 @@ export default {
 }
 
 .output {
-    width: 100%;
     display: flex;
     justify-content: center;
     align-content: center;
@@ -218,7 +217,7 @@ export default {
 
 .output-value {
     font-family: 'roboto';
-    font-size: 48px;
+    font-size: 40px;
     font-weight: 600;
     color: #1849A9;
     margin: 1em;

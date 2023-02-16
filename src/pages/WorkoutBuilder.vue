@@ -33,7 +33,8 @@
                                 <ul class="exercise-sets">
                                     <li v-for="set in draftExercise.sets" :key="set">
                                         <label for="set-rep-number"> Reps: </label>
-                                        <InputNumber id="set-rep-number" v-model="set.target_reps" :step="1" showButtons />
+                                        <InputNumber id="set-rep-number" v-model="set.target_reps" :min="1" :step="1"
+                                            showButtons />
                                     </li>
                                 </ul>
                             </div>
@@ -66,12 +67,14 @@
                                         {{ musclegroup }}
                                     </Chip>
                                 </div>
-                                <DataTable :value="exercise.sets">
-                                    <Column field="index" header="Sets"></Column>
-                                    <Column field="target_reps" header="Reps"></Column>
-                                </DataTable>
+                                <ul>
+                                    <WorkoutBuilderTable v-for="set in exercise.sets" :key="set" :set="set.index"
+                                        :reps="set.target_reps" :exerciseID="exercise.id"
+                                        @delete-set="handleDeleteSet">
 
-
+                                    </WorkoutBuilderTable>
+                                </ul>
+                                <Button  label="Delete Exercise" class=" p-button-danger w-auto mt-3" @click="deleteExercise(exercise.id)"></Button>
                             </AccordionTab>
                         </Accordion>
                         <div class="surface-border border-top-1 opacity-50 mb-3 col-12"
@@ -88,8 +91,12 @@
 </template>
 <script>
 import API from "../api";
+import WorkoutBuilderTable from "@/components/WorkoutBuilderTable";
 
 export default {
+    components: {
+        WorkoutBuilderTable
+    },
     data() {
         return {
 
@@ -128,8 +135,8 @@ export default {
         },
 
         generateSets() {
-            for (let i = 1; i < this.draftExercise.targetSets + 1; i++){
-                this.draftExercise.sets.push({'index': i, target_reps: 0, actual_reps: 0, target_weight: 0, actual_weight: 0, completed: false, success: false  })
+            for (let i = 1; i < this.draftExercise.targetSets + 1; i++) {
+                this.draftExercise.sets.push({ 'index': i, target_reps: 0, actual_reps: 0, target_weight: 0, actual_weight: 0, completed: false, success: false })
             }
         },
 
@@ -156,6 +163,23 @@ export default {
             this.saveData()
         },
 
+        deleteExercise(exerciseID){
+            for(var i = 0; i < this.finalWorkout.exercises.length; i++){
+                if (this.finalWorkout.exercises[i].id === exerciseID){
+                    let index = this.finalWorkout.exercises.indexOf(this.finalWorkout.exercises[i])
+                    this.finalWorkout.exercises.splice(index, 1)
+                    console.log(this.finalWorkout)
+                }
+            }
+        },
+
+        //COMPONENT HANDLERS
+
+        handleDeleteSet({exerciseID, set}) {
+
+            console.log("ignore, WIP" + exerciseID + set )
+        },
+
 
         //API CALLS
         async getExercises(muscleGroup) {
@@ -166,9 +190,15 @@ export default {
             await API.addWorkout(this.finalWorkout);
             this.showSuccess();
         },
+
+        async getMuscleGroups() {
+            this.muscleGroups = await API.getMuscleGroups()
+        },
+
     },
     mounted() {
         this.finalWorkout.users.push(this.$store.state.user.uid)
+        this.getMuscleGroups()
     }
 }
 
