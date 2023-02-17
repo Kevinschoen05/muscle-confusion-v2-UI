@@ -1,7 +1,7 @@
 <template>
-<div v-if="this.$store.state.userLoggedIn" class="bg-gray-900 py-3 px-6 shadow-2 flex align-items-center justify-content-between relative lg:static border-bottom-1 border-gray-800 z-3" style="min-height: 84px">
+<div v-if="this.$store.state.user" class="bg-gray-900 py-3 px-6 shadow-2 flex align-items-center justify-content-between relative lg:static border-bottom-1 border-gray-800 z-3" style="min-height: 84px">
     <a v-ripple class="cursor-pointer block lg:hidden text-gray-400 mt-1 p-ripple z-3"
-        v-styleclass="{ selector: '@next', enterClass: 'hidden', leaveToClass: 'hidden', hideOnOutsideClick: true }">
+        v-styleclass="{ selector: '@next', enterClass: 'hidden', leaveClass: 'hidden', leaveToClass: 'hidden', hideOnOutsideClick: true }">
         <i class="pi pi-bars text-4xl"></i>
     </a>
     <div class="align-items-center flex-grow-1 justify-content-between hidden lg:flex absolute lg:static w-full bg-gray-900 left-0 top-100 z-1 shadow-2 lg:shadow-none border-1 lg:border-none border-gray-800">

@@ -15,7 +15,7 @@
                                 <label for="workout-title" class="font-medium text-900">Enter Workout Title</label>
                                 <InputText id="workout-title" type="text" v-model="draftWorkoutTitle" />
                             </div>
-                            <div class="surface-border border-top-1 opacity-50 mb-3 col-12"></div>
+                            <div class="surface-border border-top-1 opacity-50 mb-3 col"></div>
                             <Dropdown class="field col" v-model="selectedMuscleGroup" :options="muscleGroups"
                                 placeholder="Select Muscle Group"
                                 @change="this.muscleGroupSelected = true, this.getExercises(selectedMuscleGroup)" />
