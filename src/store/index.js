@@ -1,5 +1,9 @@
 import { createStore } from "vuex";
 import { auth } from "../firebase/firebaseConfig";
+import createPersistedState from "vuex-persistedstate";
+import Cookies from 'js-cookie';
+
+
 
 import {
     createUserWithEmailAndPassword,
@@ -8,9 +12,15 @@ import {
 } from "firebase/auth";
 
 const store = createStore({
+
   state: {
     user: null,
-    userLoggedIn: false
+  },
+  plugins: [createPersistedState()],
+  storage: {
+    getItem: key => Cookies.get(key),
+    setItem: (key, value) => Cookies.set(key, value, { expires: 3, secure: true }),
+    removeItem: key => Cookies.remove(key)
   },
 
   mutations: {
@@ -25,7 +35,7 @@ const store = createStore({
       const response = await createUserWithEmailAndPassword(
         auth,
         email,
-        password
+        password,
       );
       if (response) {
         context.commit("setUser", response.user);
@@ -34,7 +44,7 @@ const store = createStore({
       }
     },
     async login(context, { email, password }) {
-      const response = await signInWithEmailAndPassword(auth, email, password);
+      const response = await signInWithEmailAndPassword(auth, email, password );
       if (response) {
         context.commit("setUser", response.user);
       } else {

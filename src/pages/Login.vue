@@ -53,7 +53,6 @@ export default {
                     password: this.password,
                 })
                 this.$router.push('/home')
-                this.$store.state.userLoggedIn = true
             }
             catch (err) {
                 this.error = err.message
