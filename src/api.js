@@ -1,8 +1,8 @@
 import axios from "axios";
-const exercise_url = "http://localhost:5001/api/exercises";
-const workout_url = "http://localhost:5001/api/workouts";
-const completedWorkout_url = "http://localhost:5001/api/completedworkouts";
-const userSchedule_url = "http://localhost:5001/api/userschedule";
+const exercise_url = "https://muscle-confusion-server.onrender.com/api/exercises";
+const workout_url = "https://muscle-confusion-server.onrender.com/api/workouts";
+const completedWorkout_url = "https://muscle-confusion-server.onrender.com/api/completedworkouts";
+const userSchedule_url = "https://muscle-confusion-server.onrender.com/api/userschedule";
 
 export default class API {
   //WORKOUTS
