@@ -11,25 +11,27 @@
                 <div class="col-12 lg:col-6">
                     <div class="surface-card shadow-2 border-round p-4 h-full">
                         <div class="grid formgrid p-fluid">
-                            <div class="field mb-4 col-12">
+                            <div class="field mb-4 col-12 pl-0 pr-0">
                                 <label for="workout-title" class="font-medium text-900">Enter Workout Title</label>
                                 <InputText id="workout-title" type="text" v-model="draftWorkoutTitle" />
                             </div>
-                            <div class="surface-border border-top-1 opacity-50 mb-3 col"></div>
-                            <Dropdown class="field col" v-model="selectedMuscleGroup" :options="muscleGroups"
+                            <div class="surface-border border-top-1 opacity-50 mb-3 col-12"></div>
+                            <Dropdown class="field col-12" v-model="selectedMuscleGroup" :options="muscleGroups"
                                 placeholder="Select Muscle Group"
                                 @change="this.muscleGroupSelected = true, this.getExercises(selectedMuscleGroup)" />
-                            <div class="exercise-selector field col" v-show="muscleGroupSelected">
-                                <Dropdown v-model="selectedExercise" :options="muscleGroupExercises"
-                                    optionLabel="exerciseName" placeholder="Select Exercise"
-                                    @change="this.muscleGroupSelected = true" />
-                            </div>
+                            <Dropdown class="field col-12" v-show="muscleGroupSelected" v-model="selectedExercise"
+                                :options="muscleGroupExercises" optionLabel="exerciseName" placeholder="Select Exercise"
+                                @change="this.muscleGroupSelected = true" />
                             <div class="surface-border border-top-1 opacity-50 mb-3 col-12"></div>
                             <br>
                             <div class='set-reps field mb-4 col-12'>
                                 <label for="set-number" class="font-medium text-900">Number of Sets</label>
-                                <InputNumber id="set-number" v-model="draftExercise.targetSets"
-                                    @focusout="generateSets()" :step="1" showButtons />
+                                <div class='flex field mb-4'>
+                                    <InputNumber class="" id="set-number" v-model="draftExercise.targetSets"
+                                       :min="1" :step="1" showButtons />
+                                    <Button class="p-button-icon-only ml-1" label="Save" @click="generateSets()">
+                                        <span class="pi pi-check p-button-icon"></span> </Button>
+                                </div>
                                 <ul class="exercise-sets">
                                     <li v-for="set in draftExercise.sets" :key="set">
                                         <label for="set-rep-number"> Reps: </label>
@@ -40,8 +42,7 @@
                             </div>
                             <div class="surface-border border-top-1 opacity-50 mb-3 col-12"></div>
                             <div class="col-12">
-                                <Button label="Save Exercise" class="w-auto mt-3"
-                                    @click="updateDraftExercise()"></Button>
+                                <Button label="Save Exercise" class="w-auto mt-3" @click="updateDraftExercise()"></Button>
                             </div>
                         </div>
                     </div>
@@ -69,12 +70,12 @@
                                 </div>
                                 <ul>
                                     <WorkoutBuilderTable v-for="set in exercise.sets" :key="set" :set="set.index"
-                                        :reps="set.target_reps" :exerciseID="exercise.id"
-                                        @delete-set="handleDeleteSet">
+                                        :reps="set.target_reps" :exerciseID="exercise.id" @delete-set="handleDeleteSet">
 
                                     </WorkoutBuilderTable>
                                 </ul>
-                                <Button  label="Delete Exercise" class=" p-button-danger w-auto mt-3" @click="deleteExercise(exercise.id)"></Button>
+                                <Button label="Delete Exercise" class=" p-button-danger w-auto mt-3"
+                                    @click="deleteExercise(exercise.id)"></Button>
                             </AccordionTab>
                         </Accordion>
                         <div class="surface-border border-top-1 opacity-50 mb-3 col-12"
@@ -87,7 +88,7 @@
 
             </div>
         </div>
-    </div>
+</div>
 </template>
 <script>
 import API from "../api";
@@ -163,9 +164,9 @@ export default {
             this.saveData()
         },
 
-        deleteExercise(exerciseID){
-            for(var i = 0; i < this.finalWorkout.exercises.length; i++){
-                if (this.finalWorkout.exercises[i].id === exerciseID){
+        deleteExercise(exerciseID) {
+            for (var i = 0; i < this.finalWorkout.exercises.length; i++) {
+                if (this.finalWorkout.exercises[i].id === exerciseID) {
                     let index = this.finalWorkout.exercises.indexOf(this.finalWorkout.exercises[i])
                     this.finalWorkout.exercises.splice(index, 1)
                     console.log(this.finalWorkout)
@@ -175,9 +176,9 @@ export default {
 
         //COMPONENT HANDLERS
 
-        handleDeleteSet({exerciseID, set}) {
+        handleDeleteSet({ exerciseID, set }) {
 
-            console.log("ignore, WIP" + exerciseID + set )
+            console.log("ignore, WIP" + exerciseID + set)
         },
 
 
