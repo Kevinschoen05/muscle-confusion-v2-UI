@@ -49,7 +49,7 @@ export default {
                     email: this.email,
                     password: this.password
                 })
-                this.$router.push('/')
+                this.$router.push('/home')
             }
             catch (err) {
                 this.error = err.message
