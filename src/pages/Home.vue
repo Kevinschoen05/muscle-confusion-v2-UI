@@ -3,12 +3,6 @@
     <body>
       <section id="hero">
         <div class="hero-content">
-          <div class="heroText">
-            <h1 id="home-h">Lorem ipsum, dolor sit amet consectetur adipisicing elit </h1>
-            <p>
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ab ipsam quisquam in totam nemo minima. Quod
-              ipsum quidem temporibus vero odit </p>
-          </div>
           <workout-summary></workout-summary>
         </div>
         <picture>
@@ -131,6 +125,7 @@ export default {
   .hero-content {
     display: flex;
     width: 100%;
+    height: 100vh;
     justify-content: space-around;
     align-content: center;
     align-items: center;

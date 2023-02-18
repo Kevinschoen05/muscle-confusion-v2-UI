@@ -24,7 +24,7 @@
                                 @change="this.muscleGroupSelected = true" />
                             <div class="surface-border border-top-1 opacity-50 mb-3 col-12"></div>
                             <br>
-                            <div class='set-reps field mb-4 col-12'>
+                            <div class='set-reps field mb-4 col-12 pl-0 pr-0'>
                                 <label for="set-number" class="font-medium text-900">Number of Sets</label>
                                 <div class='flex field mb-4'>
                                     <InputNumber class="" id="set-number" v-model="draftExercise.targetSets"

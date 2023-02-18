@@ -1,18 +1,18 @@
 <template>
-
     <div class="surface-card border-round shadow-2 p-4">
         <div class="text-900 font-medium mb-3 text-xl">Today's Workout</div>
         <p class="mt-0 mb-4 p-0 line-height-3"> {{ workout.workoutTitle }}</p>
         <ul>
-            <li v-for="exercise in exercises" :key="exercise.id"> <img aria-hidden="true" loading="lazy"
-                    decoding="async" src="../assets/check-circle.svg" alt="check mark" width="20" height="20">{{
-                            exercise.exerciseName
+            <li v-for="exercise in exercises" :key="exercise.id"> <img aria-hidden="true" loading="lazy" decoding="async"
+                    src="../assets/check-circle.svg" alt="check mark" width="20" height="20">{{
+                        exercise.exerciseName
                     }}</li>
         </ul>
-        <Button label="Start Workout" @click="startActiveWorkout(workout.workoutID)"></Button>
-        <Button class="p-button-outlined" @click="startWorkoutBuilder" label="Build New Workout"></Button>
-
-    </div>
+        <div class="flex">
+            <Button class="mr-1" label="Start Workout" @click="startActiveWorkout(workout.workoutID)"></Button>
+            <Button class="p-button-outlined" @click="startWorkoutBuilder" label="Build New Workout"></Button>
+        </div>
+</div>
 </template>
   
 <script>
@@ -54,6 +54,9 @@ export default {
             for (var i = 0; i < this.userSchedule.length; i++) {
                 if (this.userSchedule[i].date === this.today) {
                     this.workout = this.userSchedule[i]
+                    console.log(this.today)
+                    console.log(this.userSchedule[i].date)
+                    console.log(this.workout)
                 }
             }
         },
@@ -84,7 +87,7 @@ export default {
         async getWorkoutDetails() {
             let workoutObject = await API.getWorkoutsByWorkoutID(this.workout.workoutID)
             console.log(workoutObject)
-            this.exercises = workoutObject[0].exercises
+            this.exercises = this.workout.exercises
 
         }
 
