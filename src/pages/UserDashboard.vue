@@ -205,8 +205,14 @@ export default {
                 }
             }
             //add new placeholder days to end of schedule
-
-            let latestDate = updatedSchedule.at(-1).date
+                let latestDate = ' '
+            if (updatedSchedule.length === 0 ){
+                latestDate = this.today
+            }
+            else {
+                latestDate = updatedSchedule.at(-1).date
+            }
+            console.log(updatedSchedule)
             let increment = 1;
             console.log(latestDate)
 
