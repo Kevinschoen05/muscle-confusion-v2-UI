@@ -50,23 +50,15 @@
                 <a v-ripple @click="visible2 = true"
                     class="flex p-3 px-3 py-2 align-items-center text-gray-400 hover:text-white hover:bg-gray-800 font-medium border-round cursor-pointer transition-colors transition-duration-150 p-ripple">
                     <i class="pi pi-user text-base lg:text-2xl mr-2 mr-0"></i>
-                    <span>{{ displayName }}</span>
                 </a>
             </li>
         </ul>
     </div>
     <router-view :key="$route.fullPath" />
     <Dialog v-model:visible="visible2" appendTo="body" :modal="true">
-        <div v-if="displayName === null || displayName === '' ">
-            <label for="email1" class="block text-900 font-medium mb-2">Set Username</label>
-            <InputText id="email1" type="text" class="w-full mb-3" v-model="newUsername" />
-            <Button class="mr-1" icon="pi pi-check " label="Save" @click="updateUsername()"></Button>
-            <Button class="p-button-danger" icon="pi pi-sign-out " label="Logout" @click="logout()"></Button>
-
-        </div>
-        <div v-else>
+        <div>
             <Button icon="pi pi-sign-out
-     " class="p-button-danger" label="Logout" @click="logout()"></Button>
+         " class="p-button-danger" label="Logout" @click="logout()"></Button>
 
         </div>
 
@@ -74,7 +66,7 @@
 </template>
 
 <script>
-//import { getAuth, updateProfile } from "firebase/auth";
+import { getAuth, updateProfile } from "firebase/auth";
 
 
 export default {
@@ -82,7 +74,6 @@ export default {
         return {
             visible2: false,
             newUsername: '',
-            //displayName: this.$store.state.user.providerData[0].displayName
         }
     },
     methods: {
@@ -90,7 +81,7 @@ export default {
             console.log(this.displayName)
         },
 
-       /* updateUsername() {
+        updateUsername() {
             const auth = getAuth();
             console.log(auth.currentUser)
             updateProfile(auth.currentUser, {
@@ -98,7 +89,7 @@ export default {
             })
             this.visible2 = false;
         },
-        */
+
         async logout() {
             try {
                 await this.$store.dispatch('logout', {
@@ -109,9 +100,9 @@ export default {
                 this.error = err.message
             }
             this.visible2 = false
-            this.displayName = ''
         }
-    }
+    },
+
 
 }
 </script>
