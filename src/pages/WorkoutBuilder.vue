@@ -2,7 +2,7 @@
     <div class="container">
         <div class=" p-5 flex flex-column flex-auto">
             <h1>Create New Workout</h1>
-            <p class="m-0 mb-4 p-0 text-600 line-height-3 mr-3">Create a new preset workout by choosing a Muscle Group
+            <p class="m-0 mb-4 p-0 text-900 line-height-3 mr-3">Create a new preset workout by choosing a Muscle Group
                 to focus on
                 and selecting an exercise. Set your target number of sets and reps, and repeat until your workout is
                 complete.
@@ -207,7 +207,6 @@ export default {
 <style scoped>
 .container {
     height: 100vh;
-    background-color: var(--surface-ground);
     padding: 2rem
 }
 
