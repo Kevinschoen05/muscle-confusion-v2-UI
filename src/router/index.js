@@ -1,50 +1,58 @@
-import { createRouter, createWebHistory } from 'vue-router'
-
+import { createRouter, createWebHistory } from "vue-router";
+import store from '../store/index'
 
 const routes = [
   {
-    path: '/home',
-    name: 'home',
-    component: () => import('../pages/Home.vue')
+    path: "/",
+    redirect: "/home",
   },
   {
-    path: '/dashboard',
-    name: 'user-dashboard',
-    component: () => import('../pages/UserDashboard.vue')
+    path: "/home",
+    name: "home",
+    component: () => import("../pages/Home.vue"),
   },
   {
-    path: '/workoutbuilder',
-    name: 'workout-builder',
-    component: () => import('../pages/WorkoutBuilder.vue')
+    path: "/dashboard",
+    name: "user-dashboard",
+    component: () => import("../pages/UserDashboard.vue"),
   },
   {
-    path: '/exercisebuilder',
-    name: 'exercise-builder',
-    component: () => import('../pages/ExerciseBuilder.vue')
+    path: "/workoutbuilder",
+    name: "workout-builder",
+    component: () => import("../pages/WorkoutBuilder.vue"),
   },
   {
-    path: '/login',
-    name: 'login',
-    component: () => import('../pages/Login.vue')
+    path: "/exercisebuilder",
+    name: "exercise-builder",
+    component: () => import("../pages/ExerciseBuilder.vue"),
   },
   {
-    path: '/signup',
-    name: 'signup',
-    component: () => import ('../pages/Signup.vue')
+    path: "/login",
+    name: "login",
+    component: () => import("../pages/Login.vue"),
   },
   {
-    path: '/activeworkout/:workoutID',
-    name: 'active-workout',
-    component: () => import ('../pages/ActiveWorkout.vue')
+    path: "/signup",
+    name: "signup",
+    component: () => import("../pages/Signup.vue"),
+  },
+  {
+    path: "/activeworkout/:workoutID",
+    name: "active-workout",
+    component: () => import("../pages/ActiveWorkout.vue"),
+  },
+];
 
-  }
-
-
-]
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  routes
-})
+  routes,
+});
 
-export default router
+router.beforeEach(async (to) => {
+  if (!store.state.user && to.name !== "login") {
+    return { name: "login" };
+  }
+});
+
+export default router;

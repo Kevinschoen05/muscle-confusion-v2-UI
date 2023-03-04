@@ -26,7 +26,7 @@
                     <td class="set-index">Target</td>
                     <td class="set-item">{{ set.target_reps }}</td>
                     <td class="set-item"> <input v-if="!set.completed" class="set-input" type="number" step=5
-                            v-model="set.target_weight">
+                        pattern="\d*"     v-model="set.target_weight">
                         <p v-else class="set-value">{{ set.target_weight }}</p>
                     </td>
                     <td class="success-icon"></td>
@@ -34,13 +34,13 @@
                 <tr class="set">
                     <td class="set-index">Actual</td>
                     <td class="set-item"><input v-if="!set.completed" class="set-input" type="number" step=5
-                            v-model="set.actual_reps">
+                        pattern="\d*"    v-model="set.actual_reps">
                         <p v-else class="set-value"
                             :class="{ 'set-success': (set.success && set.completed), 'set-failure': (!set.success && set.completed) }">
                             {{ set.actual_reps }}</p>
                     </td>
                     <td class="set-item"><input v-if="!set.completed" class="set-input" type="number" step=5
-                            v-model="set.actual_weight">
+                        pattern="\d*"  v-model="set.actual_weight">
                         <p v-else class="set-value"
                             :class="{ 'set-success': (set.success && set.completed), 'set-failure': (!set.success && set.completed) }">
                             {{ set.actual_weight }}</p>

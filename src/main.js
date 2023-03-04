@@ -37,6 +37,8 @@ import ToggleButton from 'primevue/togglebutton';
 import Dialog from 'primevue/dialog'
 import SelectButton from 'primevue/selectbutton';
 import InputSwitch from 'primevue/inputswitch'
+import Badge from 'primevue/badge';
+import BadgeDirective from 'primevue/badgedirective';
 
 
 
@@ -51,6 +53,8 @@ app.use(PrimeVue, {ripple: true});
 
 app.directive('ripple', Ripple);
 app.directive('styleclass', StyleClass);
+app.directive('badge', BadgeDirective);
+
 
 
 app.config.globalProperties.$dayjs = dayjs;
@@ -72,5 +76,6 @@ app.component('ToggleButton', ToggleButton)
 app.component('Dialog', Dialog)
 app.component('SelectButton', SelectButton)
 app.component( 'InputSwitch',InputSwitch)
+app.component('Badge', Badge)
 
 app.mount('#app')
