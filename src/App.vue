@@ -74,7 +74,7 @@
 </template>
 
 <script>
-import { getAuth, updateProfile } from "firebase/auth";
+//import { getAuth, updateProfile } from "firebase/auth";
 
 
 export default {
@@ -82,7 +82,7 @@ export default {
         return {
             visible2: false,
             newUsername: '',
-            displayName: this.$store.state.user.providerData[0].displayName
+            //displayName: this.$store.state.user.providerData[0].displayName
         }
     },
     methods: {
@@ -90,7 +90,7 @@ export default {
             console.log(this.displayName)
         },
 
-        updateUsername() {
+       /* updateUsername() {
             const auth = getAuth();
             console.log(auth.currentUser)
             updateProfile(auth.currentUser, {
@@ -98,7 +98,7 @@ export default {
             })
             this.visible2 = false;
         },
-
+        */
         async logout() {
             try {
                 await this.$store.dispatch('logout', {
