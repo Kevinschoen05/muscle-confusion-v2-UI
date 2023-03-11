@@ -87,7 +87,7 @@ export default {
         async getWorkoutDetails() {
             let workoutObject = await API.getWorkoutsByWorkoutID(this.workout.workoutID)
             console.log(workoutObject)
-            this.exercises = this.workout.exercises
+            this.exercises = workoutObject[0].exercises
 
         }
 

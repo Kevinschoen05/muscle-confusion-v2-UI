@@ -15,6 +15,7 @@ const store = createStore({
 
   state: {
     user: null,
+    displayName: null
   },
   plugins: [createPersistedState()],
   storage: {
@@ -26,6 +27,7 @@ const store = createStore({
   mutations: {
     setUser(state, payload) {
       state.user = payload;
+      state.displayName = payload.displayName
       console.log(state.user);
     },
   },
