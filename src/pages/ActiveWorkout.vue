@@ -25,7 +25,7 @@
                         :sets="exercise.sets"></ExerciseCard>
                 </ul>
             </div>
-            <div class="flex flex-column flex-auto align-items-center">
+            <div class=" mb-3 flex flex-column flex-auto align-items-center">
                 <Button label="Complete Workout" class=" flex align-items-center"
                     @click="saveCompletedWorkout(this.completedExercises)"></Button>
             </div>
