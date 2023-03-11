@@ -155,11 +155,6 @@ export default {
   
   <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-@font-face {
-    font-family: "Roboto";
-    src: local("Roboto"),
-        url(../fonts/roboto-v29-latin-900.woff2) format("truetype");
-}
 
 .container {
     box-sizing: border-box;
@@ -201,6 +196,7 @@ export default {
 
 .output {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-content: center;
 
@@ -216,11 +212,11 @@ export default {
 }
 
 .output-value {
-    font-family: 'roboto';
     font-size: 40px;
     font-weight: 600;
     color: #1849A9;
-    margin: 1em;
+    margin: .5rem;
+    align-self: center;
 }
 
 .set-list {
@@ -316,8 +312,8 @@ thead {
     height: 2.6em;
     font-family: 'Roboto';
     color: white;
-    background: #1849A9;
-    border: 1px solid #1849A9;
+    background: var(--primary-color);
+    border: 1px solid var(--primary-color);
     box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
     border-radius: 8px;
 }
@@ -335,9 +331,9 @@ thead {
     width: 50%;
     height: 2.6em;
     font-family: 'Roboto';
-    color: #1849A9;
+    color: var(--primary-color);
     background: white;
-    border: 1px solid #1849A9;
+    border: 1px solid var(--primary-color);
     box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
     border-radius: 8px;
 }

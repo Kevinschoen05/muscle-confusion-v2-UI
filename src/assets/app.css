@@ -1,6 +1,6 @@
+
 body { 
-    font-family: var(--font-family);
-    color: var(--text-color);
+    background-color: var(--gray-700);
 }
 
 .p-accordion-header, .p-accordion-header-link {
@@ -10,3 +10,9 @@ body {
     color: white !important
 }	
 
+#app {
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #2c3e50;
+  }
