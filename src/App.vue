@@ -50,6 +50,7 @@
                 <a v-ripple @click="visible2 = true"
                     class="flex p-3 px-3 py-2 align-items-center text-gray-400 hover:text-white hover:bg-gray-800 font-medium border-round cursor-pointer transition-colors transition-duration-150 p-ripple">
                     <i class="pi pi-user text-base lg:text-2xl mr-2 mr-0"></i>
+                    <p>{{ this.$store.state.displayName }}</p>
                 </a>
             </li>
         </ul>
