@@ -1,15 +1,15 @@
 <template>
     <div class="container shadow-2 border-round surface-card  w-auto mb-3 flex-column justify-content-between flex">
-        <div class="header-bar w-auto">
+        <div class="header-bar">
             <div class="exercise-header">
                 <p class="exercise-name">{{ exerciseName }}</p>
             </div>
-            <div class=" flex justify-content-between align-content-center align-items-center w-auto">
+            <div class=" flex  align-content-center align-items-center w-auto">
                 <muscle-badge :title="primaryMuscleGroup" primary></muscle-badge>
                 <muscle-badge v-for="muscleGroups in secondaryMuscleGroups" :key="muscleGroups"
                     :title="muscleGroups"></muscle-badge>
             </div>
-            <div class="output w-auto">
+            <div class="output">
                 <p class="output-value"> {{ targetSets }} Sets</p>
                 <p class="output-value"> {{totalTargetReps}} Reps</p>
             </div>
@@ -171,6 +171,7 @@ export default {
 .header-bar {
     position: sticky;
     position: -webkit-sticky;
+    width: 100%;
     top: 0;
     left: 0;
     z-index: 2;
@@ -199,6 +200,7 @@ export default {
     flex-direction: column;
     justify-content: center;
     align-content: center;
+    width: 100% 
 
 }
 

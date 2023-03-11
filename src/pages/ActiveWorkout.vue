@@ -26,16 +26,29 @@
                 </ul>
             </div>
             <div class=" mb-3 flex flex-column flex-auto align-items-center">
-                <Button label="Complete Workout" class=" flex align-items-center"
-                    @click="saveCompletedWorkout(this.completedExercises)"></Button>
+                <Button label="Complete Workout" class=" flex align-items-center" @click="visible2 = true, this.calculateTotalVolume()"></Button>
             </div>
         </div>
-    </div>
+        <Dialog v-model:visible="visible2" appendTo="body" :modal="true">
+            <div class="p-4">
+                <div class="text-900 font-medium mb-3 text-xl">Workout summary</div>
+                <p class="mt-0 mb-4 p-0 line-height-3">Review all your completed workouts from your Dashboard</p>
+                <div class="flex mb-4 flex-column lg:flex-row">
+                    <div class="surface-50 p-3 flex-auto mx-0 my-3 lg:my-0 lg:mx-3">
+                        <div class="text-600 mb-3">Total Volume</div>
+                        <span class="text-blue-600 font-medium text-xl">{{ totalVolume }} lbs</span>
+                    </div>
+                    <div class="surface-50 p-3 flex-auto">
+                        <div class="text-600 mb-3">Duration</div>
+                        <span class="text-blue-600 font-medium text-xl">{{ this.timerMinutes + ":" + this.timerSeconds + ":"
+                            + this.timerMilliseconds }}</span>
+                    </div>
+                </div>
+                <Button icon="pi pi-check" label="Save Workout"></Button>
+            </div>
 
-
-
-
-
+        </Dialog>
+</div>
 </template>
 
 <script>
@@ -48,9 +61,11 @@ export default {
     },
     data() {
         return {
+            visible2: false,
             activeWorkout: {},
             exercises: [],
             completedExercises: [],
+            totalVolume: 0,
 
             timerHours: 0,
             timerMilliseconds: 0,
@@ -93,6 +108,18 @@ export default {
             console.log("completed exercises array: " + this.completedExercises)
         },
 
+        calculateTotalVolume() {
+            let volume = 0;
+            for (var i = 0; i < this.completedExercises.length; i++) {
+                for (var k = 0; k < this.completedExercises[i].sets.length; k++) {
+                    volume += (this.completedExercises[i].sets[k].actual_weight * this.completedExercises[i].sets[k].actual_reps)
+                    
+                }
+            }
+            this.totalVolume = volume
+            console.log(volume)
+        },
+
         async getActiveWorkout() {
             this.activeWorkout = await API.getWorkoutsByWorkoutID(this.$route.params.workoutID)
             this.exercises = this.activeWorkout[0].exercises
@@ -103,15 +130,19 @@ export default {
                 workoutID: this.activeWorkout[0]._id,
                 workoutTitle: this.activeWorkout[0].workoutTitle,
                 workoutDuration: this.timerMinutes + ":" + this.timerSeconds + ":" + this.timerMilliseconds,
+                totalVolume: this.totalVolume,
                 users: this.activeWorkout[0].users,
                 exercises: completedExercises
             }
 
             await API.addCompletedWorkout(completedWorkout)
         },
+
+
         debug() {
             console.log(this.exercises)
-            console.log(this.activeWorkout)
+            console.log(this.completedExercises)
+            this.calculateTotalVolume()
         }
     },
     mounted() {
