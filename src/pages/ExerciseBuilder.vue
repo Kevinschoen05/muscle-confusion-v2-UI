@@ -1,6 +1,7 @@
 <template>
 
     <div class="surface-ground px-4 py-8 md:px-6 lg:px-8">
+        <Toast />
         <div class="text-900 font-medium text-xl mb-3">Create New Exercise</div>
         <p class="m-0 mb-4 p-0 text-600 line-height-3 mr-3">Add New Exercise that will be available to use in any
             workout.</p>
@@ -53,6 +54,10 @@ export default {
             console.log(this.selectedSecondaryMuscleGroups)
         },
 
+        showSuccess() {
+            this.$toast.add({ severity: 'success', summary: 'Exercise Added', detail: 'Excercise can now be added to saved workouts', life: 5000 });
+        },
+
         async getMuscleGroups() {
             this.muscleGroups = await API.getMuscleGroups()
             for (var i = 0; i < this.muscleGroups.length; i++) {
@@ -79,6 +84,10 @@ export default {
 
             await API.addExercise(finalExercise)
 
+            this.exerciseName = '',
+            this.primaryMuscleGroup = '',
+            this.secondaryMuscleGroups = [],
+            this.showSuccess()
         }
 
     },
