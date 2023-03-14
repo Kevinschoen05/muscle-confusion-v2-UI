@@ -41,6 +41,12 @@ const routes = [
     name: "active-workout",
     component: () => import("../pages/ActiveWorkout.vue"),
   },
+
+  {
+    path: "/stats",
+    name: "stats-home",
+    component: () => import("../pages/StatsHome.vue")
+  }
 ];
 
 
