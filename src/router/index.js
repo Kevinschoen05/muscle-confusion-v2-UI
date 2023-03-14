@@ -22,6 +22,11 @@ const routes = [
     component: () => import("../pages/WorkoutBuilder.vue"),
   },
   {
+    path: "/workoutbuilder/edit/:workoutID",
+    name: "edit-workout",
+    component: () => import("../pages/WorkoutBuilder.vue")
+  },
+  {
     path: "/exercisebuilder",
     name: "exercise-builder",
     component: () => import("../pages/ExerciseBuilder.vue"),
