@@ -1,4 +1,5 @@
 <template>
+    <Toast />
     <div class="surface-ground">
         <div class="grid">
             <section class="timer flex flex-column flex-auto align-items-center">
@@ -44,7 +45,7 @@
                             + this.timerMilliseconds }}</span>
                     </div>
                 </div>
-                <Button icon="pi pi-check" label="Save Workout"></Button>
+                <Button icon="pi pi-check" label="Save Workout" @click="saveCompletedWorkout(), visible2 = false "></Button>
             </div>
 
         </Dialog>
@@ -103,6 +104,10 @@ export default {
             }
         },
 
+        showSuccess() {
+            this.$toast.add({ severity: 'success', summary: 'Workout Saved', detail: 'Excercise can now be added to saved workouts', life: 5000 });
+        },
+
         handleCompletedExercise(exercise) {
             this.completedExercises.push(exercise)
             console.log("completed exercises array: " + this.completedExercises)
@@ -125,14 +130,14 @@ export default {
             this.exercises = this.activeWorkout[0].exercises
         },
 
-        async saveCompletedWorkout(completedExercises) {
+        async saveCompletedWorkout() {
             let completedWorkout = {
                 workoutID: this.activeWorkout[0]._id,
                 workoutTitle: this.activeWorkout[0].workoutTitle,
                 workoutDuration: this.timerMinutes + ":" + this.timerSeconds + ":" + this.timerMilliseconds,
                 totalVolume: this.totalVolume,
                 users: this.activeWorkout[0].users,
-                exercises: completedExercises
+                exercises: this.completedExercises
             }
 
             await API.addCompletedWorkout(completedWorkout)
