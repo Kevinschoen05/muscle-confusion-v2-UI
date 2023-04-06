@@ -1,8 +1,16 @@
 import axios from "axios";
+
 const exercise_url = "https://muscle-confusion-server.onrender.com/api/exercises";
 const workout_url = "https://muscle-confusion-server.onrender.com/api/workouts";
 const completedWorkout_url = "https://muscle-confusion-server.onrender.com/api/completedworkouts";
-const userSchedule_url = "https://muscle-confusion-server.onrender.com/api/userschedule";
+const user_url = "https://muscle-confusion-server.onrender.com/api/users";
+
+/*
+const test_exercise_url = "http://localhost:1000/api/exercises";
+const test_workout_url = "http://localhost:1000/api/workouts";
+const test_completedWorkout_url = "http://localhost:1000/api/completedworkouts";
+const test_user_url = "http://localhost:1000/api/users";
+*/ 
 
 export default class API {
   //WORKOUTS
@@ -35,12 +43,12 @@ export default class API {
   }
 
   static async getUserSchedule(userID) {
-    const res = await axios.get(`${userSchedule_url}/users/${userID}`);
+    const res = await axios.get(`${user_url}/${userID}/userSchedule`);
     return res.data;
   }
 
   static async updateUserSchedule(userID, body) {
-    const res = await axios.put(`${userSchedule_url}/users/${userID}`, {
+    const res = await axios.put(`${user_url}/${userID}/userSchedule`, {
       user: userID,
       schedule: body,
     });
