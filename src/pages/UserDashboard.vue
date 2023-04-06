@@ -198,7 +198,7 @@ export default {
         async getUserSchedule() {
             let scheduleObject = await API.getUserSchedule(this.$store.state.user.uid)
             console.log("schedule object on getUserSchedule: " + scheduleObject)
-            let savedSchedule = scheduleObject.schedule
+            let savedSchedule = scheduleObject[0].schedule
             console.log(savedSchedule)
             let updatedSchedule = [];
 

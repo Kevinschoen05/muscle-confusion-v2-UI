@@ -53,7 +53,7 @@ export default {
         getTodaysWorkout() {
             for (var i = 0; i < this.userSchedule.length; i++) {
                 if (this.userSchedule[i].date === this.today) {
-                    this.workout = this.userSchedule[i]
+                    this.workout = this.userSchedule[i].workoutID
                     console.log(this.today)
                     console.log(this.userSchedule[i].date)
                     console.log(this.workout)
@@ -79,13 +79,15 @@ export default {
         //API CALLS
         async getUserSchedule() {
             let scheduleObject = await API.getUserSchedule(this.$store.state.user.uid)
-            this.userSchedule = scheduleObject.schedule
+            console.log(scheduleObject);
+            console.log(this.today)
+            this.userSchedule = scheduleObject[0].schedule
             this.getTodaysWorkout()
 
         },
 
         async getWorkoutDetails() {
-            let workoutObject = await API.getWorkoutsByWorkoutID(this.workout.workoutID)
+            let workoutObject = await API.getWorkoutsByWorkoutID(this.workout)
             console.log(workoutObject)
             this.exercises = workoutObject[0].exercises
 
