@@ -95,12 +95,15 @@ export default {
             try {
                 await this.$store.dispatch('logout', {
                 })
-                this.$router.push('/login')
             }
             catch (err) {
                 this.error = err.message
             }
             this.visible2 = false
+            this.$router.push({
+                name: "login",
+                link: "/login",
+            })
         }
     },
 
