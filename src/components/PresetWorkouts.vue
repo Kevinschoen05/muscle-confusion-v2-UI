@@ -11,9 +11,9 @@
             </div>
         </div>
         <div class="mt-3 lg:mt-0">
-            <Button @click="this.startActiveWorkout(workoutID)" icon="pi pi-play"
+            <Button @click="startActiveWorkout(workoutID)" icon="pi pi-play"
                 class="p-button-rounded p-button-success mr-2"></Button>
-            <Button icon="pi pi-pencil" class="p-button-rounded p-button mr-2"></Button>
+            <Button @click="editPresetWorkout(workoutID)" icon="pi pi-pencil" class="p-button-rounded p-button mr-2"></Button>
         </div>
     </li>
 </template>
@@ -42,6 +42,13 @@ export default {
             this.$router.push({
                 name: "active-workout",
                 link: "/activeworkout/",
+                params: { workoutID: workoutID },
+            });
+        },
+        editPresetWorkout(workoutID) {
+            this.$router.push({
+                name: "edit-workout",
+                link: "/workoutbuilder/edit/",
                 params: { workoutID: workoutID },
             });
         },
