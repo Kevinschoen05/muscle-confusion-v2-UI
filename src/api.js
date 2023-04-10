@@ -24,6 +24,14 @@ export default class API {
     return res.data;
   }
 
+  static async updateWorkoutByWorkoutID(workoutID, body){
+    const res = await axios.put(`${workout_url}/edit/${workoutID}`, {
+      _id: workoutID,
+      updatedFinalWorkout: body 
+    });
+    return res.data
+  }
+
   //COMPLETED WORKOUTS
   static async addCompletedWorkout(workout) {
     const res = await axios.post(completedWorkout_url, workout);

@@ -27,8 +27,8 @@
                             <div class='set-reps field mb-4 col-12 pl-0 pr-0'>
                                 <label for="set-number" class="font-medium text-900">Number of Sets</label>
                                 <div class='flex field mb-4'>
-                                    <InputNumber class="" id="set-number" v-model="draftExercise.targetSets"
-                                       :min="1" :step="1" pattern="\d*" showButtons />
+                                    <InputNumber class="" id="set-number" v-model="draftExercise.targetSets" :min="1"
+                                        :step="1" pattern="\d*" showButtons />
                                     <Button class="p-button-icon-only ml-1" label="Save" @click="generateSets()">
                                         <span class="pi pi-check p-button-icon"></span> </Button>
                                 </div>
@@ -36,7 +36,7 @@
                                     <li v-for="set in draftExercise.sets" :key="set">
                                         <label for="set-rep-number"> Reps: </label>
                                         <InputNumber id="set-rep-number" v-model="set.target_reps" :min="1" :step="1"
-                                        pattern="\d*"   showButtons />
+                                            pattern="\d*" showButtons />
                                     </li>
                                 </ul>
                             </div>
@@ -81,8 +81,9 @@
                         <div class="surface-border border-top-1 opacity-50 mb-3 col-12"
                             v-if="finalWorkout.exercises.length > 0">
                         </div>
-                        <Button v-if="finalWorkout.exercises.length > 0" label="Save Workout" class="w-auto mt-3"
-                            @click="saveFinalWorkout()"></Button>
+                        <Button v-if="finalWorkout.exercises.length > 0 & !this.$route.params.workoutID"
+                            label="Save Workout" class="w-auto mt-3" @click="saveFinalWorkout()"></Button>
+                        <Button v-else label="Update Workout" class="w-auto mt-3" @click="saveUpdatedWorkout()"></Button>
                     </div>
                 </div>
 
@@ -102,7 +103,7 @@ export default {
         return {
 
             //query needs to be run on mount to pull full list of potential muscle groups
-            muscleGroups: ['Chest', 'Back', 'Shoulders', 'Legs'],
+            muscleGroups: [],
             muscleGroupSelected: false,
             selectedMuscleGroup: '',
             selectedExercise: '',
@@ -187,19 +188,43 @@ export default {
             this.muscleGroupExercises = await API.getExercisesByMuscleGroup(muscleGroup)
         },
 
-        async saveFinalWorkout() {
-            await API.addWorkout(this.finalWorkout);
-            this.showSuccess();
-        },
 
         async getMuscleGroups() {
             this.muscleGroups = await API.getMuscleGroups()
         },
 
+        async saveFinalWorkout() {
+            await API.addWorkout(this.finalWorkout);
+            this.showSuccess();
+        },
+
+        async saveUpdatedWorkout() {
+            console.log(this.finalWorkout.exercises)
+            await API.updateWorkoutByWorkoutID(this.$route.params.workoutID, this.finalWorkout.exercises)
+        },
+
+        async getPresetWorkoutforEdit(workoutID) {
+            let editableWorkout = await API.getWorkoutsByWorkoutID(workoutID)
+            console.log(editableWorkout)
+            this.draftWorkoutTitle = editableWorkout[0].workoutTitle
+            this.finalWorkout.workoutTitle = editableWorkout[0].workoutTitle
+            this.finalWorkout.users = editableWorkout[0].users
+            this.finalWorkout.exercises = editableWorkout[0].exercises
+        }
+
     },
     mounted() {
-        this.finalWorkout.users.push(this.$store.state.user.uid)
+        if (this.$route.params.workoutID) {
+            let editWorkoutID = this.$route.params.workoutID
+            this.getPresetWorkoutforEdit(editWorkoutID)
+
+        }
+        else {
+            this.finalWorkout.users.push(this.$store.state.user.uid)
+        }
+
         this.getMuscleGroups()
+
     }
 }
 
