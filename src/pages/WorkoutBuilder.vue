@@ -135,6 +135,9 @@ export default {
         showSuccess() {
             this.$toast.add({ severity: 'success', summary: 'Workout Added', detail: 'Access your workouts in your dashboard', life: 5000 });
         },
+        showSuccessUpdate() {
+            this.$toast.add({ severity: 'success', summary: 'Workout Updated', detail: 'Changes to Preset Workout Saved', life: 5000 });
+        },
 
         generateSets() {
             for (let i = 1; i < this.draftExercise.targetSets + 1; i++) {
@@ -165,6 +168,8 @@ export default {
             this.saveData()
         },
 
+
+        //In final workout summary list Delete Exercise Button will remove entire exercise from the list
         deleteExercise(exerciseID) {
             for (var i = 0; i < this.finalWorkout.exercises.length; i++) {
                 if (this.finalWorkout.exercises[i].id === exerciseID) {
@@ -178,8 +183,21 @@ export default {
         //COMPONENT HANDLERS
 
         handleDeleteSet({ exerciseID, set }) {
+            let exerciseArray = this.finalWorkout.exercises
+            for (let i = 0; i < exerciseArray.length; i++ ) {
+                const obj = exerciseArray[i]
 
-            console.log("ignore, WIP" + exerciseID + set)
+                if (obj.id === exerciseID) {
+                    for (let j = 0; j < obj.sets.length; j++) {
+                        if (obj.sets[j].index === set) {
+                            // Remove the item from the nested array
+                            obj.sets.splice(j, 1);
+                            return true; // Return true to indicate that the item was removed
+                        }
+                    }
+                }
+            }
+
         },
 
 
@@ -201,6 +219,7 @@ export default {
         async saveUpdatedWorkout() {
             console.log(this.finalWorkout.exercises)
             await API.updateWorkoutByWorkoutID(this.$route.params.workoutID, this.finalWorkout.exercises)
+            this.showSuccessUpdate();
         },
 
         async getPresetWorkoutforEdit(workoutID) {
@@ -224,6 +243,7 @@ export default {
         }
 
         this.getMuscleGroups()
+        console.log(this.finalWorkout)
 
     }
 }
