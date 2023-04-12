@@ -70,7 +70,7 @@
                                 </div>
                                 <ul>
                                     <WorkoutBuilderTable v-for="set in exercise.sets" :key="set" :set="set.index"
-                                        :reps="set.target_reps" :exerciseID="exercise.id" @delete-set="handleDeleteSet">
+                                        :reps="set.target_reps" :exerciseID="exercise.id" @delete-set="handleDeleteSet" @update-set="handleUpdateSet">
 
                                     </WorkoutBuilderTable>
                                 </ul>
@@ -184,15 +184,29 @@ export default {
 
         handleDeleteSet({ exerciseID, set }) {
             let exerciseArray = this.finalWorkout.exercises
-            for (let i = 0; i < exerciseArray.length; i++ ) {
+            for (let i = 0; i < exerciseArray.length; i++) {
                 const obj = exerciseArray[i]
 
                 if (obj.id === exerciseID) {
                     for (let j = 0; j < obj.sets.length; j++) {
                         if (obj.sets[j].index === set) {
-                            // Remove the item from the nested array
                             obj.sets.splice(j, 1);
-                            return true; // Return true to indicate that the item was removed
+                        }
+                    }
+                }
+            }
+        },
+
+        handleUpdateSet({ exerciseID, set, newReps }) {
+            let exerciseArray = this.finalWorkout.exercises
+            for (let i = 0; i < exerciseArray.length; i++) {
+                const obj = exerciseArray[i]
+
+                if (obj.id === exerciseID) {
+                    for (let j = 0; j < obj.sets.length; j++) {
+                        if (obj.sets[j].index === set) {
+                            console.log(newReps)
+                            obj.sets[j].target_reps = newReps;
                         }
                     }
                 }
