@@ -70,12 +70,15 @@
                                 </div>
                                 <ul>
                                     <WorkoutBuilderTable v-for="set in exercise.sets" :key="set" :set="set.index"
-                                        :reps="set.target_reps" :exerciseID="exercise.id" @delete-set="handleDeleteSet">
+                                        :reps="set.target_reps" :exerciseID="exercise.id" @delete-set="handleDeleteSet"
+                                        @update-set="handleUpdateSet">
 
                                     </WorkoutBuilderTable>
                                 </ul>
-                                <Button label="Delete Exercise" class=" p-button-danger w-auto mt-3"
+                                <Button label="Delete Exercise" class=" p-button-danger w-auto mt-3 mr-1"
                                     @click="deleteExercise(exercise.id)"></Button>
+                                <Button label="Add New Set" class=" p-button w-auto mt-3"
+                                    @click="addSetToExercise(exercise.id)"></Button>
                             </AccordionTab>
                         </Accordion>
                         <div class="surface-border border-top-1 opacity-50 mb-3 col-12"
@@ -135,6 +138,9 @@ export default {
         showSuccess() {
             this.$toast.add({ severity: 'success', summary: 'Workout Added', detail: 'Access your workouts in your dashboard', life: 5000 });
         },
+        showSuccessUpdate() {
+            this.$toast.add({ severity: 'success', summary: 'Workout Updated', detail: 'Changes to Preset Workout Saved', life: 5000 });
+        },
 
         generateSets() {
             for (let i = 1; i < this.draftExercise.targetSets + 1; i++) {
@@ -165,8 +171,10 @@ export default {
             this.saveData()
         },
 
+
+        //In final workout summary list Delete Exercise Button will remove entire exercise from the list
         deleteExercise(exerciseID) {
-            for (var i = 0; i < this.finalWorkout.exercises.length; i++) {
+            for (let i = 0; i < this.finalWorkout.exercises.length; i++) {
                 if (this.finalWorkout.exercises[i].id === exerciseID) {
                     let index = this.finalWorkout.exercises.indexOf(this.finalWorkout.exercises[i])
                     this.finalWorkout.exercises.splice(index, 1)
@@ -175,11 +183,46 @@ export default {
             }
         },
 
+        addSetToExercise(exerciseID) {
+            for (let i = 0; i < this.finalWorkout.exercises.length; i++) {
+                if (this.finalWorkout.exercises[i].id === exerciseID) {
+                    this.finalWorkout.exercises[i].sets.push({ 'index': (this.finalWorkout.exercises[i].sets.length + 1), target_reps: 0, actual_reps: 0, target_weight: 0, actual_weight: 0, completed: false, success: false })
+                }
+            }
+        },
+
         //COMPONENT HANDLERS
 
         handleDeleteSet({ exerciseID, set }) {
+            let exerciseArray = this.finalWorkout.exercises
+            for (let i = 0; i < exerciseArray.length; i++) {
+                const obj = exerciseArray[i]
 
-            console.log("ignore, WIP" + exerciseID + set)
+                if (obj.id === exerciseID) {
+                    for (let j = 0; j < obj.sets.length; j++) {
+                        if (obj.sets[j].index === set) {
+                            obj.sets.splice(j, 1);
+                        }
+                    }
+                }
+            }
+        },
+
+        handleUpdateSet({ exerciseID, set, newReps }) {
+            let exerciseArray = this.finalWorkout.exercises
+            for (let i = 0; i < exerciseArray.length; i++) {
+                const obj = exerciseArray[i]
+
+                if (obj.id === exerciseID) {
+                    for (let j = 0; j < obj.sets.length; j++) {
+                        if (obj.sets[j].index === set) {
+                            console.log(newReps)
+                            obj.sets[j].target_reps = newReps;
+                        }
+                    }
+                }
+            }
+
         },
 
 
@@ -201,6 +244,7 @@ export default {
         async saveUpdatedWorkout() {
             console.log(this.finalWorkout.exercises)
             await API.updateWorkoutByWorkoutID(this.$route.params.workoutID, this.finalWorkout.exercises)
+            this.showSuccessUpdate();
         },
 
         async getPresetWorkoutforEdit(workoutID) {
@@ -224,6 +268,7 @@ export default {
         }
 
         this.getMuscleGroups()
+        console.log(this.finalWorkout)
 
     }
 }
