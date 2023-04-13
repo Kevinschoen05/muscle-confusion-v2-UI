@@ -70,12 +70,15 @@
                                 </div>
                                 <ul>
                                     <WorkoutBuilderTable v-for="set in exercise.sets" :key="set" :set="set.index"
-                                        :reps="set.target_reps" :exerciseID="exercise.id" @delete-set="handleDeleteSet" @update-set="handleUpdateSet">
+                                        :reps="set.target_reps" :exerciseID="exercise.id" @delete-set="handleDeleteSet"
+                                        @update-set="handleUpdateSet">
 
                                     </WorkoutBuilderTable>
                                 </ul>
-                                <Button label="Delete Exercise" class=" p-button-danger w-auto mt-3"
+                                <Button label="Delete Exercise" class=" p-button-danger w-auto mt-3 mr-1"
                                     @click="deleteExercise(exercise.id)"></Button>
+                                <Button label="Add New Set" class=" p-button w-auto mt-3"
+                                    @click="addSetToExercise(exercise.id)"></Button>
                             </AccordionTab>
                         </Accordion>
                         <div class="surface-border border-top-1 opacity-50 mb-3 col-12"
@@ -171,11 +174,19 @@ export default {
 
         //In final workout summary list Delete Exercise Button will remove entire exercise from the list
         deleteExercise(exerciseID) {
-            for (var i = 0; i < this.finalWorkout.exercises.length; i++) {
+            for (let i = 0; i < this.finalWorkout.exercises.length; i++) {
                 if (this.finalWorkout.exercises[i].id === exerciseID) {
                     let index = this.finalWorkout.exercises.indexOf(this.finalWorkout.exercises[i])
                     this.finalWorkout.exercises.splice(index, 1)
                     console.log(this.finalWorkout)
+                }
+            }
+        },
+
+        addSetToExercise(exerciseID) {
+            for (let i = 0; i < this.finalWorkout.exercises.length; i++) {
+                if (this.finalWorkout.exercises[i].id === exerciseID) {
+                    this.finalWorkout.exercises[i].sets.push({ 'index': (this.finalWorkout.exercises[i].sets.length + 1), target_reps: 0, actual_reps: 0, target_weight: 0, actual_weight: 0, completed: false, success: false })
                 }
             }
         },
