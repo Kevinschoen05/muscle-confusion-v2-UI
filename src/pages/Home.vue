@@ -40,11 +40,6 @@ export default {
   justify-content: center;
 }
 
-@font-face {
-  font-family: "Roboto";
-  src: local("Roboto"),
-   url(../fonts/roboto-v29-latin-900.woff2) format("truetype");
-}
 
 
 @media only screen and (min-width: 0em) {
@@ -65,7 +60,7 @@ export default {
     position: relative;
     z-index: 1;
     min-height: 30vh;
-    font-family: "Roboto";
+    font-family: Avenir, Helvetica, Arial, sans-serif;
   }
 
   #hero:before {
@@ -142,7 +137,7 @@ export default {
     gap: 8px;
     width: 30%;
     height: 2.6em;
-    font-family: 'Roboto';
+    font-family: Avenir, Helvetica, Arial, sans-serif;
     color: white;
     background: #1849A9;
     border: 1px solid #1849A9;

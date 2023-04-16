@@ -2,21 +2,7 @@
     <Toast />
     <div class="surface-ground">
         <div class="grid">
-            <section class="timer flex flex-column flex-auto align-items-center">
-                <div class="stopwatch__time">
-                    <h1 class="stopwatch__time-show">
-                        <span class="hours">{{ timerHours }}</span>:<span class="minutes">{{ timerMinutes
-                        }}</span>:<span class="seconds">{{ timerSeconds
-}}</span>.<span class="milliseconds">{{ timerMilliseconds }}</span>
-                    </h1>
-                </div>
-                <div class="stopwatch__btns">
-                    <button class="stopwatch__btns-b stopwatch__btns-start" @click="startTimer()">Start</button>
-                    <button class="stopwatch__btns-b stopwatch__btns-stop " @click="stopTimer()">
-                        Stop
-                    </button>
-                </div>
-            </section>
+            <ActiveWorkoutSummary :workoutID="this.workoutID" :workoutTitle="this.workoutTitle" :totalSets="this.totalSets" class="timer flex flex-column flex-auto align-items-center"></ActiveWorkoutSummary>
             <div class="col-12 p-3 flex flex-column flex-auto align-items-center">
                 <ul class="list-none p-0 m-0">
                     <ExerciseCard v-for="exercise in exercises" :key="exercise"
@@ -55,24 +41,24 @@
 <script>
 import API from '../api'
 import ExerciseCard from '../components/ExerciseCard.vue'
+import ActiveWorkoutSummary from '../components/ActiveWorkoutSummary.vue'
 
 export default {
     components: {
-        ExerciseCard
+        ExerciseCard,
+        ActiveWorkoutSummary
     },
     data() {
         return {
             visible2: false,
             activeWorkout: {},
+            workoutTitle: '',
+            workoutID: this.$route.params.workoutID ,
             exercises: [],
             completedExercises: [],
             totalVolume: 0,
+            totalSets: 0,
 
-            timerHours: 0,
-            timerMilliseconds: 0,
-            timerSeconds: 0,
-            timerMinutes: 0,
-            interval: null
         }
     },
 
@@ -105,7 +91,7 @@ export default {
         },
 
         showSuccess() {
-            this.$toast.add({ severity: 'success', summary: 'Workout Saved', detail: 'Excercise can now be added to saved workouts', life: 5000 });
+            this.$toast.add({ severity: 'success', summary: 'Workout Complete', detail: 'You Can Review your Completed Workouts in your Dashboard.', life: 5000 });
         },
 
         handleCompletedExercise(exercise) {
@@ -125,9 +111,19 @@ export default {
             console.log(volume)
         },
 
+        calculateTotalSets(){
+            for(let i = 0; i < this.exercises.length; i++){
+                  this.totalSets += this.exercises[i].targetSets
+            }
+            console.log(this.totalSets)
+        },
+
         async getActiveWorkout() {
             this.activeWorkout = await API.getWorkoutsByWorkoutID(this.$route.params.workoutID)
             this.exercises = this.activeWorkout[0].exercises
+            this.workoutTitle = this.activeWorkout[0].workoutTitle
+            this.workoutID = this.activeWorkout[0].workoutID
+            this.calculateTotalSets()
         },
 
         async saveCompletedWorkout() {
@@ -151,7 +147,7 @@ export default {
         }
     },
     mounted() {
-        this.getActiveWorkout()
+        this.getActiveWorkout();
     }
 }
 

@@ -82,7 +82,7 @@ export default {
     position: relative;
     z-index: 1;
     min-height: 100vh;
-    font-family: "Roboto";
+    font-family: Avenir, Helvetica, Arial, sans-serif;
   }
 
   #hero:before {

@@ -189,7 +189,7 @@ export default {
 }
 
 .exercise-name {
-    font-family: 'Roboto';
+    font-family: Avenir, Helvetica, Arial, sans-serif;
     font-size: 20px;
     font-weight: bolder;
     color: #101828
@@ -232,7 +232,7 @@ export default {
 }
 
 .header-item {
-    font-family: 'roboto';
+    font-family: Avenir, Helvetica, Arial, sans-serif;
     font-weight: 600;
     color: #475467;
 }
@@ -261,7 +261,7 @@ thead {
 
 .set-index,
 .set-value {
-    font-family: 'roboto';
+    font-family: Avenir, Helvetica, Arial, sans-serif;
     font-weight: 400;
     color: #475467;
     border: none !important;
@@ -269,7 +269,7 @@ thead {
 
 .set-value {
     margin: 0;
-    font-family: 'roboto';
+    font-family: Avenir, Helvetica, Arial, sans-serif;
     font-weight: 400;
     color: #475467;
     border: none !important;
@@ -279,7 +279,7 @@ thead {
     width: 3em;
     border: 1px solid #EAECF0;
     border-radius: 5px;
-    font-family: 'roboto';
+    font-family: Avenir, Helvetica, Arial, sans-serif;
     text-align: center;
     box-shadow: 0px 12px 16px -4px rgba(16, 24, 40, 0.08), 0px 4px 6px -2px rgba(16, 24, 40, 0.03);
 
@@ -312,7 +312,7 @@ thead {
     gap: 8px;
     width: 50%;
     height: 2.6em;
-    font-family: 'Roboto';
+    font-family: Avenir, Helvetica, Arial, sans-serif;
     color: white;
     background: var(--primary-color);
     border: 1px solid var(--primary-color);
@@ -332,7 +332,7 @@ thead {
     gap: 8px;
     width: 50%;
     height: 2.6em;
-    font-family: 'Roboto';
+    font-family: Avenir, Helvetica, Arial, sans-serif;
     color: var(--primary-color);
     background: white;
     border: 1px solid var(--primary-color);
