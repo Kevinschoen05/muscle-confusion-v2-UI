@@ -8,7 +8,7 @@
             <div class="col-12 p-3 flex flex-column flex-auto align-items-center">
                 <Button v-if="visible1" label="Start Workout" class=" flex align-items-center" @click="startTimer(), visible1 = false"></Button>
 
-                <ul class="list-none p-0 m-0">
+                <ul  v-if=!visible1 class="list-none p-0 m-0">
                     <ExerciseCard v-for="exercise in exercises" :key="exercise"
                         @exercise-complete="handleCompletedExercise(exercise)" :exerciseName=exercise.exerciseName
                         :primaryMuscleGroup="exercise.primaryMuscleGroup"
@@ -17,7 +17,7 @@
                 </ul>
             </div>
             <div class=" mb-3 flex flex-column flex-auto align-items-center">
-                <Button label="Complete Workout" class=" flex align-items-center"
+                <Button v-if=!visible1 label="Complete Workout" class=" flex align-items-center"
                     @click="visible2 = true, this.calculateTotalVolume(), stopTimer()"></Button>
             </div>
         </div>
