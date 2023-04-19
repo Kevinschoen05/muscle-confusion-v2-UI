@@ -4,7 +4,7 @@
             <div class="exercise-header">
                 <p class="exercise-name">{{ exerciseName }}</p>
             </div>
-            <div class=" flex  align-content-center align-items-center w-auto">
+            <div class=" flex  align-content-center align-items-center w-auto pl-1">
                 <muscle-badge :title="primaryMuscleGroup" primary></muscle-badge>
                 <muscle-badge v-for="muscleGroups in secondaryMuscleGroups" :key="muscleGroups"
                     :title="muscleGroups"></muscle-badge>
