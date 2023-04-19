@@ -127,7 +127,7 @@ export default {
 }
 
 h1 {
-    font-family: 'Roboto';
+    font-family: Avenir, Helvetica, Arial, sans-serif;
     font-size: 36px;
     font-weight: 600;
     color: #101828;
@@ -135,7 +135,7 @@ h1 {
 }
 
 h2 {
-    font-family: 'Roboto';
+    font-family: Avenir, Helvetica, Arial, sans-serif;
     font-size: 20px;
     font-weight: 600;
     color: #101828;
@@ -180,7 +180,7 @@ ul li img {
     gap: 8px;
     width: 90%;
     height: 2.6em;
-    font-family: 'Roboto';
+    font-family: Avenir, Helvetica, Arial, sans-serif;
     color: white;
     background: #1849A9;
     border: 1px solid #1849A9;
@@ -204,7 +204,7 @@ ul li img {
     gap: 8px;
     width: 90%;
     height: 2.6em;
-    font-family: 'Roboto';
+    font-family: Avenir, Helvetica, Arial, sans-serif;
     color: #1849A9;
     background: white;
     border: 1px solid #1849A9;

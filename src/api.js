@@ -1,8 +1,10 @@
 import axios from "axios";
 
-const exercise_url = "https://muscle-confusion-server.onrender.com/api/exercises";
+const exercise_url =
+  "https://muscle-confusion-server.onrender.com/api/exercises";
 const workout_url = "https://muscle-confusion-server.onrender.com/api/workouts";
-const completedWorkout_url = "https://muscle-confusion-server.onrender.com/api/completedworkouts";
+const completedWorkout_url =
+  "https://muscle-confusion-server.onrender.com/api/completedworkouts";
 const user_url = "https://muscle-confusion-server.onrender.com/api/users";
 
 /*
@@ -10,7 +12,7 @@ const test_exercise_url = "http://localhost:1000/api/exercises";
 const test_workout_url = "http://localhost:1000/api/workouts";
 const test_completedWorkout_url = "http://localhost:1000/api/completedworkouts";
 const test_user_url = "http://localhost:1000/api/users";
-*/ 
+*/
 
 export default class API {
   //WORKOUTS
@@ -24,17 +26,26 @@ export default class API {
     return res.data;
   }
 
-  static async updateWorkoutByWorkoutID(workoutID, body){
+  static async updateWorkoutByWorkoutID(workoutID, body) {
     const res = await axios.put(`${workout_url}/edit/${workoutID}`, {
       _id: workoutID,
-      updatedFinalWorkout: body 
+      updatedFinalWorkout: body,
     });
-    return res.data
+    return res.data;
   }
 
   //COMPLETED WORKOUTS
   static async addCompletedWorkout(workout) {
     const res = await axios.post(completedWorkout_url, workout);
+    return res.data;
+  }
+
+  static async getCompletedWorkoutsByWorkoutID(workoutID) {
+    const res = await axios.get(`${completedWorkout_url}/${workoutID}`, {
+      params: {
+        sortByCompletionDate: true, 
+      }
+    });
     return res.data;
   }
 
@@ -65,8 +76,8 @@ export default class API {
 
   //EXERCISES
 
-  static async addExercise(exercise){
-    const res = await axios.post(`${exercise_url}`, exercise)
+  static async addExercise(exercise) {
+    const res = await axios.post(`${exercise_url}`, exercise);
     return res.data;
   }
 
@@ -75,8 +86,8 @@ export default class API {
     return res.data;
   }
 
-  static async getMuscleGroups(){
-    const res = await axios.get(`${exercise_url}/muscleGroups`)
+  static async getMuscleGroups() {
+    const res = await axios.get(`${exercise_url}/muscleGroups`);
     return res.data;
   }
 }

@@ -29,7 +29,7 @@ export default {
     mix-blend-mode: normal;
     border-radius: 16px;
     margin: 1em;
-    font-family: 'roboto';
+    font-family: Avenir, Helvetica, Arial, sans-serif;
     font-size: 14px;
     font-weight: medium;
     color: #fff
@@ -49,7 +49,7 @@ export default {
     mix-blend-mode: normal;
     border-radius: 16px;
     margin: .5em;
-    font-family: 'roboto';
+    font-family: Avenir, Helvetica, Arial, sans-serif;
     font-size: 14px;
     font-weight: medium;
     color: #1849A9
