@@ -9,7 +9,7 @@
                     }}</li>
         </ul>
         <div class="flex">
-            <Button class="mr-1" label="Start Workout" @click="startActiveWorkout(workout.workoutID)"></Button>
+            <Button class="mr-1" label="Start Workout" @click="startActiveWorkout(workout)"></Button>
             <Button class="p-button-outlined" @click="startWorkoutBuilder" label="Build New Workout"></Button>
         </div>
 </div>
@@ -103,6 +103,7 @@ export default {
     mounted() {
         //this.getWorkoutImage(this.workout)
         this.getUserSchedule()
+        console.log(this.workout)
     }
 
 }

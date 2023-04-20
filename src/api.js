@@ -51,6 +51,11 @@ export default class API {
 
   //USER DATA
 
+  static async initializeUser(userID) {
+    const res = await axios.post(`${user_url}/initializeUser/${userID}`)
+    return res.data
+  }
+
   static async getWorkoutsByUserID(userID) {
     const res = await axios.get(`${workout_url}/users/${userID}`);
     return res.data;
