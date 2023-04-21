@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-import store from '../store/index'
+import store from "../store/index";
 
 const routes = [
   {
@@ -24,7 +24,7 @@ const routes = [
   {
     path: "/workoutbuilder/edit/:workoutID",
     name: "edit-workout",
-    component: () => import("../pages/WorkoutBuilder.vue")
+    component: () => import("../pages/WorkoutBuilder.vue"),
   },
   {
     path: "/exercisebuilder",
@@ -50,10 +50,9 @@ const routes = [
   {
     path: "/stats",
     name: "stats-home",
-    component: () => import("../pages/StatsHome.vue")
-  }
+    component: () => import("../pages/StatsHome.vue"),
+  },
 ];
-
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
@@ -61,7 +60,7 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to) => {
-  if (!store.state.user && to.name !== "login") {
+  if (!store.state.user && to.name !== "login" && to.name !== "signup") {
     return { name: "login" };
   }
 });

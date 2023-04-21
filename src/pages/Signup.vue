@@ -6,7 +6,7 @@
                     <div class="text-900 text-3xl font-medium mb-3">Create New Account</div>
                     <span class="text-600 font-medium line-height-3">Already have an account?</span>
                     <a class="font-medium no-underline ml-2 text-blue-500 cursor-pointer"
-                        @click="$router.push('login')">Sign In!</a>
+                        @click="this.$router.push('/login')">Sign In!</a>
                 </div>
 
                 <div>
