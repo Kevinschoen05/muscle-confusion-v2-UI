@@ -6,12 +6,15 @@
                     <div class="text-900 text-3xl font-medium mb-3">Create New Account</div>
                     <span class="text-600 font-medium line-height-3">Already have an account?</span>
                     <a class="font-medium no-underline ml-2 text-blue-500 cursor-pointer"
-                        @click="$router.push('login')">Sign In!</a>
+                        @click="this.$router.push('/login')">Sign In!</a>
                 </div>
 
                 <div>
                     <label for="email1" class="block text-900 font-medium mb-2">Email</label>
                     <InputText v-model="email" id="email1" type="text" class="w-full mb-3" />
+
+                    <label for="username" class="block text-900 font-medium mb-2">Username</label>
+                    <InputText v-model="userName" id="username1" type="text" class="w-full mb-3" />
 
                     <label for="password1" class="block text-900 font-medium mb-2">Password</label>
                     <InputText v-model="password" id="password1" type="password" class="w-full mb-3" />
@@ -23,7 +26,7 @@
                         </div>
                     </div>
 
-                    <Button @click="handleSubmit" label="Sign In" icon="pi pi-user" class="w-full"></Button>
+                    <Button @click="handleSubmit()" label="Sign In" icon="pi pi-user" class="w-full"></Button>
                 </div>
             </div>
         </div>
@@ -41,27 +44,40 @@ export default {
         return {
             email: '',
             password: '',
-            error: null
+            error: null,
+            userName: ''
         }
     },
     methods: {
+
         async handleSubmit() {
             try {
                 await this.$store.dispatch('signUp', {
                     email: this.email,
                     password: this.password
                 })
+
+                await this.$nextTick() // Wait for Vue to update the store
+                await this.createUser()
+
                 this.$router.push('/home')
             }
             catch (err) {
                 this.error = err.message
             }
 
-            this.createUser()
+
         },
 
         async createUser() {
-            await API.initializeUser(this.$store.user.userID)
+            console.log('Calling createUser() function...')
+            console.log("user ID: " + this.$store.state.user.uid, " " + "username" + this.userName)
+            try {
+                await API.initializeUser(this.$store.state.user.uid, this.userName)
+                console.log('User created successfully')
+            } catch (err) {
+                console.error('Error creating user:', err)
+            }
         }
     }
 
