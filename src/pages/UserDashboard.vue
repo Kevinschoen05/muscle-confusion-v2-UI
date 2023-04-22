@@ -4,11 +4,12 @@
             <div class="col-12">
                 <div class="surface-card pl-4 pt-4 pb-4 border-bottom-none">
                     <div class="text-900 font-medium text-xl">Upcoming Schedule</div>
-                </div> 
-                <div class="surface-card   border-top-none border-noround-top border-round flex p-3 flex-column md:flex-row">
+                </div>
+                <div
+                    class="surface-card   border-top-none border-noround-top border-round flex p-3 flex-column md:flex-row">
                     <ScheduleCard v-for="day in schedule" :key="day.date" :date="day.date"
-                        @update-schedule="UserScheduleUpdate" :workoutTitle="day.workoutTitle"
-                        :workoutID="day.workoutID" :today="today" :presetWorkouts="presetWorkouts">
+                        @update-schedule="UserScheduleUpdate" :workoutTitle="day.workoutTitle" :workoutID="day.workoutID"
+                        :today="today" :presetWorkouts="presetWorkouts">
                     </ScheduleCard>
 
                 </div>
@@ -22,11 +23,11 @@
                                 @click="$refs.menu1.toggle($event)"></Button>
                         </div>
                     </div>
-                        <ul class="list-none p-0 m-0">
-                            <ActivityFeed v-for="workout in completedWorkouts" :key="workout._id"
-                                :workoutTitle="workout.workoutTitle" :userEmail="this.$store.state.user.email"
-                                :relativeTime="workout.relativeTime"></ActivityFeed>
-                        </ul>
+                    <ul class="list-none p-0 m-0">
+                        <ActivityFeed v-for="workout in completedWorkouts" :key="workout._id"
+                            :workoutTitle="workout.workoutTitle" :userEmail="this.$store.state.user.email"
+                            :relativeTime="workout.relativeTime"></ActivityFeed>
+                    </ul>
                 </div>
             </div>
             <div class="col-12 lg:col-6">
@@ -34,15 +35,14 @@
                     <div class="flex align-items-center justify-content-between mb-3">
                         <div class="text-900 font-medium text-xl">Preset Workouts</div>
                         <div>
-                            <Button icon="pi pi-ellipsis-v"
-                                class="p-button-text p-button-plain p-button-rounded"></Button>
+                            <Button icon="pi pi-ellipsis-v" class="p-button-text p-button-plain p-button-rounded"></Button>
                         </div>
                     </div>
-                        <ul class="list-none p-0 m-0 ">
-                            <PresetWorkouts v-for="workout in presetWorkouts" :key="workout._id"
-                                :workoutTitle="workout.workoutTitle" :totalExercises="workout.exercises.length"
-                                :workoutID="workout._id"></PresetWorkouts>
-                        </ul>
+                    <ul class="list-none p-0 m-0 ">
+                        <PresetWorkouts v-for="workout in presetWorkouts" :key="workout._id"
+                            :workoutTitle="workout.workoutTitle" :totalExercises="workout.exercises.length"
+                            :workoutID="workout._id"></PresetWorkouts>
+                    </ul>
                 </div>
             </div>
             <div class="col-12 lg:col-4">
@@ -60,7 +60,7 @@
                     <img src="../assets/rise.png" alt="Image" class="mx-auto block mb-4  h-3 w-3">
                     <div class="text-900 font-medium mb-3 text-xl">Track your Progress</div>
                     <p class="mt-0 mb-4 p-0 line-height-3">View your workout breakdowns</p>
-                    <Button label="View Stats" icon="pi pi-arrow-right p-button-rounded" @click="viewStats()" ></Button>
+                    <Button label="View Stats" icon="pi pi-arrow-right p-button-rounded" @click="viewStats()"></Button>
                 </div>
             </div>
             <div class="col-12 lg:col-4">
@@ -72,7 +72,7 @@
                 </div>
             </div>
         </div>
-    </div>
+</div>
 </template>
 
 <script>
@@ -190,9 +190,18 @@ export default {
         },
 
         async getUserCompletedWorkouts() {
-            this.completedWorkouts = await API.getCompletedWorkoutsByUserID(this.$store.state.user.uid)
+            let completedWorkoutsData = await API.getCompletedWorkoutsByUserID(this.$store.state.user.uid)
+            completedWorkoutsData.sort((a, b) => {
+                // convert the `completionDate` strings to Date objects for comparison
+                const dateA = new Date(a.completionDate);
+                const dateB = new Date(b.completionDate);
+
+                // sort in descending order (most recent first)
+                return dateB - dateA;
+            });
+            this.completedWorkouts = completedWorkoutsData;
             console.log("completed Workouts: " + this.completedWorkouts)
-            this.getActivityFeedRelativeTime()
+                this.getActivityFeedRelativeTime()
 
         },
         async getUserSchedule() {
@@ -212,8 +221,8 @@ export default {
                 }
             }
             //add new placeholder days to end of schedule
-                let latestDate = ' '
-            if (updatedSchedule.length === 0 ){
+            let latestDate = ' '
+            if (updatedSchedule.length === 0) {
                 latestDate = this.today
             }
             else {
