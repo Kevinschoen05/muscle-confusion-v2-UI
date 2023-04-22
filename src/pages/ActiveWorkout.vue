@@ -149,6 +149,10 @@ export default {
 
             await API.addCompletedWorkout(completedWorkout)
             this.showSuccess()
+            this.$router.push({
+                name: "user-dashboard",
+                link: "/dashboard",
+            });
         },
 
 
