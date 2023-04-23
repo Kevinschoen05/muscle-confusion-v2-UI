@@ -6,9 +6,10 @@
                 class="timer flex flex-column flex-auto align-items-center">
             </ActiveWorkoutSummary>
             <div class="col-12 p-3 flex flex-column flex-auto align-items-center">
-                <Button v-if="visible1" label="Start Workout" class=" flex align-items-center" @click="startTimer(), visible1 = false"></Button>
+                <Button v-if="visible1" label="Start Workout" class=" flex align-items-center"
+                    @click="startTimer(), visible1 = false"></Button>
 
-                <ul  v-if=!visible1 class="list-none p-0 m-0">
+                <ul v-if=!visible1 class="list-none p-0 m-0">
                     <ExerciseCard v-for="exercise in exercises" :key="exercise"
                         @exercise-complete="handleCompletedExercise(exercise)" :exerciseName=exercise.exerciseName
                         :primaryMuscleGroup="exercise.primaryMuscleGroup"
@@ -16,11 +17,17 @@
                         :sets="exercise.sets"></ExerciseCard>
                 </ul>
             </div>
+
             <div class=" mb-3 flex flex-column flex-auto align-items-center">
+
+                <Button v-if=!visible1 icon="pi pi-plus" class="mb-6" @click="visible3 = true"></Button>
                 <Button v-if=!visible1 label="Complete Workout" class=" flex align-items-center"
                     @click="visible2 = true, this.calculateTotalVolume(), stopTimer()"></Button>
             </div>
         </div>
+        <Dialog v-model:visible="visible3" appendTo="body" :modal="true">
+            <ActiveWorkoutExerciseAdd @add-exercise="handleAddExercise"></ActiveWorkoutExerciseAdd>
+        </Dialog>
         <Dialog v-model:visible="visible2" appendTo="body" :modal="true">
             <div class="p-4">
                 <div class="text-900 font-medium mb-3 text-xl">Workout summary</div>
@@ -37,7 +44,6 @@
                 </div>
                 <Button icon="pi pi-check" label="Save Workout" @click="saveCompletedWorkout(), visible2 = false"></Button>
             </div>
-
         </Dialog>
 </div>
 </template>
@@ -46,16 +52,19 @@
 import API from '../api'
 import ExerciseCard from '../components/ExerciseCard.vue'
 import ActiveWorkoutSummary from '../components/ActiveWorkoutSummary.vue'
+import ActiveWorkoutExerciseAdd from '../components/ActiveWorkoutExerciseAdd.vue'
 
 export default {
     components: {
         ExerciseCard,
-        ActiveWorkoutSummary
+        ActiveWorkoutSummary,
+        ActiveWorkoutExerciseAdd
     },
     data() {
         return {
-            visible1: true, 
+            visible1: true,
             visible2: false,
+            visible3: false,
             activeWorkout: {},
             workoutTitle: '',
             workoutID: this.$route.params.workoutID,
@@ -108,6 +117,13 @@ export default {
         handleCompletedExercise(exercise) {
             this.completedExercises.push(exercise)
             console.log("completed exercises array: " + this.completedExercises)
+        },
+
+        handleAddExercise({draftExercise}){
+            console.log(this.exercises)
+            console.log(draftExercise)
+            this.exercises.push(draftExercise)
+            this.visible3 = false
         },
 
         calculateTotalVolume() {
