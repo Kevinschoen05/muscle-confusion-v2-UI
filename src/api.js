@@ -49,6 +49,11 @@ export default class API {
     return res.data;
   }
 
+  static async getCompletedWorkoutByID(completedWorkoutID){
+    const res = await axios.get(`${completedWorkout_url}/id/${completedWorkoutID}`);
+    return res.data
+  }
+
   //USER DATA
 
     static async initializeUser(userID, userName) {

@@ -26,7 +26,7 @@
                     <ul class="list-none p-0 m-0">
                         <ActivityFeed v-for="workout in completedWorkouts" :key="workout._id"
                             :workoutTitle="workout.workoutTitle" :userEmail="this.$store.state.user.email"
-                            :relativeTime="workout.relativeTime"></ActivityFeed>
+                            :relativeTime="workout.relativeTime" :completedWorkoutID="workout._id"></ActivityFeed>
                     </ul>
                 </div>
             </div>
@@ -201,7 +201,7 @@ export default {
             });
             this.completedWorkouts = completedWorkoutsData;
             console.log("completed Workouts: " + this.completedWorkouts)
-                this.getActivityFeedRelativeTime()
+            this.getActivityFeedRelativeTime()
 
         },
         async getUserSchedule() {
