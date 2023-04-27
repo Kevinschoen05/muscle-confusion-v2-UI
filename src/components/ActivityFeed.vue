@@ -5,9 +5,10 @@
             <div>
                 <span class="text-900 font-medium block mb-2">{{ workoutTitle }}</span>
                 <div class="text-700 mb-2">Completed by: {{ userEmail }}</div>
-                <a class="text-blue-500 cursor-pointer" @click="visible2 = true, getCompletedWorkoutByID(completedWorkoutID)" >
+                <a class="text-blue-500 cursor-pointer"
+                    @click="visible2 = true, getCompletedWorkoutByID(completedWorkoutID)">
                     <i class="pi 
-            pi-plus-circle text-sm mr-2"></i>
+                            pi-plus-circle text-sm mr-2"></i>
                     <span>See Results</span>
                 </a>
             </div>
@@ -15,8 +16,26 @@
         <span class="block text-500 font-medium ml-7 md:ml-5 mt-2 md:mt-0">{{ relativeTime
         }}</span>
         <Dialog v-model:visible="visible2" appendTo="body" :modal="true">
-
-            </Dialog>
+            <div class="text-900 font-medium mb-3 text-xl">{{ workoutTitle }}</div>
+            <div class="flex mb-4 flex-column lg:flex-row">
+                <div class="surface-50 p-3 flex-auto">
+                    <div class="text-600 mb-3">Total Sets</div>
+                    <span class="text-blue-600 font-medium text-xl">{{ completedWorkoutSetTotal }}</span>
+                </div>
+                <div class="surface-50 p-3 flex-auto mx-0 my-3 lg:my-0 lg:mx-3">
+                    <div class="text-600 mb-3">Duration</div>
+                    <span class="text-blue-600 font-medium text-xl">{{ completedWorkoutDuration }}</span>
+                </div>
+                <div class="surface-50 p-3 flex-auto mx-0 mb-3 lg:my-0 lg:mr-3">
+                    <div class="text-600 mb-3">Total Volume</div>
+                    <span class="text-blue-600 font-medium text-xl">{{ completedWorkoutTotalVolume }} lbs</span>
+                </div>
+                <div class="surface-50 p-3 flex-auto">
+                    <div class="text-600 mb-3">Successful Sets </div>
+                    <span class="text-blue-600 font-medium text-xl">{{ successfulSetPercent }} %</span>
+                </div>
+            </div>
+        </Dialog>
 </li>
 </template>
   
@@ -35,7 +54,13 @@ export default {
 
     data() {
         return {
-            visible2: false 
+            visible2: false,
+            completedWorkoutResults: [],
+            completedWorkoutSetTotal: 0,
+            completedWorkoutDuration: '',
+            completedWorkoutTotalVolume: 0,
+            successfulSetPercent: 0
+
         }
     },
 
@@ -43,11 +68,31 @@ export default {
 
     },
     methods: {
+        calculateSuccessPercentage(obj) {
+            let totalSets = 0;
+            let successfulSets = 0;
+            obj.exercises.forEach((exercise) => {
+                exercise.sets.forEach((set) => {
+                    totalSets++;
+                    if (set.success) {
+                        successfulSets++;
+                    }
+                });
+            });
+            const successPercentage = (successfulSets / totalSets) * 100;
+           
+           this.successfulSetPercent =  Math.round(successPercentage * 100) / 100;
+        },
 
-        async getCompletedWorkoutByID(completedWorkoutID){
-            let completedWorkoutResults = await API.getCompletedWorkoutByID(completedWorkoutID)
-            console.log(completedWorkoutResults)
+        async getCompletedWorkoutByID(completedWorkoutID) {
+            let results = await API.getCompletedWorkoutByID(completedWorkoutID)
+            this.completedWorkoutResults = results;
+            this.completedWorkoutSetTotal = results[0].exercises.length
+            this.completedWorkoutDuration = results[0].workoutDuration
+            this.completedWorkoutTotalVolume = results[0].totalVolume
+            this.calculateSuccessPercentage(results[0])
         }
+
 
     },
     mounted() {
