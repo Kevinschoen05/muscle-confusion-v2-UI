@@ -80,14 +80,14 @@ export default {
                 });
             });
             const successPercentage = (successfulSets / totalSets) * 100;
-           
+           this.completedWorkoutSetTotal = totalSets;
            this.successfulSetPercent =  Math.round(successPercentage * 100) / 100;
         },
 
         async getCompletedWorkoutByID(completedWorkoutID) {
             let results = await API.getCompletedWorkoutByID(completedWorkoutID)
+            console.log(results)
             this.completedWorkoutResults = results;
-            this.completedWorkoutSetTotal = results[0].exercises.length
             this.completedWorkoutDuration = results[0].workoutDuration
             this.completedWorkoutTotalVolume = results[0].totalVolume
             this.calculateSuccessPercentage(results[0])
