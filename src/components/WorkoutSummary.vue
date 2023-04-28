@@ -1,7 +1,7 @@
 <template>
     <div class="surface-card border-round shadow-2 p-4">
-        <div class="text-900 font-medium mb-3 text-xl">Today's Workout</div>
-        <p class="mt-0 mb-4 p-0 line-height-3"> {{ workout.workoutTitle }}</p>
+        <div class="text-900 font-medium mb-3 text-xl">Today's Scheduled Workout</div>
+        <p class="mt-0 mb-4 p-0 line-height-3"> {{ workoutTitle }}</p>
         <ul>
             <li v-for="exercise in exercises" :key="exercise.id"> <img aria-hidden="true" loading="lazy" decoding="async"
                     src="../assets/check-circle.svg" alt="check mark" width="20" height="20">{{
@@ -11,6 +11,9 @@
         <div class="flex">
             <Button class="mr-1" label="Start Workout" @click="startActiveWorkout(workout)"></Button>
             <Button class="p-button-outlined" @click="startWorkoutBuilder" label="Build New Workout"></Button>
+        </div>
+        <div class="flex flex-wrap align-items-center justify-content-center gap-3">
+            <Button class="mt-3" label="Freestyle Workout" @click="startFreestyleWorkout"></Button>
         </div>
 </div>
 </template>
@@ -37,7 +40,8 @@ export default {
             today: dayjs().tz().format('LL'),
             workout: [],
             exercises: [],
-            userSchedule: []
+            userSchedule: [],
+            workoutTitle: ''
         }
     },
     watch: {
@@ -69,6 +73,13 @@ export default {
             });
         },
 
+        startFreestyleWorkout(){
+            this.$router.push({
+                name: 'freestyle-workout',
+                link: "/activeworkout/freestyle"
+            })
+        },
+
         startWorkoutBuilder() {
             this.$router.push({
                 name: "workout-builder",
@@ -90,6 +101,7 @@ export default {
             let workoutObject = await API.getWorkoutsByWorkoutID(this.workout)
             console.log(workoutObject)
             this.exercises = workoutObject[0].exercises
+            this.workoutTitle = workoutObject[0].workoutTitle
 
         }
 
