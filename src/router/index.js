@@ -46,6 +46,12 @@ const routes = [
     name: "active-workout",
     component: () => import("../pages/ActiveWorkout.vue"),
   },
+  {
+    path: "/activeworkout/freestyle",
+    name: "freestyle-workout",
+    component: () => import("../pages/ActiveWorkout.vue"),
+
+  },
 
   {
     path: "/stats",
