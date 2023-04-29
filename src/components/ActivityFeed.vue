@@ -13,7 +13,7 @@
                 </a>
             </div>
         </div>
-        <span class="block text-500 font-medium ml-7 md:ml-5 mt-2 md:mt-0">{{ relativeTime
+        <span class="block text-500 font-medium  xs:ml-0 sm:ml-0 ml-7 md:ml-5 mt-2 md:mt-0">{{ relativeTime
         }}</span>
         <Dialog v-model:visible="visible2" appendTo="body" :modal="true">
             <div class="text-900 font-medium mb-3 text-xl">{{ workoutTitle }}</div>
