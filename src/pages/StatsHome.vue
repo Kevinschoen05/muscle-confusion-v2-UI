@@ -17,91 +17,15 @@
                                 <li>
                                     <a v-ripple
                                         class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
-                                        <i class="pi pi-home mr-2"></i>
-                                        <span class="font-medium">Dashboard</span>
+                                        <i class="pi pi-book mr-2"></i>
+                                        <span class="font-medium">Detailed Workout Results</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a v-ripple
                                         class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
-                                        <i class="pi pi-bookmark mr-2"></i>
-                                        <span class="font-medium">Bookmarks</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a v-ripple
-                                        class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple"
-                                        v-styleclass="{ selector: '@next', enterClass: 'hidden', enterActiveClass: 'slidedown', leaveToClass: 'hidden', leaveActiveClass: 'slideup' }">
-                                        <i class="pi pi-chart-line mr-2"></i>
-                                        <span class="font-medium">Reports</span>
-                                        <i class="pi pi-chevron-down ml-auto"></i>
-                                    </a>
-                                    <ul
-                                        class="list-none py-0 pl-3 pr-0 m-0 hidden overflow-y-hidden transition-all transition-duration-400 transition-ease-in-out">
-                                        <li>
-                                            <a v-ripple
-                                                class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple"
-                                                v-styleclass="{ selector: '@next', enterClass: 'hidden', enterActiveClass: 'slidedown', leaveToClass: 'hidden', leaveActiveClass: 'slideup' }">
-                                                <i class="pi pi-chart-line mr-2"></i>
-                                                <span class="font-medium">Revenue</span>
-                                                <i class="pi pi-chevron-down ml-auto"></i>
-                                            </a>
-                                            <ul
-                                                class="list-none py-0 pl-3 pr-0 m-0 hidden overflow-y-hidden transition-all transition-duration-400 transition-ease-in-out">
-                                                <li>
-                                                    <a v-ripple
-                                                        class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
-                                                        <i class="pi pi-table mr-2"></i>
-                                                        <span class="font-medium">View</span>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a v-ripple
-                                                        class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
-                                                        <i class="pi pi-search mr-2"></i>
-                                                        <span class="font-medium">Search</span>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                        <li>
-                                            <a v-ripple
-                                                class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
-                                                <i class="pi pi-chart-line mr-2"></i>
-                                                <span class="font-medium">Expenses</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a v-ripple
-                                        class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
-                                        <i class="pi pi-users mr-2"></i>
-                                        <span class="font-medium">Team</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a v-ripple
-                                        class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
-                                        <i class="pi pi-comments mr-2"></i>
-                                        <span class="font-medium">Messages</span>
-                                        <span
-                                            class="inline-flex align-items-center justify-content-center ml-auto bg-blue-500 text-0 border-circle"
-                                            style="min-width: 1.5rem; height: 1.5rem">3</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a v-ripple
-                                        class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
-                                        <i class="pi pi-calendar mr-2"></i>
-                                        <span class="font-medium">Calendar</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a v-ripple
-                                        class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
-                                        <i class="pi pi-cog mr-2"></i>
-                                        <span class="font-medium">Settings</span>
+                                        <i class="pi pi-star mr-2"></i>
+                                        <span class="font-medium">Preset Workout Data</span>
                                     </a>
                                 </li>
                             </ul>
@@ -120,21 +44,14 @@
                                     <a v-ripple
                                         class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
                                         <i class="pi pi-folder mr-2"></i>
-                                        <span class="font-medium">Projects</span>
+                                        <span class="font-medium">Detailed Exercise Results</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a v-ripple
                                         class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
                                         <i class="pi pi-chart-bar mr-2"></i>
-                                        <span class="font-medium">Performance</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a v-ripple
-                                        class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
-                                        <i class="pi pi-cog mr-2"></i>
-                                        <span class="font-medium">Settings</span>
+                                        <span class="font-medium">Overall Muscle Group Data</span>
                                     </a>
                                 </li>
                             </ul>
@@ -189,12 +106,12 @@
                             <div class="surface-card shadow-2 p-3 border-1 border-50 border-round">
                                 <div class="flex justify-content-between mb-3">
                                     <div>
-                                        <span class="block text-500 font-medium mb-3">TBD</span>
-                                        <div class="text-900 font-medium text-xl">28441</div>
+                                        <span class="block text-500 font-medium mb-3">Successful Set % </span>
+                                        <div class="text-900 font-medium text-xl">52 % </div>
                                     </div>
                                     <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
                                         style="width:2.5rem;height:2.5rem">
-                                        <i class="pi pi-inbox text-blue-500 text-xl"></i>
+                                        <i class="pi pi-check text-blue-500 text-xl"></i>
                                     </div>
                                 </div>
                                 <span class="text-green-500 font-medium">520 </span>
@@ -218,69 +135,8 @@
                             </div>
                         </div>
                         <div class="col-12 xl:col-6">
-                            <div class="surface-card shadow-2 border-round p-4">
-                                <div class="text-xl text-900 font-medium mb-5">Latest News</div>
-                                <ul class="list-none p-0 m-0">
-                                    <li class="pb-3 border-bottom-1 surface-border">
-                                        <div class="font-medium text-900 mb-2">Aenean euismod elementum</div>
-                                        <div class="line-height-3 text-600" style="max-width: 30rem">Vitae turpis massa sed
-                                            elementum tempus egestas sed sed risus.
-                                            In metus vulputate eu scelerisque felis imperdiet proin.</div>
-                                    </li>
-                                    <li class="py-3 border-bottom-1 surface-border">
-                                        <div class="font-medium text-900 mb-2">In iaculis nunc sed augue lacus</div>
-                                        <div class="line-height-3 text-600" style="max-width: 30rem">Viverra vitae congue.
-                                            Nisi scelerisque eu ultrices vitae auctor eu augue ut lectus.
-                                            Elementum eu facilisis sed odio morbi.</div>
-                                    </li>
-                                    <li class="py-3 border-bottom-1 surface-border">
-                                        <div class="font-medium text-900 mb-2">Proin sagittis nisl rhoncus</div>
-                                        <div class="line-height-3 text-600" style="max-width: 30rem">In pellentesque massa
-                                            placerat duis ultricies lacus. Ac feugiat sed lectus vestibulum mattis
-                                            ullamcorper.</div>
-                                    </li>
-                                </ul>
-                                <div class="flex justify-content-between pt-3">
-                                    <Button label="Clear All"
-                                        class="p-button-outlined p-button-secondary w-6 mr-2"></Button>
-                                    <Button label="New Entry" class="p-button-outlined w-6 ml-2"></Button>
-                                </div>
-                            </div>
                         </div>
                         <div class="col-12 xl:col-6">
-                            <div class="col-12 xl:col-6">
-                                <div class="surface-card shadow-2 border-round p-4">
-                                    <div class="text-xl text-900 font-medium mb-5">Latest News</div>
-                                    <ul class="list-none p-0 m-0">
-                                        <li class="pb-3 border-bottom-1 surface-border">
-                                            <div class="font-medium text-900 mb-2">Aenean euismod elementum</div>
-                                            <div class="line-height-3 text-600" style="max-width: 30rem">Vitae turpis massa
-                                                sed
-                                                elementum tempus egestas sed sed risus.
-                                                In metus vulputate eu scelerisque felis imperdiet proin.</div>
-                                        </li>
-                                        <li class="py-3 border-bottom-1 surface-border">
-                                            <div class="font-medium text-900 mb-2">In iaculis nunc sed augue lacus</div>
-                                            <div class="line-height-3 text-600" style="max-width: 30rem">Viverra vitae
-                                                congue.
-                                                Nisi scelerisque eu ultrices vitae auctor eu augue ut lectus.
-                                                Elementum eu facilisis sed odio morbi.</div>
-                                        </li>
-                                        <li class="py-3 border-bottom-1 surface-border">
-                                            <div class="font-medium text-900 mb-2">Proin sagittis nisl rhoncus</div>
-                                            <div class="line-height-3 text-600" style="max-width: 30rem">In pellentesque
-                                                massa
-                                                placerat duis ultricies lacus. Ac feugiat sed lectus vestibulum mattis
-                                                ullamcorper.</div>
-                                        </li>
-                                    </ul>
-                                    <div class="flex justify-content-between pt-3">
-                                        <Button label="Clear All"
-                                            class="p-button-outlined p-button-secondary w-6 mr-2"></Button>
-                                        <Button label="New Entry" class="p-button-outlined w-6 ml-2"></Button>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
