@@ -15,11 +15,13 @@
                             </div>
                             <ul class="list-none p-0 m-0 overflow-hidden">
                                 <li>
-                                    <a v-ripple
-                                        class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
+                                    <router-link v-ripple
+                                        class=" flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple"
+                                        to="/stats/completedworkouts">
                                         <i class="pi pi-book mr-2"></i>
-                                        <span class="font-medium">Detailed Workout Results</span>
-                                    </a>
+                                        <span class="font-medium">
+                                            Detailed Workout Results </span>
+                                    </router-link>
                                 </li>
                                 <li>
                                     <a v-ripple
@@ -134,9 +136,8 @@
                                 <span class="text-500">TBD</span>
                             </div>
                         </div>
-                        <div class="col-12 xl:col-6">
-                        </div>
-                        <div class="col-12 xl:col-6">
+                        <div class="col-12">
+                            <RouterView></RouterView>
                         </div>
                     </div>
                 </div>
@@ -175,5 +176,11 @@
     border-bottom-right-radius: 3px;
     -webkit-box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
     box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+a:-webkit-any-link {
+    color: -webkit-link;
+    cursor: pointer;
+    text-decoration: none !important;
 }
 </style>
