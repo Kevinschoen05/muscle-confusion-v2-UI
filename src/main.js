@@ -39,6 +39,7 @@ import SelectButton from 'primevue/selectbutton';
 import InputSwitch from 'primevue/inputswitch'
 import Badge from 'primevue/badge';
 import BadgeDirective from 'primevue/badgedirective';
+import Paginator from 'primevue/paginator'
 
 
 
@@ -77,5 +78,6 @@ app.component('Dialog', Dialog)
 app.component('SelectButton', SelectButton)
 app.component( 'InputSwitch',InputSwitch)
 app.component('Badge', Badge)
+app.component('Paginator', Paginator)
 
 app.mount('#app')

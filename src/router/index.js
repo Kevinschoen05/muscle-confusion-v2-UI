@@ -50,14 +50,21 @@ const routes = [
     path: "/activeworkout/freestyle",
     name: "freestyle-workout",
     component: () => import("../pages/ActiveWorkout.vue"),
-
   },
-
   {
     path: "/stats",
     name: "stats-home",
     component: () => import("../pages/StatsHome.vue"),
+    children: [
+      {
+        path: "/stats/completedworkouts",
+        name: "completed-workouts-view",
+        component: () => import("../data-views/CompletedWorkoutsView.vue"),
+      },
+    ],
   },
+
+  //Stats page data view routes go here
 ];
 
 const router = createRouter({
