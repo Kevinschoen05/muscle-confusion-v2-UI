@@ -9,7 +9,7 @@
                     @click="visible2 = true, getCompletedWorkoutByID(completedWorkoutID)">
                     <i class="pi 
                             pi-plus-circle text-sm mr-2"></i>
-                    <span>See Results</span>
+                    <span>Workout Summary</span>
                 </a>
             </div>
         </div>
