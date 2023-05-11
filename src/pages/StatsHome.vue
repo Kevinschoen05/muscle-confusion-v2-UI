@@ -24,11 +24,12 @@
                                     </router-link>
                                 </li>
                                 <li>
-                                    <a v-ripple
-                                        class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
+                                    <router-link v-ripple
+                                        class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple"
+                                        to="/stats/presetworkouts">
                                         <i class="pi pi-star mr-2"></i>
                                         <span class="font-medium">Preset Workout Data</span>
-                                    </a>
+                                </router-link>
                                 </li>
                             </ul>
                         </li>
