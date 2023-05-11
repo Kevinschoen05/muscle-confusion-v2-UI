@@ -24,11 +24,12 @@
                                     </router-link>
                                 </li>
                                 <li>
-                                    <a v-ripple
-                                        class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
+                                    <router-link v-ripple
+                                        class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple"
+                                        to="/stats/presetworkouts">
                                         <i class="pi pi-star mr-2"></i>
                                         <span class="font-medium">Preset Workout Data</span>
-                                    </a>
+                                    </router-link>
                                 </li>
                             </ul>
                         </li>
@@ -77,15 +78,15 @@
                                 <div class="flex justify-content-between mb-3">
                                     <div>
                                         <span class="block text-500 font-medium mb-3">Total Workouts</span>
-                                        <div class="text-900 font-medium text-xl">152</div>
+                                        <div class="text-900 font-medium text-xl">{{ userTotalWorkouts }}</div>
                                     </div>
                                     <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
                                         style="width:2.5rem;height:2.5rem">
                                         <i class="pi pi-calendar text-blue-500 text-xl"></i>
                                     </div>
                                 </div>
-                                <span class="text-green-500 font-medium">24 workouts </span>
-                                <span class="text-500">since last missed day</span>
+                                <span class="text-green-500 font-medium"> </span>
+                                <span class="text-500"></span>
                             </div>
                         </div>
                         <div class="col-12 lg:col-6 xl:col-3">
@@ -93,15 +94,15 @@
                                 <div class="flex justify-content-between mb-3">
                                     <div>
                                         <span class="block text-500 font-medium mb-3">Cumulative Volume</span>
-                                        <div class="text-900 font-medium text-xl">420069 lbs</div>
+                                        <div class="text-900 font-medium text-xl">{{ userTotalVolume }} lbs</div>
                                     </div>
                                     <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
                                         style="width:2.5rem;height:2.5rem">
                                         <i class="pi pi-chevron-up text-blue-500 text-xl"></i>
                                     </div>
                                 </div>
-                                <span class="text-green-500 font-medium">%52+ </span>
-                                <span class="text-500">last workout</span>
+                                <span class="text-green-500 font-medium"> </span>
+                                <span class="text-500"></span>
                             </div>
                         </div>
                         <div class="col-12 lg:col-6 xl:col-3">
@@ -109,31 +110,31 @@
                                 <div class="flex justify-content-between mb-3">
                                     <div>
                                         <span class="block text-500 font-medium mb-3">Successful Set % </span>
-                                        <div class="text-900 font-medium text-xl">52 % </div>
+                                        <div class="text-900 font-medium text-xl">{{ userSuccessfulSetPercentage }} % </div>
                                     </div>
                                     <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
                                         style="width:2.5rem;height:2.5rem">
                                         <i class="pi pi-check text-blue-500 text-xl"></i>
                                     </div>
                                 </div>
-                                <span class="text-green-500 font-medium">520 </span>
-                                <span class="text-500">TBD</span>
+                                <span class="text-green-500 font-medium"> </span>
+                                <span class="text-500"></span>
                             </div>
                         </div>
                         <div class="col-12 lg:col-6 xl:col-3">
                             <div class="surface-card shadow-2 p-3 border-1 border-50 border-round">
                                 <div class="flex justify-content-between mb-3">
                                     <div>
-                                        <span class="block text-500 font-medium mb-3">TBD</span>
-                                        <div class="text-900 font-medium text-xl">152 </div>
+                                        <span class="block text-500 font-medium mb-3">Average Workout Duration</span>
+                                        <div class="text-900 font-medium text-xl">{{ userAverageWorkoutDuration }} </div>
                                     </div>
                                     <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
                                         style="width:2.5rem;height:2.5rem">
-                                        <i class="pi pi-comment text-blue-500 text-xl"></i>
+                                        <i class="pi pi-clock text-blue-500 text-xl"></i>
                                     </div>
                                 </div>
-                                <span class="text-green-500 font-medium">85 </span>
-                                <span class="text-500">TBD</span>
+                                <span class="text-green-500 font-medium"></span>
+                                <span class="text-500"></span>
                             </div>
                         </div>
                         <div class="col-12">
@@ -147,9 +148,110 @@
 </template>
 
 <script>
+import API from '../api'
+export default {
+    data() {
+        return {
+            userCompletedWorkouts: [],
+            userTotalWorkouts: 0,
+            userTotalVolume: 0,
+            userSuccessfulSetPercentage: 0,
+            userAverageWorkoutDuration: 0
+        }
+    },
+    methods: {
 
+        calcUserSummaryStats() {
+            this.userTotalWorkouts = this.userCompletedWorkouts.length
+
+            let volume = 0;
+            for (var i = 0; i < this.userCompletedWorkouts.length; i++) {
+                volume += this.userCompletedWorkouts[i].totalVolume
+            }
+            this.userTotalVolume = volume
+
+            this.calculateSuccessPercentage(this.userCompletedWorkouts)
+            this.userAverageWorkoutDuration = this.calculateAverageDuration(this.userCompletedWorkouts)
+
+        },
+
+        calculateSuccessPercentage(userCompletedWorkouts) {
+            let totalSets = 0;
+            let successfulSets = 0;
+
+            userCompletedWorkouts.forEach((workout) => {
+                workout.exercises.forEach((exercise) => {
+                    exercise.sets.forEach((set) => {
+                        totalSets++;
+                        if (set.success) {
+                            successfulSets++;
+                        }
+                    });
+                });
+            });
+
+            if (totalSets === 0) {
+                return 0;
+            }
+
+            const successPercentage = (successfulSets / totalSets) * 100;
+            this.userSuccessfulSetPercentage = Math.round(successPercentage * 100) / 100;
+
+        },
+
+        calculateAverageDuration(userCompletedWorkouts) {
+            let totalDurationInSeconds = 0;
+
+            userCompletedWorkouts.forEach((workout) => {
+                const [hoursStr, minutesStr, secondsStr] = workout.workoutDuration.split(':');
+                const hours = parseInt(hoursStr, 10);
+                const minutes = parseInt(minutesStr, 10);
+                const seconds = parseInt(secondsStr, 10);
+
+                const durationInSeconds = (hours * 3600) + (minutes * 60) + seconds;
+                totalDurationInSeconds += durationInSeconds;
+            });
+
+            if (userCompletedWorkouts.length === 0) {
+                return '00-00-00';
+            }
+
+            const averageDurationInSeconds = Math.round(totalDurationInSeconds / userCompletedWorkouts.length);
+            const hours = Math.floor(averageDurationInSeconds / 3600);
+            const minutes = Math.floor((averageDurationInSeconds % 3600) / 60);
+            const seconds = averageDurationInSeconds % 60;
+
+            return `${this.padZero(hours)}:${this.padZero(minutes)}:${this.padZero(seconds)}`;
+        },
+
+        padZero(number) {
+            return number.toString().padStart(2, '0');
+        },
+
+
+
+        //API CALLS
+        async getUserCompletedWorkouts() {
+            let completedWorkoutsData = await API.getCompletedWorkoutsByUserID(this.$store.state.user.uid)
+            completedWorkoutsData.sort((a, b) => {
+                // convert the `completionDate` strings to Date objects for comparison
+                const dateA = new Date(a.completionDate);
+                const dateB = new Date(b.completionDate);
+
+                // sort in descending order (most recent first)
+                return dateB - dateA;
+            });
+            this.userCompletedWorkouts = completedWorkoutsData;
+            this.calcUserSummaryStats()
+        },
+    },
+    mounted() {
+        this.getUserCompletedWorkouts()
+    }
+
+}
 </script>
-
+ 
 <style>
 .pi-cog {
     line-height: 52px !important;

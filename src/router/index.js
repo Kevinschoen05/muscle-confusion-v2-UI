@@ -61,6 +61,12 @@ const routes = [
         name: "completed-workouts-view",
         component: () => import("../data-views/CompletedWorkoutsView.vue"),
       },
+      {
+        path: "/stats/presetworkouts",
+        name: "preset-workouts-view",
+        component: () => import("../data-views/PresetWorkoutsView.vue"),
+      },
+
     ],
   },
 
