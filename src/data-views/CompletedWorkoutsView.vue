@@ -20,33 +20,40 @@
 
                     <div class="line-height-3 text-700 mb-3">
                         <span class="text-500 text-sm mr-2 "> Total Volume: {{ workout.totalVolume }}</span>
+                        <br>
                         <span class="text-500 text-sm mr-2 "> Total Exercises: {{ workout.exercises.length }}</span>
+                        <br>
                         <span class="text-500 text-sm mr-2 "> Workout Duration: {{ workout.workoutDuration }}</span>
                     </div>
-                    <Button v-if="!clicked" class="ml-full" @click="clicked = !clicked"> View Detailed Results</Button>
+                    <Button v-if="!(selectedWorkout === workout._id)"  class="ml-full" @click="showDetails(workout._id)"> View Detailed Results</Button>
 
-                    <div class="surface-section" v-if="clicked">
+                    <div class="surface-section" v-if="selectedWorkout === workout._id">
                         <div class="font-medium text-3xl text-900 mb-3">Workout Details</div>
                         <ul class="list-none p-0 m-0">
                             <li v-for="exercise in workout.exercises" :key="exercise.index"
-                                class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
-                                <div class="text-500 w-6 md:w-2 font-medium">Exercise</div>
-                                <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">{{ exercise.exerciseName }}
-                                </div>
-                                <ul class="list-none">
-                                    <li v-for="set in exercise.sets" :key="set.index">
-                                        <span class="mr-0"> Set: {{ set.index }}</span> 
-                                        <span class="text-500 ml-2">Target Reps: </span>
-                                        <span class="text-900 ">{{set.target_reps }}</span>
-                                        <span class="text-500 ml-2"> Target Weight: </span>
-                                        <span class="text-900 ">{{set.target_weight }} lbs</span>
-                                        <span class="text-500 ml-2 ">Actual Reps: </span>
-                                        <span class="text-900 ">{{set.actual_reps }}</span>
-                                        <span class="text-500 ml-2"> Actual Weight: </span>
-                                        <span class="text-900 ">{{set.actual_weight }} lbs</span>
-                                        <span class="text-500 ml-2"> Success </span>
-                                        <span class="text-900 ">{{set.success }}</span>
+                                class="flexpy-3 px-2 border-top-1 surface-border flex-wrap">
+                                <div class="text-900 w-6 mt-4 font-medium">{{ exercise.exerciseName }}</div>
 
+                                <ul class="set-list list-none m-0 p-0" >
+                                    <li class="mb-4" v-for="set in exercise.sets" :key="set.index">
+                                        <div class="mr-0 flex align-items-center"> Set: {{ set.index }}
+                                            <img v-if="(set.success)" class="ml-2" aria-hidden="true" loading="lazy"
+                                                decoding="async" src="../assets/check-circle-success.svg" alt="check mark">
+                                            <img v-else-if="(!set.success && set.completed)" class="ml-2" aria-hidden="true"
+                                                loading="lazy" decoding="async" src="../assets/slash-circle.svg"
+                                                alt="check mark">
+                                        </div>
+                                        <span class="text-500">Target Reps: </span>
+                                        <span class="text-900 ">{{ set.target_reps }}</span>
+                                        <br>
+                                        <span class="text-500  ">Actual Reps: </span>
+                                        <span class="text-900 ">{{ set.actual_reps }}</span>
+                                        <br>
+                                        <span class="text-500">Target Weight: </span>
+                                        <span class="text-900 ">{{ set.target_weight }} lbs</span>
+                                        <br>
+                                        <span class="text-500">Actual Weight: </span>
+                                        <span class="text-900">{{ set.actual_weight }} lbs</span>
                                     </li>
                                 </ul>
                             </li>
@@ -73,7 +80,8 @@ export default {
             currentPage: 0, // Added for tracking current page
             completedWorkouts: [], // Your array of data
 
-            clicked: false
+            clicked: false,
+            selectedWorkout: null
 
         }
     },
@@ -94,6 +102,9 @@ export default {
             console.log("Page Change")
         },
 
+        showDetails(index) {
+            this.selectedWorkout = index;
+        },
 
         //API CALLS
         async getUserCompletedWorkouts() {
@@ -120,3 +131,13 @@ export default {
 
 
 </script>
+
+<style scoped>
+@media screen and (min-width: 576px) {
+    .set-list{
+        column-count: 2;
+}
+}
+
+
+</style>
