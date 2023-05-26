@@ -168,7 +168,7 @@ export default {
             for (var i = 0; i < this.userCompletedWorkouts.length; i++) {
                 volume += this.userCompletedWorkouts[i].totalVolume
             }
-            this.userTotalVolume = volume
+            this.userTotalVolume = volume.toLocaleString();
 
             this.calculateSuccessPercentage(this.userCompletedWorkouts)
             this.userAverageWorkoutDuration = this.calculateAverageDuration(this.userCompletedWorkouts)

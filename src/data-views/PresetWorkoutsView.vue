@@ -9,8 +9,8 @@
                     style="width:49px; height: 49px">
                     <i class="pi pi-info-circle text-xl text-white"></i>
                 </span>
-                <div class="text-2xl font-medium text-white mb-2">123K</div>
-                <span class="text-blue-100 font-medium">Messages</span>
+                <div class="text-2xl font-medium text-white mb-2">{{ totalCompletedPresetWorkouts }}</div>
+                <span class="text-blue-100 font-medium">Times Completed</span>
             </div>
         </div>
         <div class="col-12 md:col-6 lg:col-3 p-3">
@@ -19,8 +19,28 @@
                     style="width:49px; height: 49px">
                     <i class="pi pi-info-circle text-xl text-white"></i>
                 </span>
-                <div class="text-2xl font-medium text-white mb-2">123K</div>
-                <span class="text-blue-100 font-medium">Messages</span>
+                <div class="text-2xl font-medium text-white mb-2">{{ lastCompletionDate }}</div>
+                <span class="text-blue-100 font-medium">Last Completion Date</span>
+            </div>
+        </div>
+        <div class="col-12 md:col-6 lg:col-3 p-3">
+            <div class="p-3 text-center bg-blue-500" style="border-radius: 12px">
+                <span class="inline-flex justify-content-center align-items-center bg-blue-600 border-circle mb-3"
+                    style="width:49px; height: 49px">
+                    <i class="pi pi-info-circle text-xl text-white"></i>
+                </span>
+                <div class="text-2xl font-medium text-white mb-2">{{ averageVolume }} lbs</div>
+                <span class="text-blue-100 font-medium">Average Total Volume</span>
+            </div>
+        </div>
+        <div class="col-12 md:col-6 lg:col-3 p-3">
+            <div class="p-3 text-center bg-blue-500" style="border-radius: 12px">
+                <span class="inline-flex justify-content-center align-items-center bg-blue-600 border-circle mb-3"
+                    style="width:49px; height: 49px">
+                    <i class="pi pi-info-circle text-xl text-white"></i>
+                </span>
+                <div class="text-2xl font-medium text-white mb-2">{{ prVolume }} lbs</div>
+                <span class="text-blue-100 font-medium">Personal Best Volume</span>
             </div>
         </div>
 </div>
@@ -29,17 +49,59 @@
 <script>
 
 import API from '../api'
+import dayjs from "dayjs";
+import localizedFormat from "dayjs/plugin/localizedFormat"
+
+dayjs.extend(localizedFormat)
 export default {
     data() {
         return {
             selectedWorkout: '',
             presetWorkouts: [],
-            presetWorkoutData: []
+            presetWorkoutData: [],
+
+            totalCompletedPresetWorkouts: 0,
+            lastCompletionDate: '',
+            averageVolume: 0,
+            prVolume: 0,
 
         }
     },
     methods: {
 
+        getPresetWorkoutCumulativeMetrics() {
+            this.totalCompletedPresetWorkouts = this.presetWorkoutData.length
+            this.lastCompletionDate = dayjs(this.presetWorkoutData[0].completionDate).format('LLL')
+            this.calcAverageTotalVolume();
+            this.calcPrVolume();
+
+        },
+
+        calcAverageTotalVolume() {
+            let sum = 0;
+            for (let i = 0; i < this.presetWorkoutData.length; i++) {
+                sum += this.presetWorkoutData[i].totalVolume;
+            }
+
+
+            const average = sum / this.presetWorkoutData.length;
+            this.averageVolume = Number(average.toFixed(2)).toLocaleString()
+
+            console.log(this.averageVolume)
+        },
+
+
+        calcPrVolume() {
+            let highestVolume = 0;
+
+            this.presetWorkoutData.forEach((object) => {
+                if (object.totalVolume > highestVolume) {
+                    highestVolume = object.totalVolume;
+                }
+            });
+
+            this.prVolume = highestVolume.toLocaleString();
+        },
 
         //API Calls
         async getUserPresetWorkouts() {
@@ -50,6 +112,7 @@ export default {
             console.log(workoutID)
             this.presetWorkoutData = await API.getCompletedWorkoutsByWorkoutID(workoutID)
             console.log(this.presetWorkoutData)
+            this.getPresetWorkoutCumulativeMetrics()
         }
     },
     mounted() {
