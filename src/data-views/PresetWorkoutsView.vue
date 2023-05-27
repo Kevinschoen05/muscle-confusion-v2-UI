@@ -3,8 +3,6 @@
     <Dropdown class="field col-12" v-model="selectedWorkout" :options="presetWorkouts" optionLabel="workoutTitle"
         placeholder="Select Preset Workout" @change="this.getPresetWorkoutData(selectedWorkout._id)" />
     <div v-if='selectedWorkout'>
-
-
         <div class="grid">
             <div class="col-12 md:col-6 lg:col-3 p-3">
                 <div class="p-3 text-center bg-blue-500" style="border-radius: 12px">
@@ -50,8 +48,20 @@
         <div class='surface-card shadow-2'>
             <PresetWorkoutVolumeChart :presetWorkoutData="presetWorkoutData"></PresetWorkoutVolumeChart>
         </div>
+        <div class="grid">
+            <div class="col-12 md:col-6 lg:col-6 pt-6">
+                <div class='surface-card shadow-2  h-30rem'>
+                    <PresetWorkoutMuscleGroupChart :presetWorkoutData="presetWorkoutData"> </PresetWorkoutMuscleGroupChart>
+                </div>
+            </div>
+            <div class="col-12 md:col-6 lg:col-6 pt-6">
+                <div class='surface-card shadow-2 h-30rem'>
 
-</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
 </template>
 
 <script>
@@ -60,12 +70,14 @@ import API from '../api'
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat"
 
-import PresetWorkoutVolumeChart from '../components/PresetWorkoutVolumeChart.vue'
+import PresetWorkoutVolumeChart from '../components/charts/PresetWorkoutVolumeChart.vue'
+import PresetWorkoutMuscleGroupChart from '../components/charts/PresetWorkoutMuscleGroupChart.vue'
 
 dayjs.extend(localizedFormat)
 export default {
-    components:{
-        PresetWorkoutVolumeChart
+    components: {
+        PresetWorkoutVolumeChart,
+        PresetWorkoutMuscleGroupChart
     },
     data() {
         return {
@@ -102,7 +114,7 @@ export default {
                 if ('completionDate' in object) {
                     completionDates.push(object.completionDate);
                 }
-                
+
             });
             this.dataset = totalVolumes
             this.datasetLabels = completionDates
