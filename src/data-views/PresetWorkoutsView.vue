@@ -92,83 +92,9 @@ export default {
             averageVolume: 0,
             prVolume: 0,
 
-            //chart data
-            chartData: null,
-            chartOptions: null,
-            datasetLabels: [],
-            datasetTitle: 'Total Volume',
-            dataset: []
         }
     },
     methods: {
-        setChartData() {
-            const documentStyle = getComputedStyle(document.documentElement);
-
-            const totalVolumes = [];
-            const completionDates = [];
-
-            this.presetWorkoutData.forEach((object) => {
-                if ('totalVolume' in object) {
-                    totalVolumes.push(object.totalVolume);
-                }
-                if ('completionDate' in object) {
-                    completionDates.push(object.completionDate);
-                }
-
-            });
-            this.dataset = totalVolumes
-            this.datasetLabels = completionDates
-
-
-            return {
-                labels: this.datasetLabels,
-                datasets: [
-                    {
-                        label: this.datasetTitle,
-                        data: this.dataset,
-                        fill: false,
-                        borderColor: documentStyle.getPropertyValue('--blue-500'),
-                        tension: 0.4
-                    },
-                ]
-            };
-        },
-        setChartOptions() {
-            const documentStyle = getComputedStyle(document.documentElement);
-            const textColor = documentStyle.getPropertyValue('--text-color');
-            const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
-            const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
-
-            return {
-                maintainAspectRatio: false,
-                aspectRatio: 0.6,
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: textColor
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        ticks: {
-                            color: textColorSecondary
-                        },
-                        grid: {
-                            color: surfaceBorder
-                        }
-                    },
-                    y: {
-                        ticks: {
-                            color: textColorSecondary
-                        },
-                        grid: {
-                            color: surfaceBorder
-                        }
-                    }
-                }
-            };
-        },
 
         getPresetWorkoutCumulativeMetrics() {
             this.totalCompletedPresetWorkouts = this.presetWorkoutData.length
