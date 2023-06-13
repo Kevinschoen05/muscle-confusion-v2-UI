@@ -56,7 +56,7 @@
             </div>
             <div class="col-12 md:col-6 lg:col-6 pt-6">
                 <div class='surface-card shadow-2 h-30rem'>
-
+                    <PresetWorkoutSuccessfulSetChart :presetWorkoutData="presetWorkoutData" ></PresetWorkoutSuccessfulSetChart>
                 </div>
             </div>
 
@@ -72,12 +72,14 @@ import localizedFormat from "dayjs/plugin/localizedFormat"
 
 import PresetWorkoutVolumeChart from '../components/charts/PresetWorkoutVolumeChart.vue'
 import PresetWorkoutMuscleGroupChart from '../components/charts/PresetWorkoutMuscleGroupChart.vue'
+import PresetWorkoutSuccessfulSetChart from '../components/charts/PresetWorkoutSuccessfulSetChart.vue'
 
 dayjs.extend(localizedFormat)
 export default {
     components: {
         PresetWorkoutVolumeChart,
-        PresetWorkoutMuscleGroupChart
+        PresetWorkoutMuscleGroupChart,
+        PresetWorkoutSuccessfulSetChart
     },
     data() {
         return {
