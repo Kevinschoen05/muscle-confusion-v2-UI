@@ -41,6 +41,7 @@ import Badge from 'primevue/badge';
 import BadgeDirective from 'primevue/badgedirective';
 import Paginator from 'primevue/paginator'
 import Chart from 'primevue/chart';
+import Knob  from 'primevue/knob';
 
 
 
@@ -82,5 +83,6 @@ app.component( 'InputSwitch',InputSwitch)
 app.component('Badge', Badge)
 app.component('Paginator', Paginator)
 app.component('Chart', Chart)
+app.component('Knob', Knob)
 
 app.mount('#app')

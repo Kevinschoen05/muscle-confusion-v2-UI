@@ -30,7 +30,7 @@ export default {
             chartData: null,
             chartOptions: null,
             datasetLabels: [],
-            datasetTitle: 'Total Volume',
+            datasetTitle: 'Total Volume (in lbs)',
             dataset: []
         }
     },
