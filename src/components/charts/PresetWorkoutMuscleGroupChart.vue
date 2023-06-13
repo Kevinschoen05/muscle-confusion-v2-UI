@@ -1,4 +1,6 @@
-<template><Chart type="radar" :data="chartData" :options="chartOptions" class="h-full" /></template>
+<template>
+    <Chart type="radar" :data="chartData" :options="chartOptions" class="h-full" />
+</template>
 
 
 <script>
@@ -12,6 +14,7 @@ export default {
     watch: {
         // Watch for changes in the computed property
         presetWorkoutData: function () {
+            this.getPresetWorkout()
             // Execute your desired function here whenever the prop value changes
             this.chartData = this.setChartData();
             this.chartOptions = this.setChartOptions();
@@ -19,20 +22,20 @@ export default {
     },
     data() {
         return {
+            presetWorkout: [],
 
             //chart data
             chartData: null,
             chartOptions: null,
             datasetLabels: [],
+            datasetValues: [],
             datasetTitle: 'Exercises By Primary Muscle Group',
-            dataset: []
+            dataset: [],
+
         }
     },
     methods: {
-        setChartData() {
-            console.log('presetWorkoutData from component: ' + this.presetWorkoutData)
-            const documentStyle = getComputedStyle(document.documentElement);
-
+        buildMuscleGroupObject() {
             this.dataset = this.datasetLabels.map(function (label) {
                 return {
                     primaryMuscleGroup: label,
@@ -40,18 +43,36 @@ export default {
                 };
             });
 
+            for (let i = 0; i < this.presetWorkout[0].exercises.length; i++) {
+
+                for (let k = 0; k < this.dataset.length; k++) {
+                    if (this.presetWorkout[0].exercises[i].primaryMuscleGroup === this.dataset[k].primaryMuscleGroup) {
+                        this.dataset[k].count++
+                    }
+                }
+
+            }
+            this.datasetValues = this.dataset.map(item => item.count)
+            this.chartData = this.setChartData();
+        },
+
+        setChartData() {
+            const documentStyle = getComputedStyle(document.documentElement);
+
             return {
                 labels: this.datasetLabels,
                 datasets: [
                     {
                         label: this.datasetTitle,
-                        data: this.dataset,
+                        data: this.datasetValues,
+
                         fill: true,
                         borderColor: documentStyle.getPropertyValue('--blue-500'),
-                        tension: .001
+                        tension: .05
                     },
                 ]
             };
+
         },
         setChartOptions() {
             const documentStyle = getComputedStyle(document.documentElement);
@@ -84,8 +105,9 @@ export default {
                         },
                         grid: {
                             color: surfaceBorder
-                        }
-                    }
+                        },
+                    },
+
                 }
             };
         },
@@ -94,6 +116,11 @@ export default {
         //API CALLS
         async getMuscleGroups() {
             this.datasetLabels = await API.getMuscleGroups()
+        },
+
+        async getPresetWorkout() {
+            this.presetWorkout = await API.getWorkoutsByWorkoutID(this.presetWorkoutData[0].workoutID)
+            this.buildMuscleGroupObject()
         }
 
     },
