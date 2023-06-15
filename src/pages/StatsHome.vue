@@ -44,11 +44,12 @@
                             </div>
                             <ul class="list-none p-0 m-0 overflow-hidden">
                                 <li>
-                                    <a v-ripple
-                                        class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
-                                        <i class="pi pi-folder mr-2"></i>
+                                    <router-link v-ripple
+                                        class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple"
+                                        to="/stats/completedexercises">
+                                        <i class="pi pi-file mr-2"></i>
                                         <span class="font-medium">Detailed Exercise Results</span>
-                                    </a>
+                                    </router-link>
                                 </li>
                                 <li>
                                     <a v-ripple

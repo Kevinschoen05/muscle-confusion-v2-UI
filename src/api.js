@@ -53,6 +53,19 @@ export default class API {
     const res = await axios.get(`${completedWorkout_url}/id/${completedWorkoutID}`);
     return res.data
   }
+  
+  //Completed Exercises
+
+  static async getCompletedExercisesByExerciseID(exerciseID, userID){
+    const res = await axios.get(`${completedWorkout_url}/${exerciseID}`, {
+      params: {
+        exerciseID: exerciseID,
+        userID: userID
+      }
+    })
+    return res
+  }
+
 
   //USER DATA
 
