@@ -49,10 +49,35 @@
                         <span class="text-blue-600 font-medium text-xl">{{ formattedElapsedTime }}</span>
                     </div>
                 </div>
-                <Button icon="pi pi-check" label="Save Workout" @click="saveCompletedWorkout(), visible2 = false"></Button>
+                <div>
+                    <div class="text-900 font-medium mb-3 text-xl">Capture Externalities</div>
+                    <p class="mt-0 mb-4 p-0 line-height-3">Track positive and negative factors that can effect your workout
+                    </p>
+                    <div class="flex flex-column gap-2">
+                        <label for="sleep">Previous Night's Sleep</label>
+                        <InputNumber v-model="userSleep" inputId="sleep" suffix=" hours" :min="0" showButtons></InputNumber>
+                    </div>
+                    <div class=" mt-2 flex flex-column gap-2">
+                        <label for="stress">Self-Reported Nutrition Quality</label>
+                        <InputNumber v-model="userNutrition" inputId="stress" suffix=" out of 10" :min="0" :max="10"
+                            showButtons></InputNumber>
+                    </div>
+                    <div class=" mt-2 flex flex-column gap-2">
+                        <label for="stress">Self-Reported Stress Level</label>
+                        <InputNumber v-model="userStress" inputId="stress" suffix=" out of 10" :min="0" :max="10"
+                            showButtons></InputNumber>
+                    </div>
+                    <div class=" mt-2 flex flex-column gap-2">
+                        <label for="stress">Preworkout Taken</label>
+                        <InputSwitch v-model="userPreworkout" inputId="preworkout"></InputSwitch>
+                    </div>
+
+                </div>
+                <Button class=mt-4 icon="pi pi-check" label="Save Workout"
+                    @click="saveCompletedWorkout(), visible2 = false"></Button>
             </div>
         </Dialog>
-</div>
+    </div>
 </template>
 
 <script>
@@ -77,10 +102,18 @@ export default {
             workoutID: this.$route.params.workoutID,
             exercises: [],
             completedExercises: [],
+            externalities: [],
             totalVolume: 0,
             totalSets: 0,
 
+            //externalities
+            userSleep: 0,
+            userNutrition: 0,
+            userStress: 0,
+            userPreworkout: false,
 
+
+            //duration
             startTime: null,
             endTime: null,
             elapsedTime: 0,
@@ -167,6 +200,17 @@ export default {
             let finalWorkoutTitle = '';
             let finalUsers = []
 
+            this.externalities.push({
+                userSleep: this.userSleep
+            }, {
+                userNutrition: this.userNutrition
+            }, {
+                userStress: this.userStress
+            }, {
+                userPreworkout: this.userPreworkout
+            }
+            )
+
             if (this.$route.params.workoutID) {
                 finalWorkoutID = this.activeWorkout[0]._id;
                 finalWorkoutTitle = this.activeWorkout[0].workoutTitle
@@ -184,7 +228,8 @@ export default {
                 workoutDuration: this.formattedElapsedTime,
                 totalVolume: this.totalVolume,
                 users: finalUsers,
-                exercises: this.completedExercises
+                exercises: this.completedExercises,
+                externalities: this.externalities
             }
 
             await API.addCompletedWorkout(completedWorkout)
