@@ -27,7 +27,7 @@
                             <div class='set-reps field mb-4 col-12 pl-0 pr-0'>
                                 <label for="set-number" class="font-medium text-900">Number of Sets</label>
                                 <div class='flex field mb-4'>
-                                    <InputNumber class="" id="set-number" v-model="draftExercise.targetSets" :min="1"
+                                    <InputNumber type="number" id="set-number" v-model="draftExercise.targetSets" :min="1"
                                         :step="1" pattern="\d*" showButtons />
                                     <Button class="p-button-icon-only ml-1" label="Save" @click="generateSets()">
                                         <span class="pi pi-check p-button-icon"></span> </Button>
@@ -35,7 +35,7 @@
                                 <ul class="exercise-sets">
                                     <li v-for="set in draftExercise.sets" :key="set">
                                         <label for="set-rep-number"> Reps: </label>
-                                        <InputNumber id="set-rep-number" v-model="set.target_reps" :min="1" :step="1"
+                                        <InputNumber type="number" id="set-rep-number" v-model="set.target_reps" :min="1" :step="1"
                                             pattern="\d*" showButtons />
                                     </li>
                                 </ul>
