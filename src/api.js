@@ -53,6 +53,7 @@ export default class API {
     const res = await axios.get(`${completedWorkout_url}/id/${completedWorkoutID}`);
     return res.data
   }
+  
 
   //USER DATA
 
