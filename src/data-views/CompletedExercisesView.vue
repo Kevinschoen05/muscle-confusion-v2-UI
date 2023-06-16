@@ -1,5 +1,5 @@
 <template>
-    <h1> Completed Exercises View</h1>
+    <h1>Individual Exercise Results</h1>
     <div class="grid">
         <div class="col-12 md:col-6 lg:col-6 pt-6">
             <Dropdown class="field col-12" v-model="selectedMuscleGroup" :options="muscleGroups"
