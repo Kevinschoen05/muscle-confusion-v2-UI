@@ -53,6 +53,22 @@
                 <span class="text-blue-100 font-medium">PR Weight</span>
             </div>
         </div>
+        <div class='surface-card shadow-2'>
+        </div>
+        <div class="grid">
+            <div class="col-12 md:col-6 lg:col-6 pt-6">
+                <div class='surface-card shadow-2  h-30rem'>
+                </div>
+            </div>
+            <div class="col-12 md:col-6 lg:col-6 pt-6">
+                <div class='surface-card shadow-2 h-30rem'>
+                    <ExerciseSuccessfulSetChart :exerciseData="completedExerciseData">
+                    </ExerciseSuccessfulSetChart>
+
+                </div>
+            </div>
+
+        </div>
     </div>
 </template>
 
@@ -60,6 +76,7 @@
 import API from '../api'
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat"
+import ExerciseSuccessfulSetChart from '@/components/charts/ExerciseSuccessfulSetChart.vue';
 
 dayjs.extend(localizedFormat)
 
@@ -68,54 +85,44 @@ export default {
         return {
             userCompletedWorkoutsData: [],
             completedExerciseData: [],
-
-            lastCompletionDate: '',
+            lastCompletionDate: "",
             totalCompletedExerciseCount: 0,
             averageWeight: 0,
             exercisePR: 0,
-
             muscleGroups: [],
             muscleGroupSelected: false,
-            selectedMuscleGroup: '',
-            selectedExercise: '',
-
+            selectedMuscleGroup: "",
+            selectedExercise: "",
             muscleGroupExercises: [],
-        }
+        };
     },
     methods: {
-
         getCompletedExerciseCumulativeMetrics() {
             if (this.completedExerciseData.length > 0) {
-                this.totalCompletedExerciseCount = this.completedExerciseData.length
-                this.lastCompletionDate = dayjs(this.completedExerciseData[0].completionDate).format('LLL')
-
+                this.totalCompletedExerciseCount = this.completedExerciseData.length;
+                this.lastCompletionDate = dayjs(this.completedExerciseData[0].completionDate).format("LLL");
             }
             else {
                 this.totalCompletedExerciseCount = 0;
-                this.lastCompletionDate = 'N/A'
+                this.lastCompletionDate = "N/A";
             }
             this.calcAverageWeightUsed();
-            this.calcPRWeight()
+            this.calcPRWeight();
         },
-
         calcAverageWeightUsed() {
             let sum = 0;
             let count = 0;
-
             this.completedExerciseData.forEach((exercise) => {
                 exercise.sets.forEach((set) => {
                     sum += set.actual_weight;
                     count++;
                 });
             });
-
             const average = count > 0 ? sum / count : 0;
-            this.averageWeight = Number(average.toFixed(2)).toLocaleString()
+            this.averageWeight = Number(average.toFixed(2)).toLocaleString();
         },
-
         calcPRWeight() {
             let pr = 0;
-
             this.completedExerciseData.forEach((exercise) => {
                 exercise.sets.forEach((set) => {
                     if (set.actual_weight > pr) {
@@ -123,24 +130,14 @@ export default {
                     }
                 });
             });
-
             this.exercisePR = pr;
         },
-
         getCompletedExerciseData(userCompletedWorkoutsData, exerciseID) {
             const completedExerciseData = [];
-
             userCompletedWorkoutsData.forEach((workout) => {
                 workout.exercises.forEach((exercise) => {
                     if (exercise.id === exerciseID) {
-                        const {
-                            exerciseName,
-                            primaryMuscleGroup,
-                            secondaryMuscleGroups,
-                            sets,
-                            id
-                        } = exercise;
-
+                        const { exerciseName, primaryMuscleGroup, secondaryMuscleGroups, sets, id } = exercise;
                         const exerciseData = {
                             completionDate: workout.completionDate,
                             exerciseName,
@@ -157,39 +154,32 @@ export default {
                                 success: set.success
                             }))
                         };
-
                         completedExerciseData.push(exerciseData);
                     }
                 });
             });
             completedExerciseData.sort((a, b) => new Date(b.completionDate) - new Date(a.completionDate));
             this.completedExerciseData = completedExerciseData;
-
-            console.log(this.completedExerciseData)
-            this.getCompletedExerciseCumulativeMetrics()
+            console.log(this.completedExerciseData);
+            this.getCompletedExerciseCumulativeMetrics();
         },
-
         //API CALLS
         async getUserCompletedWorkouts() {
-            this.userCompletedWorkoutsData = await API.getCompletedWorkoutsByUserID(this.$store.state.user.uid)
+            this.userCompletedWorkoutsData = await API.getCompletedWorkoutsByUserID(this.$store.state.user.uid);
         },
-
         async getExercises(muscleGroup) {
-            this.muscleGroupExercises = await API.getExercisesByMuscleGroup(muscleGroup)
-            console.log(this.muscleGroupExercises)
+            this.muscleGroupExercises = await API.getExercisesByMuscleGroup(muscleGroup);
+            console.log(this.muscleGroupExercises);
         },
-
-
         async getMuscleGroups() {
-            this.muscleGroups = await API.getMuscleGroups()
+            this.muscleGroups = await API.getMuscleGroups();
         },
-
     },
     mounted() {
-        this.getMuscleGroups()
-        this.getUserCompletedWorkouts()
-
-    }
+        this.getMuscleGroups();
+        this.getUserCompletedWorkouts();
+    },
+    components: { ExerciseSuccessfulSetChart }
 }
 
 
