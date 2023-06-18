@@ -54,6 +54,7 @@
             </div>
         </div>
     </div>
+    <div v-if="selectedExercise">
         <div class='surface-card shadow-2'>
             <ExerciseVolumePerRepChart :exerciseData="completedExerciseData"></ExerciseVolumePerRepChart>
         </div>
@@ -71,6 +72,7 @@
             </div>
 
         </div>
+    </div>
 </template>
 
 <script>
