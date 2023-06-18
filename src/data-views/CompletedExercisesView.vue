@@ -53,7 +53,9 @@
                 <span class="text-blue-100 font-medium">PR Weight</span>
             </div>
         </div>
+    </div>
         <div class='surface-card shadow-2'>
+            <ExerciseVolumePerRepChart :exerciseData="completedExerciseData"></ExerciseVolumePerRepChart>
         </div>
         <div class="grid">
             <div class="col-12 md:col-6 lg:col-6 pt-6">
@@ -69,7 +71,6 @@
             </div>
 
         </div>
-    </div>
 </template>
 
 <script>
@@ -77,6 +78,7 @@ import API from '../api'
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat"
 import ExerciseSuccessfulSetChart from '@/components/charts/ExerciseSuccessfulSetChart.vue';
+import ExerciseVolumePerRepChart from '@/components/charts/ExerciseVolumePerRepChart.vue';
 
 dayjs.extend(localizedFormat)
 
@@ -179,7 +181,7 @@ export default {
         this.getMuscleGroups();
         this.getUserCompletedWorkouts();
     },
-    components: { ExerciseSuccessfulSetChart }
+    components: { ExerciseSuccessfulSetChart, ExerciseVolumePerRepChart }
 }
 
 
