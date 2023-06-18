@@ -55,6 +55,7 @@ export default {
             for (let i = 0; i < 20; i++) {
                 if (this.weightCount[i] > 0) {
                     this.weightValues[i] = this.weightSum[i] / this.weightCount[i];
+                    console.log(this.weightValues[i])
                 } else {
                     this.weightValues[i] = null; // Set null for rep values with no data
                 }
