@@ -24,19 +24,32 @@
                                 @change="this.muscleGroupSelected = true" />
                             <div class="surface-border border-top-1 opacity-50 mb-3 col-12"></div>
                             <br>
+                            <div class=" xs: w-full sm: w-full md:w-4 lg:w-4">
+                                <label for="exercise-type" class="font-medium text-900 ">Type of Exercise</label>
+                                <div class='flex field mt-2 mb-4'>
+                                    <ToggleButton id="exercise-type" v-model="exerciseType" off-label="Resistance"
+                                        on-label="Timed"></ToggleButton>
+                                </div>
+                            </div>
                             <div class='set-reps field mb-4 col-12 pl-0 pr-0'>
                                 <label for="set-number" class="font-medium text-900">Number of Sets</label>
                                 <div class='flex field mb-4'>
-                                    <InputNumber pt:inputmode="numeric" id="set-number" v-model="draftExercise.targetSets" :min="1"
-                                        :step="1" pattern="\d*" showButtons />
+                                    <InputNumber pt:inputmode="numeric" id="set-number" v-model="draftExercise.targetSets"
+                                        :min="1" :step="1" pattern="\d*" showButtons />
                                     <Button class="p-button-icon-only ml-1" label="Save" @click="generateSets()">
                                         <span class="pi pi-check p-button-icon"></span> </Button>
                                 </div>
                                 <ul class="exercise-sets">
                                     <li v-for="set in draftExercise.sets" :key="set">
-                                        <label for="set-rep-number"> Reps: </label>
-                                        <InputNumber pt:inputmode="numeric" id="set-rep-number" v-model="set.target_reps" :min="1" :step="1"
-                                            pattern="\d*" showButtons />
+                                        <div v-if="exerciseType === false">
+                                            <label for="set-rep-number"> Reps: </label>
+                                            <InputNumber pt:inputmode="numeric" id="set-rep-number"
+                                                v-model="set.target_reps" :min="1" :step="1" pattern="\d*" showButtons />
+                                        </div>
+                                        <div v-else>
+                                            <label for="set-duration">Target Duration: </label>
+                                            <Calendar class="mt-3 mb-3" id="set-duration" time-only show-seconds> </Calendar>
+                                        </div>
                                     </li>
                                 </ul>
                             </div>
@@ -92,7 +105,7 @@
 
             </div>
         </div>
-</div>
+    </div>
 </template>
 <script>
 import API from "../api";
@@ -110,6 +123,7 @@ export default {
             muscleGroupSelected: false,
             selectedMuscleGroup: '',
             selectedExercise: '',
+            exerciseType: false,
 
             //once muscleGroup is selected from dropdown, all potential exercises need to be gathered for that exercise //@change also needs to call a function to re-pull exercise list
             muscleGroupExercises: [
