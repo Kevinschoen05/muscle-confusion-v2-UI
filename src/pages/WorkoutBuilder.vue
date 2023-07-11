@@ -48,7 +48,15 @@
                                         </div>
                                         <div v-else>
                                             <label for="set-duration">Target Duration: </label>
-                                            <Calendar class="mt-3 mb-3" id="set-duration" time-only show-seconds> </Calendar>
+                                            <div id="set-duration" class="flex">
+                                                <label for="set-duration-mins">Minutes: </label>
+                                                <InputNumber id="set-duration-mins" v-model="set.target_duration_mins"  :min="1" :step="1" pattern="\d*" showButtons></InputNumber>
+                                                <p class="font-medium text-900">:</p>
+                                                <label for="set-duration-seconds">Seconds: </label>
+                                                <InputNumber id="set-duration-secs" v-model="set.target_duration_secs"  :min="1" :step="1" pattern="\d*" showButtons></InputNumber>
+                                            </div>
+
+
                                         </div>
                                     </li>
                                 </ul>
@@ -125,6 +133,10 @@ export default {
             selectedExercise: '',
             exerciseType: false,
 
+            durationHours: '',
+            durationMinutes: '',
+            durationSeconds: '',
+
             //once muscleGroup is selected from dropdown, all potential exercises need to be gathered for that exercise //@change also needs to call a function to re-pull exercise list
             muscleGroupExercises: [
 
@@ -158,7 +170,13 @@ export default {
 
         generateSets() {
             for (let i = 1; i < this.draftExercise.targetSets + 1; i++) {
-                this.draftExercise.sets.push({ 'index': i, target_reps: 0, actual_reps: 0, target_weight: 0, actual_weight: 0, completed: false, success: false })
+                if (this.exerciseType === false) {
+                    this.draftExercise.sets.push({ 'index': i, target_reps: 0, actual_reps: 0, target_weight: 0, actual_weight: 0, completed: false, success: false })
+                }
+                else {
+                    this.draftExercise.sets.push({ 'index': i, target_duration_mins: 0, target_duration_secs: 0, actual_duration: '00:00:00', target_weight: 0, actual_weight: 0, completed: false, success: false })
+
+                }
             }
         },
 
