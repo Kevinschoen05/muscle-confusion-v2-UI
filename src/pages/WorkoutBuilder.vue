@@ -48,12 +48,21 @@
                                         </div>
                                         <div v-else>
                                             <label for="set-duration">Target Duration: </label>
-                                            <div id="set-duration" class="flex">
-                                                <label for="set-duration-mins">Minutes: </label>
-                                                <InputNumber id="set-duration-mins" v-model="set.target_duration_mins"  :min="1" :step="1" pattern="\d*" showButtons></InputNumber>
-                                                <p class="font-medium text-900">:</p>
-                                                <label for="set-duration-seconds">Seconds: </label>
-                                                <InputNumber id="set-duration-secs" v-model="set.target_duration_secs"  :min="1" :step="1" pattern="\d*" showButtons></InputNumber>
+                                            <div id="set-duration" class="grid mt-2">
+                                                <div class="col w-2">
+                                                    <label for="set-duration-mins">Minutes:
+                                                    </label>
+                                                    <InputNumber id="set-duration-mins"
+                                                        v-model="set.target_duration_mins" :min="1" :step="1" pattern="\d*"
+                                                        showButtons></InputNumber>
+                                                </div>
+                                                <div class="col w-2">
+                                                    <label for="set-duration-seconds">Seconds: </label>
+                                                    <InputNumber  id="set-duration-secs"
+                                                        v-model="set.target_duration_secs" :min="1" :step="1" pattern="\d*"
+                                                        showButtons></InputNumber>
+                                                </div>
+
                                             </div>
 
 
@@ -148,6 +157,7 @@ export default {
                 primaryMuscleGroup: '',
                 secondaryMuscleGroups: [],
                 targetSets: 0,
+                exerciseType: '',
                 sets: []
             },
 
@@ -198,6 +208,13 @@ export default {
             this.draftExercise.exerciseName = this.selectedExercise.exerciseName
             this.draftExercise.primaryMuscleGroup = this.selectedExercise.primaryMuscleGroup
             this.draftExercise.secondaryMuscleGroups = this.selectedExercise.secondaryMuscleGroups
+
+            if (this.exerciseType === false) {
+                this.draftExercise.exerciseType = 'Resistance'
+            }
+            else {
+                this.draftExercise.exerciseType = 'Timed'
+            }
             console.log(this.draftExercise.targetSets)
             console.log(this.draftExercise.targetSetReps)
             this.saveData()
