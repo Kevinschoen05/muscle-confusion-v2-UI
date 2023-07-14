@@ -52,15 +52,15 @@
                                                 <div class="col w-2">
                                                     <label for="set-duration-mins">Minutes:
                                                     </label>
-                                                    <InputNumber id="set-duration-mins"
-                                                        v-model="set.target_duration_mins" :min="1" :step="1" pattern="\d*"
-                                                        showButtons></InputNumber>
+                                                    <InputNumber id="set-duration-mins" v-model="set.target_duration_mins"
+                                                        @input="formatAmount" :min="1" :step="1"
+                                                        pattern="\d*" showButtons></InputNumber>
                                                 </div>
                                                 <div class="col w-2">
                                                     <label for="set-duration-seconds">Seconds: </label>
-                                                    <InputNumber  id="set-duration-secs"
-                                                        v-model="set.target_duration_secs" :min="1" :step="1" pattern="\d*"
-                                                        showButtons></InputNumber>
+                                                    <InputNumber id="set-duration-secs" v-model="set.target_duration_secs"
+                                                        @input="formatAmount" :min="1" :step="1"
+                                                        pattern="\d*" showButtons></InputNumber>
                                                 </div>
 
                                             </div>
@@ -100,7 +100,9 @@
                                 </div>
                                 <ul>
                                     <WorkoutBuilderTable v-for="set in exercise.sets" :key="set" :set="set.index"
-                                        :reps="set.target_reps" :exerciseID="exercise.id" @delete-set="handleDeleteSet"
+                                        :exerciseType="exerciseType" :reps="set.target_reps"
+                                        :durationMins="set.target_duration_mins" :durationSeconds="set.target_duration_secs"
+                                        :exerciseID="exercise.id" @delete-set="handleDeleteSet"
                                         @update-set="handleUpdateSet">
 
                                     </WorkoutBuilderTable>
@@ -141,10 +143,6 @@ export default {
             selectedMuscleGroup: '',
             selectedExercise: '',
             exerciseType: false,
-
-            durationHours: '',
-            durationMinutes: '',
-            durationSeconds: '',
 
             //once muscleGroup is selected from dropdown, all potential exercises need to be gathered for that exercise //@change also needs to call a function to re-pull exercise list
             muscleGroupExercises: [
@@ -220,6 +218,13 @@ export default {
             this.saveData()
         },
 
+
+        formatAmount() {
+            // Add leading zero if value is less than 10
+            if (this.amount < 10) {
+                this.amount = '0' + this.amount;
+            }
+        },
 
         //In final workout summary list Delete Exercise Button will remove entire exercise from the list
         deleteExercise(exerciseID) {
