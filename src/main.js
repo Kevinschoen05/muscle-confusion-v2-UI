@@ -42,6 +42,8 @@ import BadgeDirective from 'primevue/badgedirective';
 import Paginator from 'primevue/paginator'
 import Chart from 'primevue/chart';
 import Knob  from 'primevue/knob';
+import Calendar from 'primevue/calendar';
+
 
 
 
@@ -84,5 +86,6 @@ app.component('Badge', Badge)
 app.component('Paginator', Paginator)
 app.component('Chart', Chart)
 app.component('Knob', Knob)
+app.component('Calendar', Calendar)
 
 app.mount('#app')

@@ -24,19 +24,49 @@
                                 @change="this.muscleGroupSelected = true" />
                             <div class="surface-border border-top-1 opacity-50 mb-3 col-12"></div>
                             <br>
+                            <div class=" xs: w-full sm: w-full md:w-4 lg:w-4">
+                                <label for="exercise-type" class="font-medium text-900 ">Type of Exercise</label>
+                                <div class='flex field mt-2 mb-4'>
+                                    <ToggleButton id="exercise-type" v-model="exerciseType" off-label="Resistance"
+                                        on-label="Timed"></ToggleButton>
+                                </div>
+                            </div>
                             <div class='set-reps field mb-4 col-12 pl-0 pr-0'>
                                 <label for="set-number" class="font-medium text-900">Number of Sets</label>
                                 <div class='flex field mb-4'>
-                                    <InputNumber pt:inputmode="numeric" id="set-number" v-model="draftExercise.targetSets" :min="1"
-                                        :step="1" pattern="\d*" showButtons />
+                                    <InputNumber pt:inputmode="numeric" id="set-number" v-model="draftExercise.targetSets"
+                                        :min="1" :step="1" pattern="\d*" showButtons />
                                     <Button class="p-button-icon-only ml-1" label="Save" @click="generateSets()">
                                         <span class="pi pi-check p-button-icon"></span> </Button>
                                 </div>
                                 <ul class="exercise-sets">
                                     <li v-for="set in draftExercise.sets" :key="set">
-                                        <label for="set-rep-number"> Reps: </label>
-                                        <InputNumber pt:inputmode="numeric" id="set-rep-number" v-model="set.target_reps" :min="1" :step="1"
-                                            pattern="\d*" showButtons />
+                                        <div v-if="exerciseType === false">
+                                            <label for="set-rep-number"> Reps: </label>
+                                            <InputNumber pt:inputmode="numeric" id="set-rep-number"
+                                                v-model="set.target_reps" :min="1" :step="1" pattern="\d*" showButtons />
+                                        </div>
+                                        <div v-else>
+                                            <label for="set-duration">Target Duration: </label>
+                                            <div id="set-duration" class="grid mt-2">
+                                                <div class="col w-2">
+                                                    <label for="set-duration-mins">Minutes:
+                                                    </label>
+                                                    <InputNumber id="set-duration-mins" v-model="set.target_duration_mins"
+                                                        @input="formatAmount" :min="1" :step="1"
+                                                        pattern="\d*" showButtons></InputNumber>
+                                                </div>
+                                                <div class="col w-2">
+                                                    <label for="set-duration-seconds">Seconds: </label>
+                                                    <InputNumber id="set-duration-secs" v-model="set.target_duration_secs"
+                                                        @input="formatAmount" :min="1" :step="1"
+                                                        pattern="\d*" showButtons></InputNumber>
+                                                </div>
+
+                                            </div>
+
+
+                                        </div>
                                     </li>
                                 </ul>
                             </div>
@@ -70,7 +100,9 @@
                                 </div>
                                 <ul>
                                     <WorkoutBuilderTable v-for="set in exercise.sets" :key="set" :set="set.index"
-                                        :reps="set.target_reps" :exerciseID="exercise.id" @delete-set="handleDeleteSet"
+                                        :exerciseType="exerciseType" :reps="set.target_reps"
+                                        :durationMins="set.target_duration_mins" :durationSeconds="set.target_duration_secs"
+                                        :exerciseID="exercise.id" @delete-set="handleDeleteSet"
                                         @update-set="handleUpdateSet">
 
                                     </WorkoutBuilderTable>
@@ -92,7 +124,7 @@
 
             </div>
         </div>
-</div>
+    </div>
 </template>
 <script>
 import API from "../api";
@@ -110,6 +142,7 @@ export default {
             muscleGroupSelected: false,
             selectedMuscleGroup: '',
             selectedExercise: '',
+            exerciseType: false,
 
             //once muscleGroup is selected from dropdown, all potential exercises need to be gathered for that exercise //@change also needs to call a function to re-pull exercise list
             muscleGroupExercises: [
@@ -122,6 +155,7 @@ export default {
                 primaryMuscleGroup: '',
                 secondaryMuscleGroups: [],
                 targetSets: 0,
+                exerciseType: '',
                 sets: []
             },
 
@@ -144,7 +178,13 @@ export default {
 
         generateSets() {
             for (let i = 1; i < this.draftExercise.targetSets + 1; i++) {
-                this.draftExercise.sets.push({ 'index': i, target_reps: 0, actual_reps: 0, target_weight: 0, actual_weight: 0, completed: false, success: false })
+                if (this.exerciseType === false) {
+                    this.draftExercise.sets.push({ 'index': i, target_reps: 0, actual_reps: 0, target_weight: 0, actual_weight: 0, completed: false, success: false })
+                }
+                else {
+                    this.draftExercise.sets.push({ 'index': i, target_duration_mins: 0, target_duration_secs: 0, actual_duration: '00:00:00', target_weight: 0, actual_weight: 0, completed: false, success: false })
+
+                }
             }
         },
 
@@ -166,11 +206,25 @@ export default {
             this.draftExercise.exerciseName = this.selectedExercise.exerciseName
             this.draftExercise.primaryMuscleGroup = this.selectedExercise.primaryMuscleGroup
             this.draftExercise.secondaryMuscleGroups = this.selectedExercise.secondaryMuscleGroups
+
+            if (this.exerciseType === false) {
+                this.draftExercise.exerciseType = 'Resistance'
+            }
+            else {
+                this.draftExercise.exerciseType = 'Timed'
+            }
             console.log(this.draftExercise.targetSets)
             console.log(this.draftExercise.targetSetReps)
             this.saveData()
         },
 
+
+        formatAmount() {
+            // Add leading zero if value is less than 10
+            if (this.amount < 10) {
+                this.amount = '0' + this.amount;
+            }
+        },
 
         //In final workout summary list Delete Exercise Button will remove entire exercise from the list
         deleteExercise(exerciseID) {
