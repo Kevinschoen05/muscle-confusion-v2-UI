@@ -53,14 +53,14 @@
                                                     <label for="set-duration-mins">Minutes:
                                                     </label>
                                                     <InputNumber id="set-duration-mins" v-model="set.target_duration_mins"
-                                                        @input="formatAmount" :min="1" :step="1"
-                                                        pattern="\d*" showButtons></InputNumber>
+                                                        :min="1" :step="1" pattern="\d*" showButtons>
+                                                    </InputNumber>
                                                 </div>
                                                 <div class="col w-2">
                                                     <label for="set-duration-seconds">Seconds: </label>
                                                     <InputNumber id="set-duration-secs" v-model="set.target_duration_secs"
-                                                        @input="formatAmount" :min="1" :step="1"
-                                                        pattern="\d*" showButtons></InputNumber>
+                                                        :min="0" :max="50" :step="10" pattern="\d*" showButtons>
+                                                    </InputNumber>
                                                 </div>
 
                                             </div>
@@ -212,18 +212,24 @@ export default {
             }
             else {
                 this.draftExercise.exerciseType = 'Timed'
+                this.draftExercise.sets.forEach((set) => {
+                    set.target_duration_mins = this.formatAmount(set.target_duration_mins)
+                    set.target_duration_secs = this.formatAmount(set.target_duration_secs)
+                })
             }
-            console.log(this.draftExercise.targetSets)
-            console.log(this.draftExercise.targetSetReps)
+            console.log(this.draftExercise.sets[0].target_duration_mins)
+            console.log(this.draftExercise.sets[0].target_duration_secs)
+
             this.saveData()
         },
 
 
-        formatAmount() {
+        formatAmount(value) {
             // Add leading zero if value is less than 10
-            if (this.amount < 10) {
-                this.amount = '0' + this.amount;
+            if (value < 10) {
+                value = '0' + value;
             }
+            return value
         },
 
         //In final workout summary list Delete Exercise Button will remove entire exercise from the list
@@ -262,20 +268,37 @@ export default {
             }
         },
 
-        handleUpdateSet({ exerciseID, set, newReps }) {
+        handleUpdateSet({ exerciseID, set, newReps, newDurationMins, newDurationSecs }) {
             let exerciseArray = this.finalWorkout.exercises
-            for (let i = 0; i < exerciseArray.length; i++) {
-                const obj = exerciseArray[i]
+            if (this.exerciseType === false) {
+                for (let i = 0; i < exerciseArray.length; i++) {
+                    const obj = exerciseArray[i]
 
-                if (obj.id === exerciseID) {
-                    for (let j = 0; j < obj.sets.length; j++) {
-                        if (obj.sets[j].index === set) {
-                            console.log(newReps)
-                            obj.sets[j].target_reps = newReps;
+                    if (obj.id === exerciseID) {
+                        for (let j = 0; j < obj.sets.length; j++) {
+                            if (obj.sets[j].index === set) {
+                                console.log(newReps)
+                                obj.sets[j].target_reps = newReps;
+                            }
                         }
                     }
                 }
             }
+            else {
+                for (let i = 0; i < exerciseArray.length; i++) {
+                    const obj = exerciseArray[i]
+
+                    if (obj.id === exerciseID) {
+                        for (let j = 0; j < obj.sets.length; j++) {
+                            if (obj.sets[j].index === set) {                                
+                                obj.sets[j].target_duration_mins = this.formatAmount(newDurationMins);
+                                obj.sets[j].target_duration_secs = this.formatAmount(newDurationSecs);
+                            }
+                        }
+                    }
+                }
+            }
+
 
         },
 
