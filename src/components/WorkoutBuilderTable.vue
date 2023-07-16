@@ -36,8 +36,8 @@ export default {
         exerciseType: Boolean,
         set: Number,
         reps: Number,
-        durationMins: Number,
-        durationSeconds: Number,
+        durationMins: String,
+        durationSeconds: String,
         exerciseID: String
     },
 
