@@ -268,20 +268,37 @@ export default {
             }
         },
 
-        handleUpdateSet({ exerciseID, set, newReps }) {
+        handleUpdateSet({ exerciseID, set, newReps, newDurationMins, newDurationSecs }) {
             let exerciseArray = this.finalWorkout.exercises
-            for (let i = 0; i < exerciseArray.length; i++) {
-                const obj = exerciseArray[i]
+            if (this.exerciseType === false) {
+                for (let i = 0; i < exerciseArray.length; i++) {
+                    const obj = exerciseArray[i]
 
-                if (obj.id === exerciseID) {
-                    for (let j = 0; j < obj.sets.length; j++) {
-                        if (obj.sets[j].index === set) {
-                            console.log(newReps)
-                            obj.sets[j].target_reps = newReps;
+                    if (obj.id === exerciseID) {
+                        for (let j = 0; j < obj.sets.length; j++) {
+                            if (obj.sets[j].index === set) {
+                                console.log(newReps)
+                                obj.sets[j].target_reps = newReps;
+                            }
                         }
                     }
                 }
             }
+            else {
+                for (let i = 0; i < exerciseArray.length; i++) {
+                    const obj = exerciseArray[i]
+
+                    if (obj.id === exerciseID) {
+                        for (let j = 0; j < obj.sets.length; j++) {
+                            if (obj.sets[j].index === set) {                                
+                                obj.sets[j].target_duration_mins = this.formatAmount(newDurationMins);
+                                obj.sets[j].target_duration_secs = this.formatAmount(newDurationSecs);
+                            }
+                        }
+                    }
+                }
+            }
+
 
         },
 

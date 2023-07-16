@@ -9,13 +9,31 @@
                     <div v-else>
                         <InputNumber id="set-number" v-model="newReps" :min="1" :step="1" pattern="\d*" showButtons
                             buttonLayout="vertical" style="width: 4rem" />
-                        <Button class="p-button-icon-only ml-1" label="Save" @click="updateSet(exerciseID, set, newReps)">
+                        <Button class="p-button-icon-only ml-1" label="Save" @click="updateSet(exerciseID, set, newReps, newDurationMins, newDurationSecs)">
                             <span class="pi pi-check p-button-icon"></span> </Button>
                     </div>
                 </div>
                 <div v-else>
-                    <div v-if="editSet === false" class="text-700 mb-2"> Target Duration: {{ durationMins }}:{{ durationSeconds }} </div>
-                    
+                    <div v-if="editSet === false" class="text-700 mb-2"> Target Duration: {{ durationMins }}:{{
+                        durationSeconds }} </div>
+                    <div v-else>
+                        <div class="col w-2">
+                            <label for="set-duration-mins">Minutes:
+                            </label>
+                            <InputNumber id="set-duration-mins" v-model="newDurationMins" :min="1" :step="1" pattern="\d*"
+                                showButtons>
+                            </InputNumber>
+                        </div>
+                        <div class="col w-2">
+                            <label for="set-duration-seconds">Seconds: </label>
+                            <InputNumber id="set-duration-secs" v-model="newDurationSecs" :min="0" :max="50" :step="10"
+                                pattern="\d*" showButtons>
+                            </InputNumber>
+                        </div>
+                        <Button class="p-button-icon-only ml-1" label="Save"
+                            @click="updateSet(exerciseID, set, newReps,  newDurationMins, newDurationSecs)">
+                            <span class="pi pi-check p-button-icon"></span> </Button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -44,7 +62,10 @@ export default {
     data() {
         return {
             editSet: false,
-            newReps: 0
+            newReps: 0,
+            newDurationMins: '',
+            newDurationSecs: ''
+
         }
     },
 
@@ -55,10 +76,18 @@ export default {
             console.log(" delete from component:" + exerciseID + " " + set)
         },
 
-        updateSet(exerciseID, set, newReps) {
-            this.$emit('updateSet', { exerciseID: exerciseID, set: set, newReps: newReps })
-            console.log(" update from component:" + exerciseID + " " + set + " " + newReps)
-            this.editSet = false
+        updateSet(exerciseID, set, newReps, newDurationMins, newDurationSecs) {
+            if (this.exerciseType === false) {
+                this.$emit('updateSet', { exerciseID: exerciseID, set: set, newReps: newReps })
+                console.log(" update from component:" + exerciseID + " " + set + " " + newReps)
+                this.editSet = false
+            }
+            else {
+                this.$emit('updateSet', { exerciseID: exerciseID, set: set, newDurationMins: newDurationMins, newDurationSecs: newDurationSecs })
+                console.log(" update from component:" + exerciseID + " " + set + " " + newDurationMins + " " + newDurationSecs )
+                this.editSet = false
+            }
+
         }
 
     },
