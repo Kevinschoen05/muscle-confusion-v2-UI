@@ -9,74 +9,90 @@
                 <muscle-badge v-for="muscleGroups in secondaryMuscleGroups" :key="muscleGroups"
                     :title="muscleGroups"></muscle-badge>
             </div>
-            <div class="output">
+            <div class="output" v-if="exerciseType === 'Resistance'">
                 <p class="output-value"> {{ targetSets }} Sets</p>
-                <p class="output-value"> {{totalTargetReps}} Reps</p>
+                <p class="output-value"> {{ totalTargetReps }} Reps</p>
+            </div>
+            <div class="output" v-if="exerciseType === 'Timed'">
+                <p class="output-value"> {{ targetSets }} Sets</p>
             </div>
         </div>
-        <div class="set-table">
-            <table class="set-list" v-for="set in sets" :key="set.index">
-                <thead class="header">
-                    <th class="header-item">Results</th>
-                    <th class="header-item">Reps</th>
-                    <th class="header-item">Weight</th>
-                    <th></th>
-                </thead>
-                <tr class="set">
-                    <td class="set-index">Target</td>
-                    <td class="set-item">{{ set.target_reps }}</td>
-                    <td class="set-item"> <input v-if="!set.completed" class="set-input" type="number" step=5
-                        pattern="\d*"     v-model="set.target_weight">
-                        <p v-else class="set-value">{{ set.target_weight }}</p>
-                    </td>
-                    <td class="success-icon"></td>
-                </tr>
-                <tr class="set">
-                    <td class="set-index">Actual</td>
-                    <td class="set-item"><input v-if="!set.completed" class="set-input" type="number" step=5
-                        pattern="\d*"    v-model="set.actual_reps">
-                        <p v-else class="set-value"
-                            :class="{ 'set-success': (set.success && set.completed), 'set-failure': (!set.success && set.completed) }">
-                            {{ set.actual_reps }}</p>
-                    </td>
-                    <td class="set-item"><input v-if="!set.completed" class="set-input" type="number" step=5
-                        pattern="\d*"  v-model="set.actual_weight">
-                        <p v-else class="set-value"
-                            :class="{ 'set-success': (set.success && set.completed), 'set-failure': (!set.success && set.completed) }">
-                            {{ set.actual_weight }}</p>
-                    </td>
-                    <td class="success-icon"> <img v-if="(set.success && set.completed)" class="success-icon"
-                            aria-hidden="true" loading="lazy" decoding="async" src="../assets/check-circle-success.svg"
-                            alt="check mark">
+        <div class="w-full" v-if="exerciseType === 'Resistance'">
+            <div class="set-table">
+                <table class="set-list" v-for="set in sets" :key="set.index">
+                    <thead class="header">
+                        <th class="header-item">Results</th>
+                        <th class="header-item">Reps</th>
+                        <th class="header-item">Weight</th>
+                        <th></th>
+                    </thead>
+                    <tr class="set">
+                        <td class="set-index">Target</td>
+                        <td class="set-item">{{ set.target_reps }}</td>
+                        <td class="set-item"> <input v-if="!set.completed" class="set-input" type="number" step=5
+                                pattern="\d*" v-model="set.target_weight">
+                            <p v-else class="set-value">{{ set.target_weight }}</p>
+                        </td>
+                        <td class="success-icon"></td>
+                    </tr>
+                    <tr class="set">
+                        <td class="set-index">Actual</td>
+                        <td class="set-item"><input v-if="!set.completed" class="set-input" type="number" step=5
+                                pattern="\d*" v-model="set.actual_reps">
+                            <p v-else class="set-value"
+                                :class="{ 'set-success': (set.success && set.completed), 'set-failure': (!set.success && set.completed) }">
+                                {{ set.actual_reps }}</p>
+                        </td>
+                        <td class="set-item"><input v-if="!set.completed" class="set-input" type="number" step=5
+                                pattern="\d*" v-model="set.actual_weight">
+                            <p v-else class="set-value"
+                                :class="{ 'set-success': (set.success && set.completed), 'set-failure': (!set.success && set.completed) }">
+                                {{ set.actual_weight }}</p>
+                        </td>
+                        <td class="success-icon"> <img v-if="(set.success && set.completed)" class="success-icon"
+                                aria-hidden="true" loading="lazy" decoding="async" src="../assets/check-circle-success.svg"
+                                alt="check mark">
 
-                        <img v-else-if="(!set.success && set.completed)" class="failure-icon" aria-hidden="true"
-                            loading="lazy" decoding="async" src="../assets/slash-circle.svg" alt="check mark">
-                    </td>
-                </tr>
-                <tr class="button">
-                    <button v-if="!set.completed" class="set-button"
-                        @click="completeSet(set, set.target_weight, set.target_reps, set.actual_weight, set.actual_reps)">Complete
-                        Set</button>
-                    <button v-else class="secondary-set-button"
-                        @click="completeSet(set, set.target_weight, set.target_reps, set.actual_weight, set.actual_reps)">Update
-                        Set</button>
+                            <img v-else-if="(!set.success && set.completed)" class="failure-icon" aria-hidden="true"
+                                loading="lazy" decoding="async" src="../assets/slash-circle.svg" alt="check mark">
+                        </td>
+                    </tr>
+                    <tr class="button">
+                        <button v-if="!set.completed" class="set-button"
+                            @click="completeSet(set, set.target_weight, set.target_reps, set.actual_weight, set.actual_reps)">Complete
+                            Set</button>
+                        <button v-else class="secondary-set-button"
+                            @click="completeSet(set, set.target_weight, set.target_reps, set.actual_weight, set.actual_reps)">Update
+                            Set</button>
 
-                </tr>
-            </table>
+                    </tr>
+                </table>
+            </div>
         </div>
+        <div class="w-full" v-else>
+            <div v-for="set in sets" :key="set.index">
+                <timer :minutes="set.target_duration_mins" :seconds="set.target_duration_secs"
+                    @timer-complete="handleTimerComplete(set)"></timer>
+            </div>
+
+        </div>
+
     </div>
 </template>
   
 <script>
 import MuscleBadge from './MuscleBadge.vue'
+import Timer from './TImer.vue'
 export default {
     name: 'ExcerciseCard',
 
     components: {
         MuscleBadge,
-    }, 
+        Timer
+    },
     props: {
         exerciseName: String,
+        exerciseType: String,
         primaryMuscleGroup: String,
         secondaryMuscleGroups: Array,
         targetSets: Number,
@@ -95,18 +111,18 @@ export default {
 
     watch: {
         sets: {
-            handler(){
+            handler() {
                 this.completeExercise()
             },
-            deep: true 
+            deep: true
         }
     },
     methods: {
-        calculateTotalReps(){
-            this.sets.forEach( set => {
+        calculateTotalReps() {
+            this.sets.forEach(set => {
                 this.totalTargetReps += set.target_reps
             })
-            
+
         },
         completeSet(set, targetWeight, targetReps, actualWeight, actualReps) {
             this.setTotal = this.sets.length;
@@ -125,25 +141,32 @@ export default {
             else {
                 set.success = false;
             }
-            console.log("set "+  set.completed)
+            console.log("set " + set.completed)
             console.log(targetWeight, targetReps, actualWeight, actualReps)
             console.log(set.success)
             console.log(this.setTotal, this.completedCounter)
         },
 
         completeExercise() {
-            let exerciseComplete = true 
-            for(let i = 0; i < this.sets.length; i++ )
-            {
-                if(this.sets[i].completed === false ){
-                    exerciseComplete = false 
+            let exerciseComplete = true
+            for (let i = 0; i < this.sets.length; i++) {
+                if (this.sets[i].completed === false) {
+                    exerciseComplete = false
                 }
             }
 
-            if (exerciseComplete === true ){
-                this.$emit("exerciseComplete", exerciseComplete )
+            if (exerciseComplete === true) {
+                this.$emit("exerciseComplete", exerciseComplete)
             }
-        }
+        },
+
+        handleTimerComplete(set) {
+            set.completed = true;
+            set.success = true;
+            set.actual_duration = "00:" + ":"+ set.target_duration_mins +":"+ set.target_duration_secs
+            console.log(set)
+            console.log("Timer completed successfully!");
+        },
     },
     mounted() {
         this.calculateTotalReps()
@@ -155,7 +178,6 @@ export default {
   
   <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
 .container {
     box-sizing: border-box;
     display: flex;
@@ -200,8 +222,7 @@ export default {
     flex-direction: column;
     justify-content: center;
     align-content: center;
-    width: 100% 
-
+    width: 100%
 }
 
 .set-table {

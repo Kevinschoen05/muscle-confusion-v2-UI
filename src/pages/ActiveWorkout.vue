@@ -21,6 +21,7 @@
                         @exercise-complete="handleCompletedExercise(exercise)" :exerciseName=exercise.exerciseName
                         :primaryMuscleGroup="exercise.primaryMuscleGroup"
                         :secondaryMuscleGroups="exercise.secondaryMuscleGroups" :targetSets="exercise.targetSets"
+                        :exerciseType="exercise.exerciseType"
                         :sets="exercise.sets"></ExerciseCard>
                 </ul>
             </div>
