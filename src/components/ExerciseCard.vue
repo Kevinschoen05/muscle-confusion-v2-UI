@@ -69,9 +69,10 @@
                 </table>
             </div>
         </div>
-        <div class="w-full" v-else >
+        <div class="w-full" v-else>
             <div v-for="set in sets" :key="set.index">
-                <timer :minutes="set.target_duration_mins" :seconds="set.target_duration_secs"></timer>
+                <timer :minutes="set.target_duration_mins" :seconds="set.target_duration_secs"
+                    @timer-complete="handleTimerComplete(set)"></timer>
             </div>
 
         </div>
@@ -157,7 +158,15 @@ export default {
             if (exerciseComplete === true) {
                 this.$emit("exerciseComplete", exerciseComplete)
             }
-        }
+        },
+
+        handleTimerComplete(set) {
+            set.completed = true;
+            set.success = true;
+            set.actual_duration = "00:" + ":"+ set.target_duration_mins +":"+ set.target_duration_secs
+            console.log(set)
+            console.log("Timer completed successfully!");
+        },
     },
     mounted() {
         this.calculateTotalReps()
