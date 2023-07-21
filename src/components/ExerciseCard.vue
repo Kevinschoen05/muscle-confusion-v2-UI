@@ -1,5 +1,5 @@
 <template>
-    <div class="container shadow-2 border-round surface-card  w-auto mb-3 flex-column justify-content-between flex">
+    <div class="container shadow-2 border-round surface-card  w-24rem mb-3 flex-column justify-content-between flex">
         <div class="header-bar">
             <div class="exercise-header">
                 <p class="exercise-name">{{ exerciseName }}</p>
@@ -57,14 +57,15 @@
                                 loading="lazy" decoding="async" src="../assets/slash-circle.svg" alt="check mark">
                         </td>
                     </tr>
-                    <tr class="button">
-                        <button v-if="!set.completed" class="set-button"
-                            @click="completeSet(set, set.target_weight, set.target_reps, set.actual_weight, set.actual_reps)">Complete
-                            Set</button>
-                        <button v-else class="secondary-set-button"
-                            @click="completeSet(set, set.target_weight, set.target_reps, set.actual_weight, set.actual_reps)">Update
-                            Set</button>
-
+                    <tr>
+                        <div class="button">
+                            <button v-if="!set.completed" class="set-button"
+                                @click="completeSet(set, set.target_weight, set.target_reps, set.actual_weight, set.actual_reps)">Complete
+                                Set</button>
+                            <button v-else class="secondary-set-button"
+                                @click="completeSet(set, set.target_weight, set.target_reps, set.actual_weight, set.actual_reps)">Update
+                                Set</button>
+                        </div>
                     </tr>
                 </table>
             </div>
@@ -163,7 +164,7 @@ export default {
         handleTimerComplete(set) {
             set.completed = true;
             set.success = true;
-            set.actual_duration = "00:" + ":"+ set.target_duration_mins +":"+ set.target_duration_secs
+            set.actual_duration = "00:" + ":" + set.target_duration_mins + ":" + set.target_duration_secs
             console.log(set)
             console.log("Timer completed successfully!");
         },
@@ -316,11 +317,10 @@ thead {
     width: 3em;
 }
 
-
 .button {
-    display: flex;
-    justify-content: center;
-    padding-top: 1em;
+    width: 100%;
+    margin-top: 20px;
+    align-items: center;
 }
 
 .set-button {
@@ -329,9 +329,9 @@ thead {
     text-align: center;
     justify-content: center;
     align-items: center;
-    padding: 12px 20px;
+    padding: 20px;
     gap: 8px;
-    width: 50%;
+    width: 100%;
     height: 2.6em;
     font-family: Avenir, Helvetica, Arial, sans-serif;
     color: white;
@@ -342,16 +342,15 @@ thead {
 }
 
 .secondary-set-button {
-    box-sizing: border-box;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    padding: 12px 20px;
     margin-top: 1em;
     margin-bottom: 1em;
+    padding: 20px;
     gap: 8px;
-    width: 50%;
+    width: 100%;
     height: 2.6em;
     font-family: Avenir, Helvetica, Arial, sans-serif;
     color: var(--primary-color);
