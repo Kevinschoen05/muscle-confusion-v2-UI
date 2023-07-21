@@ -139,18 +139,26 @@
                             </div>
                         </div>
                         <div class="col-12">
+                            <h1>Current Form: Previous 7 Workouts</h1>
+                            <CurrentFormChart :completedWorkoutData="userCompletedWorkouts"></CurrentFormChart>
+                        </div>
+                        <div class="col-12">
                             <RouterView></RouterView>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-</div>
+    </div>
 </template>
 
 <script>
 import API from '../api'
+import CurrentFormChart from '../components/charts/CurrentFormChart.vue'
 export default {
+    components:{ 
+        CurrentFormChart
+    },
     data() {
         return {
             userCompletedWorkouts: [],
