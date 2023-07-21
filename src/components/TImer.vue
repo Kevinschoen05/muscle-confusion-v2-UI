@@ -7,7 +7,7 @@
         <div class="countdown-container">
             <div class="countdown">{{ formattedTime }}</div>
         </div>
-        <div v-if="completed === false" class="w-full">
+        <div v-if="completed === false" class="w-full mt-2">
             <button class="set-button " @click="startTimer" :disabled="timerRunning">Start</button>
             <button class="secondary-set-button" @click="stopTimer" :disabled="!timerRunning">Stop</button>
         </div>
@@ -94,7 +94,6 @@ export default {
 .input-container {
     display: flex;
     align-items: center;
-    margin-bottom: 20px;
 }
 
 .countdown {
