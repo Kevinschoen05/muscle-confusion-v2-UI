@@ -16,6 +16,17 @@
             <div class="output" v-if="exerciseType === 'Timed'">
                 <p class="output-value"> {{ targetSets }} Sets</p>
             </div>
+            <div class="flex align-items-center autofill w-full ml-4 ">
+                <p>Complete Exercise</p>
+                <input-switch class="ml-2" v-model="autofillComplete" @click="visible = true"></input-switch>
+            </div>
+            <Dialog v-model:visible="visible" appendTo="body" :modal="true">
+                <p>Actual Weight: </p>
+                <div class="flex flex-column align-items-center">
+                    <InputNumber class="w-auto" v-model="autofillValue" :min="1" :step="1" pattern="\d*" showButtons />
+                    <Button class="mt-2" @click="visible = false, autofillExercise()">Autofill Sets</Button>
+                </div>
+            </Dialog>
         </div>
         <div class="w-full" v-if="exerciseType === 'Resistance'">
             <div class="set-table">
@@ -89,7 +100,7 @@ export default {
 
     components: {
         MuscleBadge,
-        Timer
+        Timer,
     },
     props: {
         exerciseName: String,
@@ -106,7 +117,9 @@ export default {
             totalTargetReps: 0,
             setTotal: 0,
             completedCounter: 0,
-
+            visible: false,
+            autofillComplete: false,
+            autofillValue: 0
         }
     },
 
@@ -159,6 +172,9 @@ export default {
             if (exerciseComplete === true) {
                 this.$emit("exerciseComplete", exerciseComplete)
             }
+        },
+        autofillExercise() {
+
         },
 
         handleTimerComplete(set) {
