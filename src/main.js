@@ -33,6 +33,7 @@ import Row from 'primevue/row'
 import Checkbox from 'primevue/checkbox'
 import Ripple from 'primevue/ripple';
 import StyleClass from 'primevue/styleclass';
+import TabMenu from 'primevue/tabmenu';
 import ToggleButton from 'primevue/togglebutton';
 import Dialog from 'primevue/dialog'
 import SelectButton from 'primevue/selectbutton';
@@ -60,6 +61,7 @@ app.use(PrimeVue, {ripple: true});
 app.directive('ripple', Ripple);
 app.directive('styleclass', StyleClass);
 app.directive('badge', BadgeDirective);
+app.directive('tab')
 
 
 
@@ -87,5 +89,6 @@ app.component('Paginator', Paginator)
 app.component('Chart', Chart)
 app.component('Knob', Knob)
 app.component('Calendar', Calendar)
+app.component('TabMenu', TabMenu)
 
 app.mount('#app')
