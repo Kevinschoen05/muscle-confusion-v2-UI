@@ -17,6 +17,11 @@ const routes = [
     component: () => import("../pages/UserDashboard.vue"),
   },
   {
+    path: "/profile",
+    name: "user-profile",
+    component: () => import("../pages/UserProfile.vue")
+  },
+  {
     path: "/workoutbuilder",
     name: "workout-builder",
     component: () => import("../pages/WorkoutBuilder.vue"),
