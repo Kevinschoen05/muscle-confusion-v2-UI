@@ -87,6 +87,11 @@ export default class API {
     return res.data;
   }
 
+  static async getUserFriends(userID) {
+    const res = await axios.get(`${user_url}/friends/${userID}`)
+    return res.data
+  }
+
   //EXERCISES
 
   static async addExercise(exercise) {

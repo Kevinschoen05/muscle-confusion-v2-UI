@@ -8,6 +8,8 @@ import dayjs from 'dayjs'
 //global stylesheet to use primevue fonts etc
 import './assets/app.css'
 
+//fontawesome icons
+import '@fortawesome/fontawesome-free/css/all.css';
 
 //primevue theme, core css, and icons
 import 'primevue/resources/themes/lara-light-blue/theme.css'
