@@ -4,10 +4,6 @@
             <div>
                 <span class="text-900 font-medium block mb-2">{{ workoutTitle }}</span>
                 <div class="text-700 mb-2"> {{ totalExercises }} Total Exercises</div>
-                <a class="text-blue-500 cursor-pointer">
-                    <i class="pi pi-github text-sm mr-2"></i>
-                    <span>Chip Row</span>
-                </a>
             </div>
         </div>
         <div class="mt-3 lg:mt-0">
