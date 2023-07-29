@@ -4,12 +4,11 @@
             <span class="text-xl text-900 font-medium">Friends List</span>
         </div>
         <ul class="list-none p-0 m-0">
-            <li class="flex flex-column md:flex-row md:align-items-center md:justify-content-between mb-4">
+            <li class="flex flex-column md:flex-row md:align-items-center md:justify-content-between mb-4" v-for="friend in userFriendsData" :key="friend.userID">
                 <div class="flex">
-                    <img src="images/blocks/avatars/circle/avatar-f-1.png" class="mr-3" style="width: 45px; height: 45px" />
                     <div class="mr-0 md:mr-8">
-                        <span class="block text-900 font-medium mb-1">Janette Hudson</span>
-                        <div class="text-600">UI/UX Designer</div>
+                        <span class="block text-900 font-medium mb-1">{{ friend.userName }}</span>
+                        <div class="text-600">{{ friend.userID }}</div>
                     </div>
                 </div>
                 <div class="mt-2 md:mt-0 flex flex-nowrap">
@@ -19,30 +18,44 @@
                 </div>
             </li>
         </ul>
+        <button @click="test()"></button>
     </div>
 </template>
 <script>
-import API from  '../api'
+import API from '../api'
 export default {
     data() {
         return {
-            userFriendsList: ''
+            userFriendsData: []
         }
     },
     methods: {
-        test(){
-            console.log(this.userFriendsList)
+        test() {
+            console.log(this.userFriendsData)
         },
 
         //API Calls
-        async getUserFriends(){
+        async getUserFriends() {
             let userObject = await API.getUserFriends(this.$store.state.user.uid)
-            this.userFriendsList = userObject[0].friends
-            this.test()
+            let userFriendsList = userObject[0].friends;
+            await this.getUserFriendsDetails(userFriendsList)
+
+        },
+
+        async getUserFriendsDetails(friends) {
+            console.log('getting details')
+            for (const friend of friends) {
+                console.log('Fetching details for friend:', friend); // Debugging log
+                const friendData = await API.getUserFriendsDetails(friend);
+                console.log('Friend data:', friendData); // Debugging log
+                this.userFriendsData.push(...friendData); // Use spread operator to push the individual friendData into the array
+            }
+
         }
     },
-    mounted(){
+    mounted() {
         this.getUserFriends()
+
     }
 }
 

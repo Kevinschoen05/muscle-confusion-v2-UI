@@ -91,6 +91,13 @@ export default class API {
     const res = await axios.get(`${user_url}/friends/${userID}`)
     return res.data
   }
+  
+  static async getUserFriendsDetails(userIDsString){
+    const res = await axios.get(`${user_url}/friends/data`, {
+      params: { userIDs: userIDsString }
+    })
+    return res.data
+  }
 
   //EXERCISES
 
