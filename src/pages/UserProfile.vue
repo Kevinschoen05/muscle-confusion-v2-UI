@@ -5,6 +5,8 @@
 
         <TabMenu :model="items"></TabMenu>
     </div>
+    <RouterView></RouterView>
+
 </template>
 
 <script>
@@ -31,14 +33,14 @@ export default {
         },
 
         //API Calls
-        async getUserFriends(){
+        async getUserData(){
             let userObject = await API.getUserFriends(this.$store.state.user.uid)
             this.userData = userObject[0]
             this.test()
         }
     },
     mounted(){
-        this.getUserFriends()
+        this.getUserData()
     }
 }
 
