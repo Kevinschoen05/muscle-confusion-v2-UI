@@ -74,8 +74,9 @@ export default class API {
     return res.data;
   }
 
-  static async getCompletedWorkoutsByUserID(userID) {
-    const res = await axios.get(`${completedWorkout_url}/users/${userID}`);
+  static async getCompletedWorkoutsByUserID(userIDs) {
+    const userIDsString = userIDs.join(','); // Convert the array of userIDs to a comma-separated string
+    const res = await axios.get(`${completedWorkout_url}/users/${userIDsString}`);
     return res.data;
   }
 

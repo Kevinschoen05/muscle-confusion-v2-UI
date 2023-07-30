@@ -169,7 +169,8 @@ export default {
         },
         //API CALLS
         async getUserCompletedWorkouts() {
-            this.userCompletedWorkoutsData = await API.getCompletedWorkoutsByUserID(this.$store.state.user.uid);
+            let userIDs = [this.$store.state.user.uid]
+            this.userCompletedWorkoutsData = await API.getCompletedWorkoutsByUserID(userIDs);
         },
         async getExercises(muscleGroup) {
             this.muscleGroupExercises = await API.getExercisesByMuscleGroup(muscleGroup);

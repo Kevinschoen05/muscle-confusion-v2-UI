@@ -190,7 +190,8 @@ export default {
         },
 
         async getUserCompletedWorkouts() {
-            let completedWorkoutsData = await API.getCompletedWorkoutsByUserID(this.$store.state.user.uid)
+            let userIDs = [this.$store.state.user.uid]
+            let completedWorkoutsData = await API.getCompletedWorkoutsByUserID(userIDs)
             completedWorkoutsData.sort((a, b) => {
                 // convert the `completionDate` strings to Date objects for comparison
                 const dateA = new Date(a.completionDate);
