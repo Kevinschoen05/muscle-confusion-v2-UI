@@ -64,6 +64,11 @@ export default class API {
       return res.data
   }
 
+  static async getAllUsers(){
+    const res = await axios.get(`${user_url}`)
+    return  res.data
+  }
+
   static async getWorkoutsByUserID(userID) {
     const res = await axios.get(`${workout_url}/users/${userID}`);
     return res.data;
@@ -85,6 +90,18 @@ export default class API {
       schedule: body,
     });
     return res.data;
+  }
+
+  static async getUserFriends(userID) {
+    const res = await axios.get(`${user_url}/friends/${userID}`)
+    return res.data
+  }
+  
+  static async getUserFriendsDetails(userIDsString){
+    const res = await axios.get(`${user_url}/friends/data`, {
+      params: { userIDs: userIDsString }
+    })
+    return res.data
   }
 
   //EXERCISES

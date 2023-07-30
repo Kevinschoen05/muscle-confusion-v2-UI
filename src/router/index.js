@@ -17,6 +17,24 @@ const routes = [
     component: () => import("../pages/UserDashboard.vue"),
   },
   {
+    path: "/profile",
+    name: "user-profile",
+    component: () => import("../pages/UserProfile.vue"),
+    children: [
+      {
+        path: "/profile/biometrics",
+        name: "user-biometrics",
+        component: () => import("../profile-views/UserBiometrics.vue"),
+      },
+      {
+        path: "/profile/friends",
+        name: "user-friends",
+        component: () => import("../profile-views/UserFriends.vue"),
+      },
+
+    ]
+  },
+  {
     path: "/workoutbuilder",
     name: "workout-builder",
     component: () => import("../pages/WorkoutBuilder.vue"),

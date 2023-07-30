@@ -8,6 +8,8 @@ import dayjs from 'dayjs'
 //global stylesheet to use primevue fonts etc
 import './assets/app.css'
 
+//fontawesome icons
+import '@fortawesome/fontawesome-free/css/all.css';
 
 //primevue theme, core css, and icons
 import 'primevue/resources/themes/lara-light-blue/theme.css'
@@ -33,6 +35,7 @@ import Row from 'primevue/row'
 import Checkbox from 'primevue/checkbox'
 import Ripple from 'primevue/ripple';
 import StyleClass from 'primevue/styleclass';
+import TabMenu from 'primevue/tabmenu';
 import ToggleButton from 'primevue/togglebutton';
 import Dialog from 'primevue/dialog'
 import SelectButton from 'primevue/selectbutton';
@@ -60,6 +63,7 @@ app.use(PrimeVue, {ripple: true});
 app.directive('ripple', Ripple);
 app.directive('styleclass', StyleClass);
 app.directive('badge', BadgeDirective);
+app.directive('tab')
 
 
 
@@ -87,5 +91,6 @@ app.component('Paginator', Paginator)
 app.component('Chart', Chart)
 app.component('Knob', Knob)
 app.component('Calendar', Calendar)
+app.component('TabMenu', TabMenu)
 
 app.mount('#app')
