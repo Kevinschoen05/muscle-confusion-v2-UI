@@ -285,10 +285,9 @@ export default {
 
 
     },
-
     mounted() {
         this.getUserPresetWorkouts()
-        this.getUserCompletedWorkouts()
+        this.getUserCompletedWorkouts([this.$store.state.user.uid])
         this.getUserSchedule()
         this.getUserFriends()
     }
