@@ -4,7 +4,7 @@
         <div class="flex align-items-start mr-0 lg:mr-5">
             <div>
                 <span class="text-900 font-medium block mb-2">{{ workoutTitle }}</span>
-                <div class="text-700 mb-2">Completed by: {{ userEmail }}</div>
+                <div class="text-700 mb-2">Completed by: {{ this.userName   }}</div>
                 <a class="text-blue-500 cursor-pointer"
                     @click="visible2 = true, getCompletedWorkoutByID(completedWorkoutID)">
                     <i class="pi 
@@ -46,7 +46,7 @@ export default {
 
     props: {
         workoutTitle: String,
-        userEmail: String,
+        userID: String,
         workoutID: String,
         relativeTime: String,
         completedWorkoutID: String
@@ -54,6 +54,7 @@ export default {
 
     data() {
         return {
+            userName: '',
             visible2: false,
             completedWorkoutResults: [],
             completedWorkoutSetTotal: 0,
@@ -91,12 +92,16 @@ export default {
             this.completedWorkoutDuration = results[0].workoutDuration
             this.completedWorkoutTotalVolume = results[0].totalVolume
             this.calculateSuccessPercentage(results[0])
-        }
+        },
 
+        async getUserFriends(){
+            let userObject = await API.getUserFriendsDetails(this.userID)
+            this.userName = userObject[0].userName
+        }
 
     },
     mounted() {
-
+        this.getUserFriends()
     }
 
 }
