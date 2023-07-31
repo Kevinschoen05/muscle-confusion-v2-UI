@@ -20,12 +20,13 @@
                         <div class="text-900 font-medium text-xl">Recent Activity</div>
                         <div>
                             <Button icon="pi pi-ellipsis-v" class="p-button-text p-button-plain p-button-rounded"
-                                @click="$refs.menu1.toggle($event)"></Button>
+                                @click="toggleMenu1"></Button>
+                            <Menu ref="menu1" id="overlay_menu" :model="filterOptions" :popup="true"></Menu>
                         </div>
                     </div>
                     <ul class="list-none p-0 m-0">
                         <ActivityFeed v-for="workout in completedWorkouts" :key="workout._id"
-                            :workoutTitle="workout.workoutTitle" :userEmail="this.$store.state.user.email"
+                            :workoutTitle="workout.workoutTitle" :userID="workout.users[0]"
                             :relativeTime="workout.relativeTime" :completedWorkoutID="workout._id"></ActivityFeed>
                     </ul>
                 </div>
@@ -35,7 +36,9 @@
                     <div class="flex align-items-center justify-content-between mb-3">
                         <div class="text-900 font-medium text-xl">Preset Workouts</div>
                         <div>
-                            <Button icon="pi pi-ellipsis-v" class="p-button-text p-button-plain p-button-rounded"></Button>
+                            <Button icon="pi pi-ellipsis-v" class="p-button-text p-button-plain p-button-rounded"
+                                @click="toggleMenu2"></Button>
+                            <Menu ref="menu2" id="overlay_menu" :model="filterOptions" :popup="true"></Menu>
                         </div>
                     </div>
                     <ul class="list-none p-0 m-0 ">
@@ -72,7 +75,7 @@
                 </div>
             </div>
         </div>
-</div>
+    </div>
 </template>
 
 <script>
@@ -110,6 +113,9 @@ export default {
         return {
             today: dayjs().tz().format('MM/DD/YYYY h:mm:ss z'),
 
+            userFriends: [
+
+            ],
             schedule: [
 
             ],
@@ -118,7 +124,20 @@ export default {
             ],
             presetWorkouts: [
 
-            ]
+            ],
+            filterOptions: [
+                {
+                    label: 'Only You', icon: 'pi pi-fw pi-user', command: () => {
+                        this.getUserCompletedWorkouts([this.$store.state.user.uid])
+                    }
+                },
+
+                {
+                    label: 'All Friends', icon: 'pi pi-fw pi-users', command: () => {
+                        this.userFriends.friends.push(this.$store.state.user.uid)
+                        this.getUserCompletedWorkouts(this.userFriends.friends)
+                    }
+                }]
         }
     },
 
@@ -126,6 +145,12 @@ export default {
 
         debug() {
             console.log(this.schedule)
+        },
+        toggleMenu1(event) {
+            this.$refs.menu1.toggle(event);
+        },
+        toggleMenu2(event) {
+            this.$refs.menu2.toggle(event);
         },
 
         displayUserSchedule() {
@@ -171,6 +196,12 @@ export default {
 
         //API CALLS
 
+        async getUserFriends() {
+            let userObject = await API.getUserFriends(this.$store.state.user.uid)
+            this.userFriends = userObject[0]
+            console.log("User Friends" + this.userFriends)
+        },
+
         async updateUserSchedule(date, workoutID, workoutTitle) {
             for (var i = 0; i < this.schedule.length; i++) {
                 if (this.schedule[i].date === date) {
@@ -189,8 +220,8 @@ export default {
             console.log("preset Workouts: " + this.presetWorkouts)
         },
 
-        async getUserCompletedWorkouts() {
-            let completedWorkoutsData = await API.getCompletedWorkoutsByUserID(this.$store.state.user.uid)
+        async getUserCompletedWorkouts(userIDs) {
+            let completedWorkoutsData = await API.getCompletedWorkoutsByUserID(userIDs)
             completedWorkoutsData.sort((a, b) => {
                 // convert the `completionDate` strings to Date objects for comparison
                 const dateA = new Date(a.completionDate);
@@ -254,11 +285,11 @@ export default {
 
 
     },
-
     mounted() {
         this.getUserPresetWorkouts()
-        this.getUserCompletedWorkouts()
+        this.getUserCompletedWorkouts([this.$store.state.user.uid])
         this.getUserSchedule()
+        this.getUserFriends()
     }
 }
 
