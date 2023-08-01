@@ -4,7 +4,7 @@
         <div class="flex align-items-start mr-0 lg:mr-5">
             <div>
                 <span class="text-900 font-medium block mb-2">{{ workoutTitle }}</span>
-                <div class="text-700 mb-2">Completed by: {{ this.userName   }}</div>
+                <div class="text-700 mb-2">Completed by: {{ userName }}</div>
                 <a class="text-blue-500 cursor-pointer"
                     @click="visible2 = true, getCompletedWorkoutByID(completedWorkoutID)">
                     <i class="pi 
@@ -36,7 +36,7 @@
                 </div>
             </div>
         </Dialog>
-</li>
+    </li>
 </template>
   
 <script>
@@ -81,8 +81,8 @@ export default {
                 });
             });
             const successPercentage = (successfulSets / totalSets) * 100;
-           this.completedWorkoutSetTotal = totalSets;
-           this.successfulSetPercent =  Math.round(successPercentage * 100) / 100;
+            this.completedWorkoutSetTotal = totalSets;
+            this.successfulSetPercent = Math.round(successPercentage * 100) / 100;
         },
 
         async getCompletedWorkoutByID(completedWorkoutID) {
@@ -94,7 +94,7 @@ export default {
             this.calculateSuccessPercentage(results[0])
         },
 
-        async getUserFriends(){
+        async getUserFriends() {
             let userObject = await API.getUserFriendsDetails(this.userID)
             this.userName = userObject[0].userName
         }
