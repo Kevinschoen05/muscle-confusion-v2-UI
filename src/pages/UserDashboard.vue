@@ -21,7 +21,7 @@
                         <div>
                             <Button icon="pi pi-ellipsis-v" class="p-button-text p-button-plain p-button-rounded"
                                 @click="toggleMenu1"></Button>
-                            <Menu ref="menu1" id="overlay_menu" :model="filterOptions" :popup="true"></Menu>
+                            <Menu ref="menu1" id="overlay_menu" :model="filterOptions1" :popup="true"></Menu>
                         </div>
                     </div>
                     <ul class="list-none p-0 m-0">
@@ -38,12 +38,12 @@
                         <div>
                             <Button icon="pi pi-ellipsis-v" class="p-button-text p-button-plain p-button-rounded"
                                 @click="toggleMenu2"></Button>
-                            <Menu ref="menu2" id="overlay_menu" :model="filterOptions" :popup="true"></Menu>
+                            <Menu ref="menu2" id="overlay_menu" :model="filterOptions2" :popup="true"></Menu>
                         </div>
                     </div>
                     <ul class="list-none p-0 m-0 ">
                         <PresetWorkouts v-for="workout in presetWorkouts" :key="workout._id"
-                            :workoutTitle="workout.workoutTitle" :totalExercises="workout.exercises.length"
+                            :workoutTitle="workout.workoutTitle" :totalExercises="workout.exercises.length" :userID="workout.users[0]"
                             :workoutID="workout._id"></PresetWorkouts>
                     </ul>
                 </div>
@@ -125,7 +125,7 @@ export default {
             presetWorkouts: [
 
             ],
-            filterOptions: [
+            filterOptions1: [
                 {
                     label: 'Only You', icon: 'pi pi-fw pi-user', command: () => {
                         this.getUserCompletedWorkouts([this.$store.state.user.uid])
@@ -136,6 +136,19 @@ export default {
                     label: 'All Friends', icon: 'pi pi-fw pi-users', command: () => {
                         this.userFriends.friends.push(this.$store.state.user.uid)
                         this.getUserCompletedWorkouts(this.userFriends.friends)
+                    }
+                }],
+            filterOptions2: [
+                {
+                    label: 'Only You', icon: 'pi pi-fw pi-user', command: () => {
+                        this.getUserPresetWorkouts([this.$store.state.user.uid])
+                    }
+                },
+
+                {
+                    label: 'All Friends', icon: 'pi pi-fw pi-users', command: () => {
+                        this.userFriends.friends.push(this.$store.state.user.uid)
+                        this.getUserPresetWorkouts(this.userFriends.friends)
                     }
                 }]
         }
@@ -215,8 +228,8 @@ export default {
             await API.updateUserSchedule(this.$store.state.user.uid, body)
         },
 
-        async getUserPresetWorkouts() {
-            this.presetWorkouts = await API.getWorkoutsByUserID(this.$store.state.user.uid)
+        async getUserPresetWorkouts(userIDs) {
+            this.presetWorkouts = await API.getWorkoutsByUserID(userIDs)
             console.log("preset Workouts: " + this.presetWorkouts)
         },
 
@@ -286,7 +299,7 @@ export default {
 
     },
     mounted() {
-        this.getUserPresetWorkouts()
+        this.getUserPresetWorkouts([this.$store.state.user.uid])
         this.getUserCompletedWorkouts([this.$store.state.user.uid])
         this.getUserSchedule()
         this.getUserFriends()

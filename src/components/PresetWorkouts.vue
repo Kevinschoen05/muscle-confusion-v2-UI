@@ -1,32 +1,41 @@
 <template>
-    <li class="py-3 border-bottom-1 surface-border flex md:align-items-start md:justify-content-between flex-column md:flex-row">
+    <li
+        class="py-3 border-bottom-1 surface-border flex md:align-items-start md:justify-content-between flex-column md:flex-row">
         <div class="flex align-items-start mr-0 lg:mr-5">
             <div>
                 <span class="text-900 font-medium block mb-2">{{ workoutTitle }}</span>
-                <div class="text-700 mb-2"> {{ totalExercises }} Total Exercises</div>
+                <div class="flex">
+                    <div class="text-700 mb-2"> {{ totalExercises }} Total Exercises</div>
+                    <div class="text-700 mb-2"> Created By: {{ userName }} </div>
+                </div>
             </div>
         </div>
         <div class="mt-3 lg:mt-0">
             <Button @click="startActiveWorkout(workoutID)" icon="pi pi-play"
                 class="p-button-rounded p-button-success mr-2"></Button>
-            <Button @click="editPresetWorkout(workoutID)" icon="pi pi-pencil" class="p-button-rounded p-button mr-2"></Button>
+            <Button v-if="userID === this.$store.state.user.uid" @click="editPresetWorkout(workoutID)" icon="pi pi-pencil"
+                class="p-button-rounded p-button mr-2"></Button>
         </div>
     </li>
 </template>
   
 <script>
+import API from '../api'
 
 export default {
     name: 'PresetWorkouts',
 
     props: {
-        workoutTitle: String, 
+        workoutTitle: String,
         totalExercises: Number,
+        userID: String,
         workoutID: String
     },
 
     data() {
         return {
+            userName: '',
+
         }
     },
 
@@ -48,8 +57,13 @@ export default {
                 params: { workoutID: workoutID },
             });
         },
+        async getUserFriends() {
+            let userObject = await API.getUserFriendsDetails(this.userID)
+            this.userName = userObject[0].userName
+        }
     },
     mounted() {
+        this.getUserFriends()
 
     }
 
@@ -58,8 +72,6 @@ export default {
 </script>
   
   <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-
-</style>
+<style scoped></style>
 
   
