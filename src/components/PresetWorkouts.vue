@@ -4,10 +4,8 @@
         <div class="flex align-items-start mr-0 lg:mr-5">
             <div>
                 <span class="text-900 font-medium block mb-2">{{ workoutTitle }}</span>
-                <div class="flex">
-                    <div class="text-700 mb-2"> {{ totalExercises }} Total Exercises</div>
-                    <div class="text-700 mb-2 ml-2"> Created By: {{ userName }} </div>
-                </div>
+                <div class="text-700 mb-2"> {{ totalExercises }} Total Exercises</div>
+                <div class="text-700 mb-2 "> Created By: {{ userName }} </div>
             </div>
         </div>
         <div class="mt-3 lg:mt-0">
