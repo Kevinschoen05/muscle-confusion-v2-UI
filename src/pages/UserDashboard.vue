@@ -351,8 +351,16 @@ body {
     margin-top: 2rem;
 }
 
-.paginator {
-    position: sticky;
-    position: -webkit-sticky;
+
+@media screen and (max-width: 767px) {
+
+    .p-paginator, .p-component { 
+        padding-left: 0rem !important
+    }
+    /* Adjust the max-width as needed to target your mobile screen size */
+    .paginator {
+        padding-left: 0% !important;
+        width: max-content;
+    }
 }
 </style>

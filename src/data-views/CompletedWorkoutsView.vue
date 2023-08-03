@@ -25,7 +25,8 @@
                         <br>
                         <span class="text-500 text-sm mr-2 "> Workout Duration: {{ workout.workoutDuration }}</span>
                     </div>
-                    <Button v-if="!(selectedWorkout === workout._id)"  class="ml-full" @click="showDetails(workout._id)"> View Detailed Results</Button>
+                    <Button v-if="!(selectedWorkout === workout._id)" class="ml-full" @click="showDetails(workout._id)">
+                        View Detailed Results</Button>
 
                     <div class="surface-section" v-if="selectedWorkout === workout._id">
                         <div class="font-medium text-3xl text-900 mb-3">Workout Details</div>
@@ -34,7 +35,7 @@
                                 class="flexpy-3 px-2 border-top-1 surface-border flex-wrap">
                                 <div class="text-900 w-6 mt-4 font-medium">{{ exercise.exerciseName }}</div>
 
-                                <ul class="set-list list-none m-0 p-0" >
+                                <ul class="set-list list-none m-0 p-0">
                                     <li class="mb-4" v-for="set in exercise.sets" :key="set.index">
                                         <div class="mr-0 flex align-items-center"> Set: {{ set.index }}
                                             <img v-if="(set.success)" class="ml-2" aria-hidden="true" loading="lazy"
@@ -63,8 +64,9 @@
             </div>
         </li>
     </ul>
-    <Paginator  :totalRecords="completedWorkouts.length" :rows="perPage" :first="currentPage * perPage" @page="onPageChange" template="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink">
-</Paginator>
+    <Paginator class="paginator" :totalRecords="completedWorkouts.length" :rows="perPage" :first="currentPage * perPage"
+        @page="onPageChange" template="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink">
+    </Paginator>
 </template>
 
 <script>
@@ -135,8 +137,21 @@ export default {
 
 <style scoped>
 @media screen and (min-width: 576px) {
-    .set-list{
+    .set-list {
         column-count: 2;
+    }
 }
-}
-</style>
+
+@media screen and (max-width: 767px) {
+
+    .p-paginator,
+    .p-component {
+        padding-left: 0rem !important
+    }
+
+    /* Adjust the max-width as needed to target your mobile screen size */
+    .paginator {
+        padding-left: 0% !important;
+        width: max-content;
+    }
+}</style>
