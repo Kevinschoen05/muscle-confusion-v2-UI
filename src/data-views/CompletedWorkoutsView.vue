@@ -63,7 +63,7 @@
             </div>
         </li>
     </ul>
-    <Paginator :totalRecords="completedWorkouts.length" :rows="perPage" :first="currentPage * perPage" @page="onPageChange">
+    <Paginator  :totalRecords="completedWorkouts.length" :rows="perPage" :first="currentPage * perPage" @page="onPageChange" template="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink">
 </Paginator>
 </template>
 
@@ -139,6 +139,4 @@ export default {
         column-count: 2;
 }
 }
-
-
 </style>

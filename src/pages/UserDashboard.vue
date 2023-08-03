@@ -25,10 +25,13 @@
                         </div>
                     </div>
                     <ul class="list-none p-0 m-0">
-                        <ActivityFeed v-for="workout in completedWorkouts" :key="workout._id"
+                        <ActivityFeed v-for="workout in paginatedActivity" :key="workout._id"
                             :workoutTitle="workout.workoutTitle" :userID="workout.users[0]"
                             :relativeTime="workout.relativeTime" :completedWorkoutID="workout._id"></ActivityFeed>
                     </ul>
+                    <Paginator class="paginator" :totalRecords="completedWorkouts.length" :rows="perPage"
+                        :first="currentPageActivityFeed * perPage" @page="onPageChangeActivityFeed"
+                        template="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"></Paginator>
                 </div>
             </div>
             <div class="col-12 lg:col-6">
@@ -42,10 +45,13 @@
                         </div>
                     </div>
                     <ul class="list-none p-0 m-0 ">
-                        <PresetWorkouts v-for="workout in presetWorkouts" :key="workout._id"
-                            :workoutTitle="workout.workoutTitle" :totalExercises="workout.exercises.length" :userID="workout.users[0]"
-                            :workoutID="workout._id"></PresetWorkouts>
+                        <PresetWorkouts v-for="workout in paginatedPresetWorkouts" :key="workout._id"
+                            :workoutTitle="workout.workoutTitle" :totalExercises="workout.exercises.length"
+                            :userID="workout.users[0]" :workoutID="workout._id"></PresetWorkouts>
                     </ul>
+                    <Paginator class="paginator" :totalRecords="presetWorkouts.length" :rows="perPage"
+                        :first="currentPagePresetWorkouts * perPage" @page="onPageChangePresetWorkouts"
+                        template="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"></Paginator>
                 </div>
             </div>
             <div class="col-12 lg:col-4">
@@ -113,6 +119,10 @@ export default {
         return {
             today: dayjs().tz().format('MM/DD/YYYY h:mm:ss z'),
 
+            perPage: 10,
+            currentPageActivityFeed: 0,
+            currentPagePresetWorkouts: 0, // Added for tracking current page
+
             userFriends: [
 
             ],
@@ -153,6 +163,16 @@ export default {
                 }]
         }
     },
+    computed: {
+        paginatedActivity() {
+            const startIndex = this.currentPageActivityFeed * this.perPage;
+            return this.completedWorkouts.slice(startIndex, startIndex + this.perPage);
+        },
+        paginatedPresetWorkouts() {
+            const startIndex = this.currentPagePresetWorkouts * this.perPage;
+            return this.presetWorkouts.slice(startIndex, startIndex + this.perPage);
+        }
+    },
 
     methods: {
 
@@ -164,6 +184,19 @@ export default {
         },
         toggleMenu2(event) {
             this.$refs.menu2.toggle(event);
+        },
+
+        setPage(page) {
+            this.currentPageActivityFeed = page;
+        },
+
+        onPageChangeActivityFeed(event) {
+            this.currentPageActivityFeed = event.page;
+            console.log("Page Change")
+        },
+        onPageChangePresetWorkouts(event) {
+            this.currentPagePresetWorkouts = event.page;
+            console.log("Page Change")
         },
 
         displayUserSchedule() {
@@ -316,5 +349,10 @@ body {
 
 #primevue {
     margin-top: 2rem;
+}
+
+.paginator {
+    position: sticky;
+    position: -webkit-sticky;
 }
 </style>
