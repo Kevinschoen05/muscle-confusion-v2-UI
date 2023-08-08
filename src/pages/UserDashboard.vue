@@ -354,7 +354,7 @@ body {
 
 @media screen and (max-width: 767px) {
 
-    .p-paginator, .p-component { 
+    .p-paginator { 
         padding-left: 0rem !important
     }
     /* Adjust the max-width as needed to target your mobile screen size */
