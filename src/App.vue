@@ -41,7 +41,7 @@
         </div>
         <ul class="list-none p-0 m-0  flex lg:align-items-center justify-content-end  select-none flex-row">
             <li>
-                <a v-ripple @click="debug()"
+                <a v-ripple @click="$router.push('/inbox')"
                     class="flex p-3 px-3 py-3 align-items-center text-600 hover:text-white hover:bg-gray-800 font-medium border-round cursor-pointer transition-colors transition-duration-150 p-ripple">
                     <i class="pi pi-bell text-base lg:text-2xl mr-2 mr-0" v-badge.danger></i>
                 </a>
