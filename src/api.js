@@ -113,6 +113,11 @@ export default class API {
     const res = await axios.post(`${user_url}/messages`, newMessage);
     return res.data;
   }
+
+  static async getUserMessages(userID){
+    const res = await axios.get(`${user_url}/inbox/${userID}`)
+    return res.data
+  }
   //EXERCISES
 
   static async addExercise(exercise) {
