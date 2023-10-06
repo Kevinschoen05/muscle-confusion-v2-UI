@@ -2,7 +2,6 @@
     <div class="surface-card shadow-2 border-round p-4">
         <div class="flex justify-content-between align-items-center mb-5">
             <span class="text-xl text-900 font-medium">Friends List</span>
-            <button @click="test()">Test</button>
             <div>
                 <Button icon="pi pi-plus" class="p-button-text p-button-plain p-button-rounded"
                     @click="visible2 = true, getAllUsers()"></Button>
@@ -67,21 +66,6 @@ export default {
         }
     },
     methods: {
-        async test() {
-            let senderUserID = this.$store.state.user.uid;
-            let receiverUserID = 'KHugOMu6b7fs4PlB9UjVDHxk7qF2';
-            let messageType = 'friendRequest';
-            let content = 'User Wants to be your friend!';
-
-            let newMessage = {
-                senderUserID: senderUserID,
-                receiverUserID: receiverUserID,
-                messageType: messageType,
-                messageContent: content
-            }
-
-            await API.createMessage(newMessage)
-        },
 
         //API Calls
         async getUserFriends() {
