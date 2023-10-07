@@ -114,9 +114,16 @@ export default class API {
     return res.data;
   }
 
-  static async getUserMessages(userID){
-    const res = await axios.get(`${user_url}/inbox/${userID}`)
-    return res.data
+  static async getUserMessages(userID) {
+    const res = await axios.get(`${user_url}/inbox/${userID}`);
+    return res.data;
+  }
+
+  static async updateMessageByMessageID(messageID, body) {
+    const res = await axios.put(`${user_url}/messages/${messageID}`, {
+      messageAccepted: body,
+    });
+    return res.data;
   }
   //EXERCISES
 

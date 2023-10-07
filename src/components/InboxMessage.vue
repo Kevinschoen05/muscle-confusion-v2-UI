@@ -12,25 +12,46 @@
             <p class="mt-0 mb-3 text-700 line-height-3">{{ messageContent }}</p>
         </div>
         <div class="px-4 py-3 surface-100 text-right">
-            <Button icon="pi pi-check" iconPos="right" label="Accept" class="p-button-rounded p-button mr-2"></Button>
+            <Button icon="pi pi-check" iconPos="right" label="Accept" class="p-button-rounded p-button mr-2" @click="acceptFriendRequest()"></Button>
             <Button icon="pi pi-times" iconPos="right" label="Reject" class="p-button-rounded p-button-danger"></Button>
         </div>
     </div>
 </template>
 
 <script>
+import API from '../api'
 export default {
     name: 'ExcerciseCard',
 
     props: {
+        messageID: String,
         receiverUserID: String,
         receiverUserName: String,
         senderUserID: String,
         senderUserName: String,
         messageType: String,
         messageContent: String,
+        messageRead: Boolean,
+        messageAccepted: Boolean,
         timeStamp: Date
     },
+
+    methods: {
+        
+        async acceptFriendRequest() {
+            let messageAccepted = true 
+            console.log("friend request accepted!")
+            await API.updateMessageByMessageID(this.messageID, messageAccepted)
+        },
+
+        async rejectFriendRequest() {
+            let messageAccepted = false
+            console.log("friend request rejected!")
+            await API.updateMessageByMessageID(this.messageID, messageAccepted)
+
+        },
+
+    }
 }
 
 </script>
