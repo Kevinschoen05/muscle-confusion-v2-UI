@@ -1,4 +1,5 @@
 <template>
+    <Toast />
     <div class="surface-card shadow-2 border-round p-4">
         <div class="flex justify-content-between align-items-center mb-5">
             <span class="text-xl text-900 font-medium">Friends List</span>
@@ -25,8 +26,9 @@
                                 </div>
                             </div>
                             <div class="mt-2 md:mt-0 flex flex-nowrap">
-                                <Button @click="visible2 = false, visible3 = true" label="Invite"
-                                    class="flex-grow-1"></Button>
+                                <Button
+                                    @click="visible2 = false, visible3 = true, this.invitedUserID = user.userID, this.invitedUserName = user.userName"
+                                    label="Invite" class="flex-grow-1"></Button>
                             </div>
                         </li>
                     </ul>
@@ -40,15 +42,17 @@
                     <div class="p-4">
                         <div class="text-900 font-medium mb-4 text-xl">Send Friend Request</div>
                         <span class="p-float-label">
-                            <Textarea v-model="messageContent" rows="5" cols="30" />
+                            <TextArea v-model="messageContent" rows="5" cols="30"></TextArea>
                             <label>Optional Message</label>
                         </span>
                         <div>
-                            <Button class="mr-2" label="Send" @click="visible3 = false "></Button>
-                            <Button class=" p-button-danger" label="Cancel" @click="visible3 = false "></Button>
+                            <Button class="mr-2" label="Send"
+                                @click="visible3 = false, sendFriendRequest()"></Button>
+                            <Button class=" p-button-danger" label="Cancel" @click="visible3 = false"></Button>
                         </div>
                     </div>
                 </Dialog>
+
             </div>
         </div>
         <ul class="list-none p-0 m-0">
@@ -74,6 +78,9 @@ import API from '../api'
 export default {
     data() {
         return {
+            currentUserName: '',
+            invitedUserID: '',
+            invitedUserName: '',
             userFriendsData: [],
             userList: [],
             visible2: false,
@@ -82,10 +89,14 @@ export default {
         }
     },
     methods: {
+        showSuccess() {
+            this.$toast.add({ severity: 'success', summary: 'Invite Sent', detail: 'Friend Request Successfully Sent.', life: 5000 });
+        },
 
         //API Calls
         async getUserFriends() {
             let userObject = await API.getUserFriends(this.$store.state.user.uid)
+            this.currentUserName = userObject[0].userName
             let userFriendsList = userObject[0].friends;
             await this.getUserFriendsDetails(userFriendsList)
 
@@ -100,6 +111,26 @@ export default {
                 this.userFriendsData.push(...friendData); // Use spread operator to push the individual friendData into the array
             }
 
+        },
+
+        async sendFriendRequest() {
+            let senderUserID = this.$store.state.user.uid;
+            let senderUserName = this.currentUserName;
+            let receiverUserID = this.invitedUserID;
+            let receiverUserName = this.invitedUserName;
+            let messageType = 'Friend Request';
+            let messageContent = this.messageContent
+            
+            //console.log(senderUserID + ' ' + senderUserName + ' ' + receiverUserID + ' ' + receiverUserName + ' ' + messageType + ' ' + messageContent )
+            await API.createMessage( {
+                senderUserID: senderUserID,
+                senderUserName: senderUserName,
+                receiverUserID: receiverUserID,
+                receiverUserName: receiverUserName,
+                messageType: messageType,
+                messageContent: messageContent
+            })
+            this.showSuccess()
         },
 
         async getAllUsers() {
