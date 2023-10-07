@@ -119,7 +119,9 @@ export default {
             let receiverUserID = this.invitedUserID;
             let receiverUserName = this.invitedUserName;
             let messageType = 'Friend Request';
-            let messageContent = this.messageContent
+            let messageContent = this.messageContent;
+            let messageRead = false;
+            let messageAccepted = false; 
             
             //console.log(senderUserID + ' ' + senderUserName + ' ' + receiverUserID + ' ' + receiverUserName + ' ' + messageType + ' ' + messageContent )
             await API.createMessage( {
@@ -128,7 +130,10 @@ export default {
                 receiverUserID: receiverUserID,
                 receiverUserName: receiverUserName,
                 messageType: messageType,
-                messageContent: messageContent
+                messageContent: messageContent,
+                messageRead: messageRead,
+                messageAccepted: messageAccepted
+
             })
             this.showSuccess()
         },
