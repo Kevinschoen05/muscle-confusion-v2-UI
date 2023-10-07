@@ -35,6 +35,11 @@ const routes = [
     ]
   },
   {
+    path: '/inbox',
+    name: 'user-inbox',
+    component: () => import("../pages/UserInbox.vue")
+  },
+  {
     path: "/workoutbuilder",
     name: "workout-builder",
     component: () => import("../pages/WorkoutBuilder.vue"),

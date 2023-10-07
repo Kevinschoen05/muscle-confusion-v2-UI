@@ -43,30 +43,31 @@ export default class API {
   static async getCompletedWorkoutsByWorkoutID(workoutID) {
     const res = await axios.get(`${completedWorkout_url}/${workoutID}`, {
       params: {
-        sortByCompletionDate: true, 
-      }
+        sortByCompletionDate: true,
+      },
     });
     return res.data;
   }
 
-  static async getCompletedWorkoutByID(completedWorkoutID){
-    const res = await axios.get(`${completedWorkout_url}/id/${completedWorkoutID}`);
-    return res.data
+  static async getCompletedWorkoutByID(completedWorkoutID) {
+    const res = await axios.get(
+      `${completedWorkout_url}/id/${completedWorkoutID}`
+    );
+    return res.data;
   }
-  
 
   //USER DATA
 
-    static async initializeUser(userID, userName) {
-      const res = await axios.post(`${user_url}/initializeUser/${userID}`, {
-        userName: userName
-      })
-      return res.data
+  static async initializeUser(userID, userName) {
+    const res = await axios.post(`${user_url}/initializeUser/${userID}`, {
+      userName: userName,
+    });
+    return res.data;
   }
 
-  static async getAllUsers(){
-    const res = await axios.get(`${user_url}`)
-    return  res.data
+  static async getAllUsers() {
+    const res = await axios.get(`${user_url}`);
+    return res.data;
   }
 
   static async getWorkoutsByUserID(userID) {
@@ -75,8 +76,10 @@ export default class API {
   }
 
   static async getCompletedWorkoutsByUserID(userIDs) {
-    const userIDsString = userIDs.join(','); // Convert the array of userIDs to a comma-separated string
-    const res = await axios.get(`${completedWorkout_url}/users/${userIDsString}`);
+    const userIDsString = userIDs.join(","); // Convert the array of userIDs to a comma-separated string
+    const res = await axios.get(
+      `${completedWorkout_url}/users/${userIDsString}`
+    );
     return res.data;
   }
 
@@ -94,17 +97,27 @@ export default class API {
   }
 
   static async getUserFriends(userID) {
-    const res = await axios.get(`${user_url}/friends/${userID}`)
-    return res.data
-  }
-  
-  static async getUserFriendsDetails(userIDsString){
-    const res = await axios.get(`${user_url}/friends/data`, {
-      params: { userIDs: userIDsString }
-    })
-    return res.data
+    const res = await axios.get(`${user_url}/friends/${userID}`);
+    return res.data;
   }
 
+  static async getUserFriendsDetails(userIDsString) {
+    const res = await axios.get(`${user_url}/friends/data`, {
+      params: { userIDs: userIDsString },
+    });
+    return res.data;
+  }
+
+  //MESSAGING
+  static async createMessage(newMessage) {
+    const res = await axios.post(`${user_url}/messages`, newMessage);
+    return res.data;
+  }
+
+  static async getUserMessages(userID){
+    const res = await axios.get(`${user_url}/inbox/${userID}`)
+    return res.data
+  }
   //EXERCISES
 
   static async addExercise(exercise) {
