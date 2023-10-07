@@ -42,6 +42,8 @@ export default {
             let messageAccepted = true 
             console.log("friend request accepted!")
             await API.updateMessageByMessageID(this.messageID, messageAccepted)
+            this.updateFriendsLists(this.senderUserID, this.receiverUserID)
+            this.updateFriendsLists(this.receiverUserID, this.senderUserID)
         },
 
         async rejectFriendRequest() {
@@ -50,6 +52,11 @@ export default {
             await API.updateMessageByMessageID(this.messageID, messageAccepted)
 
         },
+
+        async updateFriendsLists(firstUser, secondUser){
+            console.log("friends lists updated")
+            await API.updateUserFriends(firstUser, secondUser)
+        }
 
     }
 }

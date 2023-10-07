@@ -108,6 +108,13 @@ export default class API {
     return res.data;
   }
 
+  static async updateUserFriends(userID, body) {
+    const res = await axios.put(`${user_url}/friends/add/${userID}`, {
+      newfriends: body
+    })
+    return res.data
+  }
+
   //MESSAGING
   static async createMessage(newMessage) {
     const res = await axios.post(`${user_url}/messages`, newMessage);
