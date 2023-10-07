@@ -25,7 +25,8 @@
                                 </div>
                             </div>
                             <div class="mt-2 md:mt-0 flex flex-nowrap">
-                                <Button @click="visible2 = false" label="Invite" class="flex-grow-1"></Button>
+                                <Button @click="visible2 = false, visible3 = true" label="Invite"
+                                    class="flex-grow-1"></Button>
                             </div>
                         </li>
                     </ul>
@@ -34,6 +35,19 @@
                             <Button @click="visible2 = false" label="Cancel" class="p-button-text flex-grow-1"></Button>
                         </div>
                     </template>
+                </Dialog>
+                <Dialog v-model:visible="visible3" appendTo="body" :modal="true">
+                    <div class="p-4">
+                        <div class="text-900 font-medium mb-4 text-xl">Send Friend Request</div>
+                        <span class="p-float-label">
+                            <Textarea v-model="messageContent" rows="5" cols="30" />
+                            <label>Optional Message</label>
+                        </span>
+                        <div>
+                            <Button class="mr-2" label="Send" @click="visible3 = false "></Button>
+                            <Button class=" p-button-danger" label="Cancel" @click="visible3 = false "></Button>
+                        </div>
+                    </div>
                 </Dialog>
             </div>
         </div>
@@ -63,6 +77,8 @@ export default {
             userFriendsData: [],
             userList: [],
             visible2: false,
+            visible3: false,
+            messageContent: ''
         }
     },
     methods: {
