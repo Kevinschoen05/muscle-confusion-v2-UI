@@ -108,15 +108,29 @@ export default class API {
     return res.data;
   }
 
+  static async updateUserFriends(userID, body) {
+    const res = await axios.put(`${user_url}/friends/add/${userID}`, {
+      newFriends: body
+    })
+    return res.data
+  }
+
   //MESSAGING
   static async createMessage(newMessage) {
     const res = await axios.post(`${user_url}/messages`, newMessage);
     return res.data;
   }
 
-  static async getUserMessages(userID){
-    const res = await axios.get(`${user_url}/inbox/${userID}`)
-    return res.data
+  static async getUserMessages(userID) {
+    const res = await axios.get(`${user_url}/inbox/${userID}`);
+    return res.data;
+  }
+
+  static async updateMessageByMessageID(messageID, body) {
+    const res = await axios.put(`${user_url}/messages/${messageID}`, {
+      messageAccepted: body,
+    });
+    return res.data;
   }
   //EXERCISES
 
