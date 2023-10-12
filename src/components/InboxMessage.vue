@@ -1,4 +1,5 @@
 <template>
+    <Toast/>
     <div class="surface-border border-round surface-0">
         <div class="p-4">
             <div class="flex align-items-center">
@@ -12,8 +13,8 @@
             <p class="mt-0 mb-3 text-700 line-height-3">{{ messageContent }}</p>
         </div>
         <div class="px-4 py-3 surface-100 text-right">
-            <Button v-if="messageRead === false" icon="pi pi-check" iconPos="right" label="Accept" class="p-button-rounded p-button mr-2" @click="acceptFriendRequest()"></Button>
-            <Button v-if="messageRead === false" icon="pi pi-times" iconPos="right" label="Reject" class="p-button-rounded p-button-danger"></Button>
+            <Button v-if="messageRead === false && messageUpdated === false " icon="pi pi-check" iconPos="right" label="Accept" class="p-button-rounded p-button mr-2" @click="acceptFriendRequest()"></Button>
+            <Button v-if="messageRead === false && messageUpdated === false" icon="pi pi-times" iconPos="right" label="Reject" class="p-button-rounded p-button-danger"></Button>
         </div>
     </div>
 </template>
@@ -36,14 +37,23 @@ export default {
         timeStamp: Date
     },
 
+    data () {
+        return {
+            messageUpdated: false
+        }
+    },
+
     methods: {
         
         async acceptFriendRequest() {
             let messageAccepted = true 
             console.log("friend request accepted!")
             await API.updateMessageByMessageID(this.messageID, messageAccepted)
-            //await this.updateFriendsLists(this.senderUserID, this.receiverUserID)
-            //await this.updateFriendsLists(this.receiverUserID, this.senderUserID)
+            await this.updateFriendsLists(this.senderUserID, this.receiverUserID)
+            await this.updateFriendsLists(this.receiverUserID, this.senderUserID)
+
+            this.messageUpdated = true 
+            this.showSuccess()
         },
 
         async rejectFriendRequest() {
@@ -51,6 +61,10 @@ export default {
             console.log("friend request rejected!")
             await API.updateMessageByMessageID(this.messageID, messageAccepted)
 
+        },
+
+        showSuccess() {
+            this.$toast.add({ severity: 'success', summary: 'Friend Request Accepted', detail: 'You can now view and share workouts with your friend.', life: 5000 });
         },
 
         async updateFriendsLists(firstUser, secondUser){

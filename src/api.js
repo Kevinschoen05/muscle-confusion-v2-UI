@@ -110,7 +110,7 @@ export default class API {
 
   static async updateUserFriends(userID, body) {
     const res = await axios.put(`${user_url}/friends/add/${userID}`, {
-      newfriends: body
+      newFriends: body
     })
     return res.data
   }
