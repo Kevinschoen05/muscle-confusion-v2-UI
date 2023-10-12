@@ -14,7 +14,7 @@
         </div>
         <div class="px-4 py-3 surface-100 text-right">
             <Button v-if="messageRead === false && messageUpdated === false " icon="pi pi-check" iconPos="right" label="Accept" class="p-button-rounded p-button mr-2" @click="acceptFriendRequest()"></Button>
-            <Button v-if="messageRead === false && messageUpdated === false" icon="pi pi-times" iconPos="right" label="Reject" class="p-button-rounded p-button-danger"></Button>
+            <Button v-if="messageRead === false && messageUpdated === false" icon="pi pi-times" iconPos="right" label="Reject" class="p-button-rounded p-button-danger" @click="rejectFriendRequest()"></Button>
         </div>
     </div>
 </template>
@@ -44,6 +44,16 @@ export default {
     },
 
     methods: {
+
+
+        showSuccess() {
+            this.$toast.add({ severity: 'success', summary: 'Friend Request Accepted', detail: 'You can now view and share workouts with your friend.', life: 5000 });
+        },
+
+
+        showReject() {
+            this.$toast.add({ severity: 'error', summary: 'Friend Request Rejected', detail: "This user won't be able to view or share workouts with you.", life: 5000 });
+        },
         
         async acceptFriendRequest() {
             let messageAccepted = true 
@@ -61,11 +71,11 @@ export default {
             console.log("friend request rejected!")
             await API.updateMessageByMessageID(this.messageID, messageAccepted)
 
+            this.messageUpdated = true
+            this.showReject()
+
         },
 
-        showSuccess() {
-            this.$toast.add({ severity: 'success', summary: 'Friend Request Accepted', detail: 'You can now view and share workouts with your friend.', life: 5000 });
-        },
 
         async updateFriendsLists(firstUser, secondUser){
             console.log("friends lists updated")
