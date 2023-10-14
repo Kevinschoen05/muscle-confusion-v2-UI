@@ -18,7 +18,7 @@
                     </section>
                     <ul class="list-none p-0 m-0">
                         <li class="flex flex-column md:flex-row md:align-items-center md:justify-content-between mb-4"
-                            v-for="user in userList" :key="user.userID">
+                            v-for="user in inviteUserList" :key="user.userID">
                             <div class="flex">
                                 <div class="mr-0 md:mr-8">
                                     <span class="block text-900 font-medium mb-1">{{ user.userName }}</span>
@@ -82,6 +82,8 @@ export default {
             invitedUserID: '',
             invitedUserName: '',
             userFriendsData: [],
+            userFriendsList:[],
+            inviteUserList: [],
             userList: [],
             visible2: false,
             visible3: false,
@@ -93,12 +95,23 @@ export default {
             this.$toast.add({ severity: 'success', summary: 'Invite Sent', detail: 'Friend Request Successfully Sent.', life: 5000 });
         },
 
+        getInviteUserList(friendIDs, listOfUsers){
+            const idsToRemove = friendIDs;
+
+            const updatedUserList = listOfUsers.filter(obj => !idsToRemove.includes(obj.userID));
+
+            this.inviteUserList = updatedUserList;
+            console.log(this.inviteUserList)
+
+        },
+
         //API Calls
         async getUserFriends() {
             let userObject = await API.getUserFriends(this.$store.state.user.uid)
             this.currentUserName = userObject[0].userName
-            let userFriendsList = userObject[0].friends;
-            await this.getUserFriendsDetails(userFriendsList)
+            this.userFriendsList = userObject[0].friends;
+            console.log(this.userFriendsList)
+            await this.getUserFriendsDetails(this.userFriendsList)
 
         },
 
@@ -141,7 +154,9 @@ export default {
         async getAllUsers() {
             this.userList = await API.getAllUsers()
             await console.log(this.userList)
+            await this.getInviteUserList(this.userFriendsList, this.userList)
         }
+
 
     },
     mounted() {
