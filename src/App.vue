@@ -43,7 +43,7 @@
             <li>
                 <a v-ripple @click="$router.push('/inbox')"
                     class="flex p-3 px-3 py-3 align-items-center text-600 hover:text-white hover:bg-gray-800 font-medium border-round cursor-pointer transition-colors transition-duration-150 p-ripple">
-                    <i class="pi pi-bell text-base lg:text-2xl mr-2 mr-0" v-badge.danger></i>
+                    <i class="pi pi-bell text-base lg:text-2xl mr-2 mr-0" v-badge.danger="messageCount"></i>
                 </a>
             </li>
             <li>
@@ -58,7 +58,8 @@
     <router-view :key="$route.fullPath" />
     <Dialog v-model:visible="visible2" appendTo="body" :modal="true">
         <div class="flex flex-column">
-            <Button icon="pi pi-cog" class="p-button m-2" label="Profile" @click="$router.push('/profile'), this.visible2 = false" v-ripple></Button>
+            <Button icon="pi pi-cog" class="p-button m-2" label="Profile"
+                @click="$router.push('/profile'), this.visible2 = false" v-ripple></Button>
             <Button icon="pi pi-sign-out
          " class="p-button-danger m-2" label="Logout" @click="logout()"></Button>
 
@@ -69,6 +70,7 @@
 
 <script>
 import { getAuth, updateProfile } from "firebase/auth";
+import API from './api'
 
 
 export default {
@@ -76,11 +78,20 @@ export default {
         return {
             visible2: false,
             newUsername: '',
+            messageCount: 0
         }
     },
     methods: {
         debug() {
             console.log(this.displayName)
+        },
+
+        async getMessageCount() {
+            let userMessages = await API.getUserMessages(this.$store.state.user.uid)
+            this.messageCount = userMessages.reduce((count, message) => {
+                return count + (message.messageRead ? 0 : 1);
+            }, 0);
+
         },
 
         updateUsername() {
@@ -109,6 +120,9 @@ export default {
 
 
     },
+    mounted() {
+        this.getMessageCount();
+    }
 
 
 }
