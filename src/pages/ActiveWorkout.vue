@@ -21,8 +21,7 @@
                         @exercise-complete="handleCompletedExercise(exercise)" :exerciseName=exercise.exerciseName
                         :primaryMuscleGroup="exercise.primaryMuscleGroup"
                         :secondaryMuscleGroups="exercise.secondaryMuscleGroups" :targetSets="exercise.targetSets"
-                        :exerciseType="exercise.exerciseType"
-                        :sets="exercise.sets"></ExerciseCard>
+                        :exerciseType="exercise.exerciseType" :sets="exercise.sets"></ExerciseCard>
                 </ul>
             </div>
 
@@ -76,7 +75,32 @@
                 </div>
                 <Button class=mt-4 icon="pi pi-check" label="Save Workout"
                     @click="saveCompletedWorkout(), visible2 = false"></Button>
+                <Button class="mt-4 lg:ml-2" icon="pi pi-send" label="Save & Share Results"
+                    @click=" getUserFriends(), visible2 = false, visible4 = true"></Button>
             </div>
+        </Dialog>
+        <Dialog v-model:visible="visible4" appendTo="body" :modal="true">
+            <div class="p-2">
+                <div class="flex w-full justify-content-between mb-4">
+                    <span class="w-4rem h-4rem border-circle flex justify-content-center align-items-center bg-blue-100"><i
+                            class="pi pi-users text-blue-700 text-4xl"></i></span>
+                </div>
+                <div class="text-900 font-medium mb-3 text-xl">Send Results</div>
+                <p class="mt-0 mb-4 p-0 line-height-3">Select Friends to Share Your Workout Details </p>
+                <ul class="list-none p-0 m-0">
+                    <li class="flex flex-column md:flex-row md:align-items-center md:justify-content-between mb-4"
+                        v-for="friend in userFriendsData" :key="friend.userID">
+                        <div class="flex">
+                            <div class=" flex mr-0 md:mr-8">
+                                <Checkbox></Checkbox>
+                                <span class="block text-900 font-medium mb-1 ml-1">{{ friend.userName }}</span>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <Button label="Send"></Button>
+            </div>
+
         </Dialog>
     </div>
 </template>
@@ -98,6 +122,7 @@ export default {
             visible1: true,
             visible2: false,
             visible3: false,
+            visible4: false,
             activeWorkout: {},
             workoutTitle: '',
             workoutID: this.$route.params.workoutID,
@@ -106,6 +131,11 @@ export default {
             externalities: [],
             totalVolume: 0,
             totalSets: 0,
+
+            //User Info
+            currentUserName: '',
+            userFriendsList: '',
+            userFriendsData: [],
 
             //externalities
             userSleep: 0,
@@ -241,6 +271,25 @@ export default {
             });
         },
 
+        async getUserFriends() {
+            let userObject = await API.getUserFriends(this.$store.state.user.uid)
+            this.currentUserName = userObject[0].userName
+            this.userFriendsList = userObject[0].friends;
+            console.log(this.userFriendsList)
+            await this.getUserFriendsDetails(this.userFriendsList)
+
+        },
+
+        async getUserFriendsDetails(friends) {
+            console.log('getting details')
+            for (const friend of friends) {
+                console.log('Fetching details for friend:', friend); // Debugging log
+                const friendData = await API.getUserFriendsDetails(friend);
+                console.log('Friend data:', friendData); // Debugging log
+                this.userFriendsData.push(...friendData); // Use spread operator to push the individual friendData into the array
+            }
+
+        },
 
         debug() {
             console.log(this.exercises)
