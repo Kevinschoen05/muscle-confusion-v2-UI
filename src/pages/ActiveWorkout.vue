@@ -73,10 +73,10 @@
                     </div>
 
                 </div>
-                <Button class=mt-4 icon="pi pi-check" label="Save Workout"
+                <Button class="w-full mt-4" icon="pi pi-check" label="Save Workout"
                     @click="saveCompletedWorkout(), visible2 = false"></Button>
-                <Button class="mt-4 lg:ml-2" icon="pi pi-send" label="Save & Share Results"
-                    @click=" getUserFriends(), visible2 = false, visible4 = true"></Button>
+                <Button class=" w-full mt-4" icon="pi pi-send" label="Save & Share Results"
+                    @click="getUserFriends(), visible2 = false, visible4 = true"></Button>
             </div>
         </Dialog>
         <Dialog v-model:visible="visible4" appendTo="body" :modal="true">
@@ -91,14 +91,12 @@
                     <li class="flex flex-column md:flex-row md:align-items-center md:justify-content-between mb-4"
                         v-for="friend in userFriendsData" :key="friend.userID">
                         <div class="flex">
-                            <div class=" flex mr-0 md:mr-8">
-                                <Checkbox></Checkbox>
-                                <span class="block text-900 font-medium mb-1 ml-1">{{ friend.userName }}</span>
-                            </div>
+                            <Checkbox v-model="selectedFriends" :inputId="friend.userID" name="Friends" :value="friend.userID"></Checkbox>
+                            <label :for="friend.userID">{{ friend.userName }}</label>
                         </div>
                     </li>
                 </ul>
-                <Button label="Send"></Button>
+                <Button @click="sendWorkoutSummary()" label="Send"></Button>
             </div>
 
         </Dialog>
@@ -136,6 +134,7 @@ export default {
             currentUserName: '',
             userFriendsList: '',
             userFriendsData: [],
+            selectedFriends:[],
 
             //externalities
             userSleep: 0,
@@ -217,6 +216,7 @@ export default {
             console.log(this.totalSets)
         },
 
+
         async getActiveWorkout() {
             this.activeWorkout = await API.getWorkoutsByWorkoutID(this.$route.params.workoutID)
             this.exercises = this.activeWorkout[0].exercises
@@ -289,6 +289,12 @@ export default {
                 this.userFriendsData.push(...friendData); // Use spread operator to push the individual friendData into the array
             }
 
+        },
+
+        async sendWorkoutSummary() {
+            console.log(this.selectedFriends)
+
+           // this.saveCompletedWorkout()
         },
 
         debug() {
