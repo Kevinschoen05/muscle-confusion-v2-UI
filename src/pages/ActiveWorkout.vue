@@ -21,8 +21,7 @@
                         @exercise-complete="handleCompletedExercise(exercise)" :exerciseName=exercise.exerciseName
                         :primaryMuscleGroup="exercise.primaryMuscleGroup"
                         :secondaryMuscleGroups="exercise.secondaryMuscleGroups" :targetSets="exercise.targetSets"
-                        :exerciseType="exercise.exerciseType"
-                        :sets="exercise.sets"></ExerciseCard>
+                        :exerciseType="exercise.exerciseType" :sets="exercise.sets"></ExerciseCard>
                 </ul>
             </div>
 
@@ -74,9 +73,33 @@
                     </div>
 
                 </div>
-                <Button class=mt-4 icon="pi pi-check" label="Save Workout"
+                <Button class="w-full mt-4" icon="pi pi-check" label="Save Workout"
                     @click="saveCompletedWorkout(), visible2 = false"></Button>
+                <Button class=" w-full mt-4" icon="pi pi-send" label="Save & Share Results"
+                    @click="getUserFriends(), visible2 = false, visible4 = true, shareWorkout = true"></Button>
             </div>
+        </Dialog>
+        <Dialog v-model:visible="visible4" appendTo="body" :modal="true">
+            <div class="p-2">
+                <div class="flex w-full justify-content-between mb-4">
+                    <span class="w-4rem h-4rem border-circle flex justify-content-center align-items-center bg-blue-100"><i
+                            class="pi pi-users text-blue-700 text-4xl"></i></span>
+                </div>
+                <div class="text-900 font-medium mb-3 text-xl">Send Results</div>
+                <p class="mt-0 mb-4 p-0 line-height-3">Select Friends to Share Your Workout Details </p>
+                <ul class="list-none p-0 m-0">
+                    <li class="flex flex-column md:flex-row md:align-items-center md:justify-content-between mb-4"
+                        v-for="friend in userFriendsData" :key="friend.userID">
+                        <div class="flex">
+                            <Checkbox v-model="selectedFriends" :inputId="friend.userID" name="Friends"
+                                :value="friend.userID"></Checkbox>
+                            <label :for="friend.userID">{{ friend.userName }}</label>
+                        </div>
+                    </li>
+                </ul>
+                <Button @click="sendWorkoutSummary()" label="Send"></Button>
+            </div>
+
         </Dialog>
     </div>
 </template>
@@ -98,14 +121,24 @@ export default {
             visible1: true,
             visible2: false,
             visible3: false,
+            visible4: false,
             activeWorkout: {},
             workoutTitle: '',
             workoutID: this.$route.params.workoutID,
             exercises: [],
             completedExercises: [],
+            completedWorkoutID: '',
             externalities: [],
             totalVolume: 0,
             totalSets: 0,
+
+            //User Info & Sharing
+            currentUserName: '',
+            userFriendsList: '',
+            userFriendsData: [],
+            selectedFriends: [],
+            shareWorkout: false,
+
 
             //externalities
             userSleep: 0,
@@ -187,6 +220,7 @@ export default {
             console.log(this.totalSets)
         },
 
+
         async getActiveWorkout() {
             this.activeWorkout = await API.getWorkoutsByWorkoutID(this.$route.params.workoutID)
             this.exercises = this.activeWorkout[0].exercises
@@ -235,12 +269,74 @@ export default {
 
             await API.addCompletedWorkout(completedWorkout)
             this.showSuccess()
+            if (this.shareWorkout === false) {
+                this.$router.push({
+                    name: "user-dashboard",
+                    link: "/dashboard",
+                });
+            }
+            else {
+                let completedWorkouts = await API.getCompletedWorkoutsByUserID(this.$store.state.user.uid)
+                let lastCompletedWorkoutID = completedWorkouts[completedWorkouts.length - 1]._id
+                this.completedWorkoutID = lastCompletedWorkoutID
+                console.log(this.completedWorkoutID)
+            }
+
+        },
+
+        async getUserFriends() {
+            let userObject = await API.getUserFriends(this.$store.state.user.uid)
+            this.currentUserName = userObject[0].userName
+            this.userFriendsList = userObject[0].friends;
+            console.log(this.userFriendsList)
+            await this.getUserFriendsDetails(this.userFriendsList)
+
+        },
+
+        async getUserFriendsDetails(friends) {
+            console.log('getting details')
+            for (const friend of friends) {
+                console.log('Fetching details for friend:', friend); // Debugging log
+                const friendData = await API.getUserFriendsDetails(friend);
+                console.log('Friend data:', friendData); // Debugging log
+                this.userFriendsData.push(...friendData); // Use spread operator to push the individual friendData into the array
+            }
+
+        },
+
+        async sendWorkoutSummary() {
+            console.log(this.selectedFriends)
+            await this.saveCompletedWorkout();
+
+            for (let i = 0; i < this.selectedFriends.length; i++) {
+                let senderUserID = this.$store.state.user.uid;
+                let senderUserName = this.currentUserName;
+                let receiverUserID = this.selectedFriends[i];
+                let receiverUserName = '';
+                let messageType = 'Workout Summary'
+                let messageContent = this.completedWorkoutID;
+                let messageRead = false;
+                let messageAccepted = false;
+
+                await API.createMessage({
+                    senderUserID: senderUserID,
+                    senderUserName: senderUserName,
+                    receiverUserID: receiverUserID,
+                    receiverUserName: receiverUserName,
+                    messageType: messageType,
+                    messageContent: messageContent,
+                    messageRead: messageRead,
+                    messageAccepted: messageAccepted
+
+                })
+            }
+            this.showSuccess()
             this.$router.push({
                 name: "user-dashboard",
                 link: "/dashboard",
             });
-        },
 
+        },
 
         debug() {
             console.log(this.exercises)
