@@ -9,20 +9,20 @@
     </div>
     <ul v-if="unread === false" class="list-none p-3 m-0">
         <li v-for="message in userMessages" :key="message" class="surface-card m-2 shadow-2 border-round">
-            <InboxMessage :messageID="message._id" :receiverUserID="message.receiverUserID"
+            <FriendRequest :messageID="message._id" :receiverUserID="message.receiverUserID"
                 :receiverUserName="message.receiverUserName" :senderUserID="message.senderUserID"
                 :senderUserName="message.senderUserName" :messageType="message.messageType"
                 :messageContent="message.messageContent" :messageRead="message.messageRead"
-                :messageAccepted="message.messageAccepted" :timestamp="message.timestamp"></InboxMessage>
+                :messageAccepted="message.messageAccepted" :timestamp="message.timestamp"></FriendRequest>
         </li>
     </ul>
     <ul v-else class="list-none p-3 m-0">
         <li v-for="message in userUnreadMessages" :key="message" class="surface-card m-2 shadow-2 border-round">
-            <InboxMessage :messageID="message._id" :receiverUserID="message.receiverUserID"
+            <FriendRequest :messageID="message._id" :receiverUserID="message.receiverUserID"
                 :receiverUserName="message.receiverUserName" :senderUserID="message.senderUserID"
                 :senderUserName="message.senderUserName" :messageType="message.messageType"
                 :messageContent="message.messageContent" :messageRead="message.messageRead"
-                :messageAccepted="message.messageAccepted" :timestamp="message.timestamp"></InboxMessage>
+                :messageAccepted="message.messageAccepted" :timestamp="message.timestamp"></FriendRequest>
         </li>
     </ul>
 </template>
@@ -30,10 +30,10 @@
 <script>
 
 import API from '../api'
-import InboxMessage from '../components/InboxMessage.vue'
+import FriendRequest from '../components/messages/FriendRequest.vue'
 export default {
     components: {
-        InboxMessage
+        FriendRequest
     },
     data() {
         return {
