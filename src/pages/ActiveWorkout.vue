@@ -76,7 +76,7 @@
                 <Button class="w-full mt-4" icon="pi pi-check" label="Save Workout"
                     @click="saveCompletedWorkout(), visible2 = false"></Button>
                 <Button class=" w-full mt-4" icon="pi pi-send" label="Save & Share Results"
-                    @click="getUserFriends(), visible2 = false, visible4 = true"></Button>
+                    @click="getUserFriends(), visible2 = false, visible4 = true, shareWorkout = true"></Button>
             </div>
         </Dialog>
         <Dialog v-model:visible="visible4" appendTo="body" :modal="true">
@@ -91,7 +91,8 @@
                     <li class="flex flex-column md:flex-row md:align-items-center md:justify-content-between mb-4"
                         v-for="friend in userFriendsData" :key="friend.userID">
                         <div class="flex">
-                            <Checkbox v-model="selectedFriends" :inputId="friend.userID" name="Friends" :value="friend.userID"></Checkbox>
+                            <Checkbox v-model="selectedFriends" :inputId="friend.userID" name="Friends"
+                                :value="friend.userID"></Checkbox>
                             <label :for="friend.userID">{{ friend.userName }}</label>
                         </div>
                     </li>
@@ -126,15 +127,18 @@ export default {
             workoutID: this.$route.params.workoutID,
             exercises: [],
             completedExercises: [],
+            completedWorkoutID: '',
             externalities: [],
             totalVolume: 0,
             totalSets: 0,
 
-            //User Info
+            //User Info & Sharing
             currentUserName: '',
             userFriendsList: '',
             userFriendsData: [],
-            selectedFriends:[],
+            selectedFriends: [],
+            shareWorkout: false,
+
 
             //externalities
             userSleep: 0,
@@ -265,10 +269,19 @@ export default {
 
             await API.addCompletedWorkout(completedWorkout)
             this.showSuccess()
-            this.$router.push({
-                name: "user-dashboard",
-                link: "/dashboard",
-            });
+            if (this.shareWorkout === false) {
+                this.$router.push({
+                    name: "user-dashboard",
+                    link: "/dashboard",
+                });
+            }
+            else {
+                let completedWorkouts = await API.getCompletedWorkoutsByUserID(this.$store.state.user.uid)
+                let lastCompletedWorkoutID = completedWorkouts[completedWorkouts.length - 1]._id
+                this.completedWorkoutID = lastCompletedWorkoutID
+                console.log(this.completedWorkoutID)
+            }
+
         },
 
         async getUserFriends() {
@@ -293,8 +306,36 @@ export default {
 
         async sendWorkoutSummary() {
             console.log(this.selectedFriends)
+            await this.saveCompletedWorkout();
 
-           // this.saveCompletedWorkout()
+            for (let i = 0; i < this.selectedFriends.length; i++) {
+                let senderUserID = this.$store.state.user.uid;
+                let senderUserName = this.currentUserName;
+                let receiverUserID = this.selectedFriends[i];
+                let receiverUserName = '';
+                let messageType = 'Workout Summary'
+                let messageContent = this.completedWorkoutID;
+                let messageRead = false;
+                let messageAccepted = false;
+
+                await API.createMessage({
+                    senderUserID: senderUserID,
+                    senderUserName: senderUserName,
+                    receiverUserID: receiverUserID,
+                    receiverUserName: receiverUserName,
+                    messageType: messageType,
+                    messageContent: messageContent,
+                    messageRead: messageRead,
+                    messageAccepted: messageAccepted
+
+                })
+            }
+            this.showSuccess()
+            this.$router.push({
+                name: "user-dashboard",
+                link: "/dashboard",
+            });
+
         },
 
         debug() {

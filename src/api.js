@@ -76,7 +76,8 @@ export default class API {
   }
 
   static async getCompletedWorkoutsByUserID(userIDs) {
-    const userIDsString = userIDs.join(","); // Convert the array of userIDs to a comma-separated string
+    const userIDsArray = Array.isArray(userIDs) ? userIDs : [userIDs];
+    const userIDsString = userIDsArray.join(","); // Convert the array of userIDs to a comma-separated string
     const res = await axios.get(
       `${completedWorkout_url}/users/${userIDsString}`
     );
