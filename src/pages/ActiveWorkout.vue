@@ -1,7 +1,6 @@
 <template>
     <Toast />
     <div class="surface-ground">
-        <Button label="Debug" @click="debug()"></Button>
         <div class="grid">
             <ActiveWorkoutSummary v-if="this.$route.params.workoutID" :workoutID="this.workoutID"
                 :workoutTitle="this.workoutTitle" :totalSets="this.totalSets"
