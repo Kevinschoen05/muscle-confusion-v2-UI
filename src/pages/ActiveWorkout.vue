@@ -1,6 +1,7 @@
 <template>
     <Toast />
     <div class="surface-ground">
+        <Button label="Debug" @click="debug()"></Button>
         <div class="grid">
             <ActiveWorkoutSummary v-if="this.$route.params.workoutID" :workoutID="this.workoutID"
                 :workoutTitle="this.workoutTitle" :totalSets="this.totalSets"
@@ -249,7 +250,7 @@ export default {
             if (this.$route.params.workoutID) {
                 finalWorkoutID = this.activeWorkout[0]._id;
                 finalWorkoutTitle = this.activeWorkout[0].workoutTitle
-                finalUsers = this.activeWorkout[0].users
+                finalUsers = this.$store.state.user.uid
             }
             else {
                 finalWorkoutID = activeFreestyleWorkoutID
@@ -339,9 +340,9 @@ export default {
         },
 
         debug() {
-            console.log(this.exercises)
-            console.log(this.completedExercises)
-            this.calculateTotalVolume()
+            console.log(this.activeWorkout[0])
+            console.log(this.currentUserName)
+            console.log(this.activeWorkout[0].users)
         }
     },
     mounted() {
