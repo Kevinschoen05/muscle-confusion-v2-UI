@@ -149,4 +149,9 @@ export default class API {
     const res = await axios.get(`${exercise_url}/muscleGroups`);
     return res.data;
   }
+
+  static async getExerciseByExerciseID(exerciseID){
+    const res = await axios.get(`${exercise_url}/id/${exerciseID}`)
+    return res.data
+  } 
 }

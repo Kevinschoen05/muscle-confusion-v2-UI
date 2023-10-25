@@ -3,6 +3,25 @@
         <div class="header-bar">
             <div class="exercise-header">
                 <p class="exercise-name">{{ exerciseName }}</p>
+                <Button icon="fa-solid fa-shuffle" class="p-button-text p-button-plain p-button-rounded justify-self-right"
+                    @click="getSwapExercises(), visible2 = true"></Button>
+                <Dialog v-model:visible="visible2" appendTo="body" :modal="true">
+                    <div class="text-900 font-medium mb-3 text-xl">Choose an Exercise to Swap</div>
+                    <ul class="list-none p-0 m-0">
+                        <li class="flex flex-column md:flex-row md:align-items-center md:justify-content-between mb-4"
+                            v-for="exercise in swapExercises" :key="exercise._id">
+                            <div class="flex">
+                                <div class="mr-0 md:mr-8">
+                                    <span class="block text-900 font-medium mb-1">{{ exercise.exerciseName }}</span>
+                                </div>
+                            </div>
+                            <div class="mt-2 md:mt-0 flex flex-nowrap">
+                                <Button @click="visible2 = false, completeExerciseSwap(exercise._id)" label="Select"
+                                    class="flex-grow-1"></Button>
+                            </div>
+                        </li>
+                    </ul>
+                </Dialog>
             </div>
             <div class=" flex  align-content-center align-items-center w-auto pl-1">
                 <muscle-badge :title="primaryMuscleGroup" primary></muscle-badge>
@@ -24,7 +43,8 @@
                 <p>Actual Weight: </p>
                 <div class="flex flex-column align-items-center">
                     <InputNumber class="w-auto" v-model="autofillValue" :min="1" :step="1" pattern="\d*" showButtons />
-                    <Button class="mt-2" @click="visible = false, autofillExercise(sets, this.autofillValue)">Autofill Sets</Button>
+                    <Button class="mt-2" @click="visible = false, autofillExercise(sets, this.autofillValue)">Autofill
+                        Sets</Button>
                 </div>
             </Dialog>
         </div>
@@ -95,6 +115,7 @@
 <script>
 import MuscleBadge from './MuscleBadge.vue'
 import Timer from './TImer.vue'
+import API from '../api'
 export default {
     name: 'ExcerciseCard',
 
@@ -103,6 +124,7 @@ export default {
         Timer,
     },
     props: {
+        exerciseID: String,
         exerciseName: String,
         exerciseType: String,
         primaryMuscleGroup: String,
@@ -118,8 +140,11 @@ export default {
             setTotal: 0,
             completedCounter: 0,
             visible: false,
+            visible2: false,
             autofillComplete: false,
-            autofillValue: 0
+            autofillValue: 0,
+
+            swapExercises: [],
         }
     },
 
@@ -174,7 +199,7 @@ export default {
             }
         },
         autofillExercise(sets, autofillValue) {
-            for (let i = 0; i < sets.length; i++){
+            for (let i = 0; i < sets.length; i++) {
                 sets[i] = {
                     index: i,
                     target_reps: sets[i].target_reps,
@@ -195,9 +220,27 @@ export default {
             console.log(set)
             console.log("Timer completed successfully!");
         },
+
+        completeExerciseSwap(swapExerciseID) {
+            // Replace this with your actual data
+            const originalExercise = this.exerciseID; // Assuming this.exerciseID is defined correctly
+            const selectedSwapExercise = swapExerciseID; // Replace with the actual ID you want to swap to
+
+            this.$emit("swap-exercises", { originalExercise, selectedSwapExercise });
+        },
+
+        //API Calls
+
+        async getSwapExercises() {
+            this.swapExercises = await API.getExercisesByMuscleGroup(this.primaryMuscleGroup)
+            console.log(this.swapExercises)
+        }
+
+
     },
     mounted() {
         this.calculateTotalReps()
+        console.log(this.exerciseID)
     }
 
 }
