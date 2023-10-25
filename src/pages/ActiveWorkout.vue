@@ -18,7 +18,8 @@
 
                 <ul v-if=!visible1 class="list-none p-0 m-0">
                     <ExerciseCard v-for="exercise in exercises" :key="exercise"
-                        @exercise-complete="handleCompletedExercise(exercise)" :exerciseName=exercise.exerciseName
+                        @exercise-complete="handleCompletedExercise(exercise)" @swap-exercises="handleExerciseSwap"
+                        :exerciseID="exercise.id" :exerciseName=exercise.exerciseName
                         :primaryMuscleGroup="exercise.primaryMuscleGroup"
                         :secondaryMuscleGroups="exercise.secondaryMuscleGroups" :targetSets="exercise.targetSets"
                         :exerciseType="exercise.exerciseType" :sets="exercise.sets"></ExerciseCard>
@@ -167,7 +168,7 @@ export default {
         startTimer() {
             this.startTime = Date.now();
             this.showWorkoutStart();
-
+            console.log(this.exercises)
         },
 
         stopTimer() {
@@ -199,6 +200,37 @@ export default {
             console.log(draftExercise)
             this.exercises.push(draftExercise)
             this.visible3 = false
+        },
+        async handleExerciseSwap({ originalExercise, selectedSwapExercise }) {
+            console.log("Received data: " + '' + originalExercise + ' ' + selectedSwapExercise);
+
+            try {
+                // Make the API call to retrieve the exercise data based on selectedSwapExercise
+                const swapExerciseObject = await API.getExerciseByExerciseID(selectedSwapExercise);
+
+                if (swapExerciseObject) {
+                    // Find the index of the original exercise in the 'exercises' array
+                    const originalIndex = this.exercises.findIndex(exercise => exercise.id === originalExercise);
+
+                    if (originalIndex !== -1) {
+                        // Create a new exercise object with the updated properties
+                        const updatedExercise = {
+                            ...this.exercises[originalIndex], // Copy existing properties
+                            id: swapExerciseObject[0]._id,
+                            exerciseName: swapExerciseObject[0].exerciseName,
+                            primaryMuscleGroup: swapExerciseObject[0].primaryMuscleGroup,
+                            secondaryMuscleGroups: swapExerciseObject[0].secondaryMuscleGroups,
+                            // You can add more updated properties here
+                        };
+
+                        // Replace the exercise at originalIndex with the new exercise
+                        this.exercises.splice(originalIndex, 1, updatedExercise);
+                    }
+                }
+            } catch (error) {
+                console.error("Error while fetching exercise data: " + error);
+            }
+            console.log(this.exercises)
         },
 
         calculateTotalVolume() {
