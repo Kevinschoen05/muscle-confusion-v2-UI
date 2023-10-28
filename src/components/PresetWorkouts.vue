@@ -11,7 +11,8 @@
         <div class="mt-3 lg:mt-0">
             <Button @click="startActiveWorkout(workoutID)" icon="pi pi-play"
                 class="p-button-rounded p-button-success mr-2"></Button>
-            <Button @click="visible2 = true, getAllUsers()" icon="pi pi-users" class="p-button-rounded p-button-warning mr-2"></Button>
+            <Button @click="visible2 = true, getAllUsers()" icon="pi pi-users"
+                class="p-button-rounded p-button-warning mr-2"></Button>
             <Button v-if="userID === this.$store.state.user.uid" @click="editPresetWorkout(workoutID)" icon="pi pi-pencil"
                 class="p-button-rounded p-button mr-2"></Button>
         </div>
@@ -23,7 +24,8 @@
                         class="fa-solid fa-medal text-blue-700 text-4xl"></i></span>
             </div>
             <p class="font-semibold text-xl mt-0 mb-2 text-900">Challenge A Friend</p>
-            <p class="font-normal text-base mt-0 mb-3 text-600">Choose a friend and challenge them to compete with this workout.</p>
+            <p class="font-normal text-base mt-0 mb-3 text-600">Choose a friend and challenge them to compete with this
+                workout.</p>
         </section>
         <ul class="list-none p-0 m-0">
             <li class="flex flex-column md:flex-row md:align-items-center md:justify-content-between mb-4"
@@ -46,6 +48,19 @@
                 <Button @click="visible2 = false" label="Cancel" class="p-button-text flex-grow-1"></Button>
             </div>
         </template>
+    </Dialog>
+    <Dialog v-model:visible="visible3" appendTo="body" :modal="true">
+        <div class="p-4">
+            <div class="text-900 font-medium mb-4 text-xl">Issue Challenge</div>
+            <span class="p-float-label">
+                <TextArea v-model="messageContent" rows="5" cols="30"></TextArea>
+                <label>Optional Message</label>
+            </span>
+            <div>
+                <Button class="mr-2" label="Send" @click="visible3 = false, sendChallenge()"></Button>
+                <Button class=" p-button-danger" label="Cancel" @click="visible3 = false"></Button>
+            </div>
+        </div>
     </Dialog>
 </template>
   
@@ -71,8 +86,11 @@ export default {
             userFriendsList: [],
             inviteUserList: [],
             userList: [],
+            messageContent: '',
 
-            visible2: false
+
+            visible2: false,
+            visible3: false 
         }
     },
 
@@ -134,7 +152,33 @@ export default {
             this.userList = await API.getAllUsers()
             await console.log(this.userList)
             await this.getInviteUserList(this.userFriendsList, this.userList)
-        }
+        },
+
+        async sendChallenge() {
+            let senderUserID = this.$store.state.user.uid;
+            let senderUserName = this.currentUserName;
+            let receiverUserID = this.invitedUserID;
+            let receiverUserName = this.invitedUserName;
+            let messageType = 'Workout Challenge';
+            let messageContent = this.messageContent;
+            let messageRead = false;
+            let messageAccepted = false; 
+            
+            //console.log(senderUserID + ' ' + senderUserName + ' ' + receiverUserID + ' ' + receiverUserName + ' ' + messageType + ' ' + messageContent )
+            await API.createMessage( {
+                senderUserID: senderUserID,
+                senderUserName: senderUserName,
+                receiverUserID: receiverUserID,
+                receiverUserName: receiverUserName,
+                messageType: messageType,
+                messageContent: messageContent,
+                messageRead: messageRead,
+                messageAccepted: messageAccepted
+
+            })
+            this.showSuccess()
+        },
+
     },
     mounted() {
         this.getUserNameFromID()
