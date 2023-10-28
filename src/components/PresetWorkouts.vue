@@ -52,10 +52,8 @@
     <Dialog v-model:visible="visible3" appendTo="body" :modal="true">
         <div class="p-4">
             <div class="text-900 font-medium mb-4 text-xl">Issue Challenge</div>
-            <span class="p-float-label">
-                <TextArea v-model="messageContent" rows="5" cols="30"></TextArea>
-                <label>Optional Message</label>
-            </span>
+            <p class="font-normal text-base mt-0 mb-3 text-600">Your friend will be sent an invite to compete with this Preset Workout.</p>
+
             <div>
                 <Button class="mr-2" label="Send" @click="visible3 = false, sendChallenge()"></Button>
                 <Button class=" p-button-danger" label="Cancel" @click="visible3 = false"></Button>
@@ -160,7 +158,7 @@ export default {
             let receiverUserID = this.invitedUserID;
             let receiverUserName = this.invitedUserName;
             let messageType = 'Workout Challenge';
-            let messageContent = this.messageContent;
+            let messageContent = this.workoutID;
             let messageRead = false;
             let messageAccepted = false; 
             
