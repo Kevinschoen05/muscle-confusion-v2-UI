@@ -1,4 +1,5 @@
 <template>
+    <Toast />
     <li
         class="py-3 border-bottom-1 surface-border flex md:align-items-start md:justify-content-between flex-column md:flex-row">
         <div class="flex align-items-start mr-0 lg:mr-5">
@@ -96,6 +97,10 @@ export default {
 
     },
     methods: {
+        showSuccess() {
+            this.$toast.add({ severity: 'success', summary: 'Workout Challenge Sent', detail: 'You will be notified if your friend accepts the challenge. ', life: 5000 });
+        },
+
         startActiveWorkout(workoutID) {
             this.$router.push({
                 name: "active-workout",
