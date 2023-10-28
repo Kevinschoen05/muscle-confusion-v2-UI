@@ -5,12 +5,12 @@
             <div class="flex align-items-center">
                 <span class="inline-flex border-circle align-items-center justify-content-center bg-green-100 mr-3"
                     style="width: 38px; height: 38px">
-                    <i class="pi pi-envelope text-xl text-green-600"></i>
+                    <i class="fa-solid fa-medal text-xl text-green-600"></i>
                 </span>
                 <span class="text-900 font-medium text-2xl">{{ senderUserName }}</span>
             </div>
             <div class="text-900 my-3 text-xl font-medium">{{ messageType }}</div>
-            <p class="mt-0 mb-3 text-700 line-height-3">{{ messageContent }}</p>
+            <p class="mt-0 mb-3 text-700 line-height-3">{{senderUserName  }} wants to compete head to head using the Preset Workout: {{ matchupWorkoutName}} </p>
         </div>
         <div class="px-4 py-3 surface-100 text-right">
             <Button v-if="messageRead === false && messageUpdated === false " icon="pi pi-check" iconPos="right" label="Accept" class="p-button-rounded p-button mr-2" @click="acceptFriendRequest()"></Button>
@@ -39,7 +39,8 @@ export default {
 
     data () {
         return {
-            messageUpdated: false
+            messageUpdated: false,
+            matchupWorkoutName: ''
         }
     },
 
@@ -47,12 +48,12 @@ export default {
 
 
         showSuccess() {
-            this.$toast.add({ severity: 'success', summary: 'Friend Request Accepted', detail: 'You can now view and share workouts with your friend.', life: 5000 });
+            this.$toast.add({ severity: 'success', summary: 'Workout Challenge Accepted', detail: 'Head to your Matchup Dashboard to complete your part of the challenge. ', life: 5000 });
         },
 
 
         showReject() {
-            this.$toast.add({ severity: 'error', summary: 'Friend Request Rejected', detail: "This user won't be able to view or share workouts with you.", life: 5000 });
+            this.$toast.add({ severity: 'error', summary: 'Workout Challenge Rejected', detail: "Your friend will be notified you're not ready to compete. ", life: 5000 });
         },
         
         async acceptFriendRequest() {
@@ -76,6 +77,16 @@ export default {
 
         },
 
+       async getMatchupWorkoutName() {
+        let workoutByID = await API.getWorkoutsByWorkoutID(this.messageContent)
+        console.log(workoutByID)
+        this.matchupWorkoutName =  workoutByID[0].workoutTitle
+        
+        }
+
+    },
+    mounted () {
+        this.getMatchupWorkoutName()
     }
 }
 

@@ -5,7 +5,7 @@
             <div class="flex align-items-center">
                 <span class="inline-flex border-circle align-items-center justify-content-center bg-green-100 mr-3"
                     style="width: 38px; height: 38px">
-                    <i class="pi pi-envelope text-xl text-green-600"></i>
+                    <i class="pi pi-user text-xl text-green-600"></i>
                 </span>
                 <span class="text-900 font-medium text-2xl">{{ senderUserName }}</span>
             </div>
