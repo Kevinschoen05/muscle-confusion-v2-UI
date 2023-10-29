@@ -56,12 +56,12 @@ export default {
             this.$toast.add({ severity: 'error', summary: 'Workout Challenge Rejected', detail: "Your friend will be notified you're not ready to compete. ", life: 5000 });
         },
         
-        async acceptFriendRequest() {
+        async InitializeChallenge() {
             let messageAccepted = true 
-            console.log("friend request accepted!")
+            console.log("Matchup request accepted!")
             await API.updateMessageByMessageID(this.messageID, messageAccepted)
-            await this.updateFriendsLists(this.senderUserID, this.receiverUserID)
-            await this.updateFriendsLists(this.receiverUserID, this.senderUserID)
+
+
 
             this.messageUpdated = true 
             this.showSuccess()
@@ -69,7 +69,7 @@ export default {
 
         async rejectFriendRequest() {
             let messageAccepted = false
-            console.log("friend request rejected!")
+            console.log("Matchup request rejected!")
             await API.updateMessageByMessageID(this.messageID, messageAccepted)
 
             this.messageUpdated = true
