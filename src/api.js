@@ -5,6 +5,7 @@ const exercise_url =
 const workout_url = "https://muscle-confusion-server.onrender.com/api/workouts";
 const completedWorkout_url =
   "https://muscle-confusion-server.onrender.com/api/completedworkouts";
+const matchupWorkout_url = "https://muscle-confusion-server.onrender.com/api/matchupWorkouts"
 const user_url = "https://muscle-confusion-server.onrender.com/api/users";
 
 /*
@@ -53,6 +54,13 @@ export default class API {
     const res = await axios.get(
       `${completedWorkout_url}/id/${completedWorkoutID}`
     );
+    return res.data;
+  }
+
+  //Matchup workouts
+
+  static async createMatchupWorkout(matchupWorkout){
+    const res = await axios.post(matchupWorkout_url, matchupWorkout);
     return res.data;
   }
 

@@ -61,7 +61,7 @@ export default {
             console.log("Matchup request accepted!")
             await API.updateMessageByMessageID(this.messageID, messageAccepted)
 
-
+            await API.createMatchupWorkout()
 
             this.messageUpdated = true 
             this.showSuccess()
