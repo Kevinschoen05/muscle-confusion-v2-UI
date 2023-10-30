@@ -17,7 +17,7 @@
             <Button v-if="messageRead === false && messageUpdated === false" icon="pi pi-check" iconPos="right"
                 label="Accept" class="p-button-rounded p-button mr-2" @click="initializeChallenge()"></Button>
             <Button v-if="messageRead === false && messageUpdated === false" icon="pi pi-times" iconPos="right"
-                label="Reject" class="p-button-rounded p-button-danger" @click="rejectFriendRequest()"></Button>
+                label="Reject" class="p-button-rounded p-button-danger" @click="rejectChallenge()"></Button>
         </div>
     </div>
 </template>
@@ -94,10 +94,24 @@ export default {
             this.showSuccess()
         },
 
-        async rejectFriendRequest() {
+        async rejectChallenge() {
             let messageAccepted = false
             console.log("Matchup request rejected!")
             await API.updateMessageByMessageID(this.messageID, messageAccepted)
+
+            await API.createMessage(
+                {
+                    senderUserID: this.receiverUserID,
+                    senderUserName: this.receiverUserName,
+                    receiverUserID: this.senderUserID,
+                    receiverUserName: this.senderUserName,
+                    messageType: 'Workout Challenge Rejection',
+                    messageContent: 'Your Challenge has been Rejected. Your Friend is not ready to compete. ',
+                    messageRead: false,
+                    messageAccepted: false
+
+                }
+            )
 
             this.messageUpdated = true
             this.showReject()
