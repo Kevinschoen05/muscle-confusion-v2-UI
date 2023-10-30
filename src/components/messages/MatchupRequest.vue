@@ -90,6 +90,20 @@ export default {
 
             await API.createMatchupWorkout(matchupWorkout)
 
+            await API.createMessage(
+                {
+                    senderUserID: this.receiverUserID,
+                    senderUserName: this.receiverUserName,
+                    receiverUserID: this.senderUserID,
+                    receiverUserName: this.senderUserName,
+                    messageType: 'Workout Challenge Accepted',
+                    messageContent: 'Your Challenge has been Accepted. Complete your Workout to Determine a Winner!',
+                    messageRead: false,
+                    messageAccepted: false
+
+                }
+            )
+
             this.messageUpdated = true
             this.showSuccess()
         },
