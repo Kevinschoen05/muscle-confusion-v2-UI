@@ -29,6 +29,12 @@
                 :messageType="message.messageType" :messageContent="message.messageContent"
                 :messageRead="message.messageRead" :messageAccepted="message.messageAccepted"
                 :timestamp="message.timestamp"></MatchupRequest>
+            <MatchupRejection v-else-if="message.messageType === 'Workout Challenge Rejection'" :messageID="message._id"
+                :receiverUserID="message.receiverUserID" :receiverUserName="message.receiverUserName"
+                :senderUserID="message.senderUserID" :senderUserName="message.senderUserName"
+                :messageType="message.messageType" :messageContent="message.messageContent"
+                :messageRead="message.messageRead" :messageAccepted="message.messageAccepted"
+                :timestamp="message.timestamp"></MatchupRejection>
         </li>
     </ul>
     <ul v-else class="list-none p-3 m-0">
@@ -53,6 +59,12 @@
                 :messageType="message.messageType" :messageContent="message.messageContent"
                 :messageRead="message.messageRead" :messageAccepted="message.messageAccepted"
                 :timestamp="message.timestamp"></MatchupRequest>
+            <MatchupRejection v-else-if="message.messageType === 'Workout Challenge Rejection'" :messageID="message._id"
+                :receiverUserID="message.receiverUserID" :receiverUserName="message.receiverUserName"
+                :senderUserID="message.senderUserID" :senderUserName="message.senderUserName"
+                :messageType="message.messageType" :messageContent="message.messageContent"
+                :messageRead="message.messageRead" :messageAccepted="message.messageAccepted"
+                :timestamp="message.timestamp"></MatchupRejection>
         </li>
     </ul>
 </template>
@@ -63,11 +75,13 @@ import API from '../api'
 import FriendRequest from '../components/messages/FriendRequest.vue'
 import WorkoutSummaryMsg from '../components/messages/WorkoutSummaryMsg.vue'
 import MatchupRequest from '../components/messages/MatchupRequest.vue'
+import MatchupRejection from '../components/messages/MatchupRejection.vue'
 export default {
     components: {
         FriendRequest,
         WorkoutSummaryMsg,
-        MatchupRequest
+        MatchupRequest,
+        MatchupRejection
     },
     data() {
         return {
