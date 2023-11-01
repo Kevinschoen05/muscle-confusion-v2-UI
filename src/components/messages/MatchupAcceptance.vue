@@ -14,7 +14,7 @@
         </div>
         <div class="px-4 py-3 surface-100 text-right">
             <Button v-if="messageRead === false && messageUpdated === false" icon="pi pi-check" iconPos="right"
-                label="Start Challenge " class="p-button-rounded p-button mr-2"></Button>
+                label="Start Challenge " class="p-button-rounded p-button mr-2" @click="markRead()"></Button>
         </div>
     </div>
 </template>
