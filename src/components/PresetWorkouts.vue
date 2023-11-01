@@ -159,7 +159,7 @@ export default {
 
         async sendChallenge() {
             let senderUserID = this.$store.state.user.uid;
-            let senderUserName = this.$store.state.user.displayName;
+            let senderUserName = this.userName;
             let receiverUserID = this.invitedUserID;
             let receiverUserName = this.invitedUserName;
             let messageType = 'Workout Challenge';
