@@ -18,6 +18,8 @@
                 label="Accept" class="p-button-rounded p-button mr-2" @click="initializeChallenge()"></Button>
             <Button v-if="messageRead === false && messageUpdated === false" icon="pi pi-times" iconPos="right"
                 label="Reject" class="p-button-rounded p-button-danger" @click="rejectChallenge()"></Button>
+            <Button v-if="messageAccepted === true" icon="pi pi-play" iconPos="right"
+                label="View Matchup Workouts" class="p-button-rounded p-button-success" @click="viewMatchupWorkouts()" ></Button>
         </div>
     </div>
 </template>
@@ -45,6 +47,7 @@ export default {
             messageUpdated: false,
             matchupWorkoutName: '',
             matchupWorkoutExercises: [],
+            matchupWorkoutID: ''
         }
     },
 
@@ -88,7 +91,11 @@ export default {
                 userWorkoutData: [senderUser, receiverUser]
             }
 
-            await API.createMatchupWorkout(matchupWorkout)
+           const createdMatchupWorkout = await API.createMatchupWorkout(matchupWorkout)
+           console.log(createdMatchupWorkout)
+
+           this.matchupWorkoutID = createdMatchupWorkout._id;
+           console.log(this.matchupWorkoutID)
 
             await API.createMessage(
                 {
@@ -99,7 +106,7 @@ export default {
                     messageType: 'Workout Challenge Accepted',
                     messageContent: 'Your Challenge has been Accepted. Complete your Workout to Determine a Winner!',
                     messageRead: false,
-                    messageAccepted: false
+                    messageAccepted: true
 
                 }
             )
@@ -130,6 +137,13 @@ export default {
             this.messageUpdated = true
             this.showReject()
 
+        },
+
+        async viewMatchupWorkouts(){
+            this.$router.push({
+                name: "matchup-workouts",
+                link: "/matchupWorkouts",
+            });
         },
 
         async getMatchupWorkoutDetails() {

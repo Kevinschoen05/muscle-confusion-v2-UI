@@ -13,8 +13,9 @@
             <p class="mt-0 mb-3 text-700 line-height-3">{{ messageContent }}</p>
         </div>
         <div class="px-4 py-3 surface-100 text-right">
-            <Button v-if="messageRead === false && messageUpdated === false" icon="pi pi-check" iconPos="right"
-                label="Start Challenge " class="p-button-rounded p-button mr-2" @click="markRead()"></Button>
+            <Button v-if="messageAccepted === true" icon="pi pi-play" iconPos="right"
+                label="Start Challenge " class="p-button-rounded p-button-success mr-2"
+                @click="viewMatchupWorkouts()"></Button>
         </div>
     </div>
 </template>
@@ -45,9 +46,17 @@ export default {
 
     methods: {
 
+        async viewMatchupWorkouts() {
+            this.markRead()
+
+            this.$router.push({
+                name: "matchup-workouts",
+                link: "/matchupWorkouts",
+            });
+        },
 
         async markRead() {
-            let messageAccepted = false
+            let messageAccepted = true
             console.log("Message Read")
             await API.updateMessageByMessageID(this.messageID, messageAccepted)
 

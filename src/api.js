@@ -64,6 +64,13 @@ export default class API {
     return res.data;
   }
 
+  static async getMatchupWorkoutByID(matchupWorkoutID){
+    const res = await axios.get(
+      `${matchupWorkout_url}/id/${matchupWorkoutID}`
+    )
+    return res.data
+  }
+
   //USER DATA
 
   static async initializeUser(userID, userName) {
