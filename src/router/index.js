@@ -75,6 +75,16 @@ const routes = [
     component: () => import("../pages/ActiveWorkout.vue"),
   },
   {
+    path: "/matchupworkout/:matchupWorkoutID",
+    name: "matchup-workout",
+    component: () => import("../pages/MatchupWorkout.vue")
+  },
+  {
+    path: "/matchupworkouts",
+    name: "matchup-workouts",
+    component: () => import("../pages/MatchupWorkoutsHome.vue")
+  },
+  {
     path: "/stats",
     name: "stats-home",
     component: () => import("../pages/StatsHome.vue"),
