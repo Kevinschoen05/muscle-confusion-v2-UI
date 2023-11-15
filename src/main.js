@@ -48,6 +48,7 @@ import Knob  from 'primevue/knob';
 import Calendar from 'primevue/calendar';
 import Menu from 'primevue/menu'
 import TextArea from 'primevue/textarea';
+import Card from 'primevue/card'
 
 
 
@@ -95,5 +96,6 @@ app.component('Calendar', Calendar)
 app.component('TabMenu', TabMenu)
 app.component('Menu', Menu)
 app.component('TextArea', TextArea)
+app.component('Card', Card)
 
 app.mount('#app')

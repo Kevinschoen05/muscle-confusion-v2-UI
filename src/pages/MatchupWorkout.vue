@@ -1,3 +1,31 @@
 <template>
-    <H1>Test</H1>
+    <div class="flex ">
+        <Card class="w-5 p-0">
+            <template #title> Test Card </template>
+            <template #content>
+                <Card class="w-full">
+
+                </Card>
+            </template>
+        </Card>
+        <Card class="w-3">
+            <template #title> Test Card </template>
+            <template #content>
+            </template>
+        </Card>
+        <Card class="w-5">
+            <template #title> Test Card </template>
+            <template #content>
+            </template>
+        </Card>
+    </div>
 </template>
+
+<script>
+export default {
+    data() {
+        return {
+        };
+    },
+};
+</script>

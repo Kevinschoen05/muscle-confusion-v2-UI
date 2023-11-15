@@ -75,7 +75,7 @@ const routes = [
     component: () => import("../pages/ActiveWorkout.vue"),
   },
   {
-    path: "/matchupworkout/:matchupWorkoutID",
+    path: "/completedMatchupWorkout/:completedMatchupWorkoutID",
     name: "matchup-workout",
     component: () => import("../pages/MatchupWorkout.vue")
   },
