@@ -68,7 +68,20 @@ export default class API {
   }
 
   //COMPLETED MATCHUP WORKOUTS
-  static async getCompletedMatchupWorkoutByID(completedMatchupWorkoutID) {
+  static async getCompletedMatchupWorkouts(){
+    const res = await axios.get(`${completedMatchupWorkout_url}`)
+    return res.data
+  }
+  static async getCompletedMatchupWorkoutsByUserID(userIDs){
+    const userIDsArray = Array.isArray(userIDs) ? userIDs : [userIDs];
+    const userIDsString = userIDsArray.join(","); // Convert the array of userIDs to a comma-separated string
+    const res = await axios.get(
+      `${completedMatchupWorkout_url}/${userIDsString}`
+    );  
+      return res.data
+  }
+
+  static async getCompletedMatchupWorkoutbyID(completedMatchupWorkoutID){
     const res = await axios.get(
       `${completedMatchupWorkout_url}/id/${completedMatchupWorkoutID}`
     );

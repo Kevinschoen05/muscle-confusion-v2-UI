@@ -22,10 +22,24 @@
 </template>
 
 <script>
+import API from '../api'
 export default {
     data() {
         return {
+            matchupWorkout: {}
         };
     },
+    methods: {
+
+        //API Calls
+        async getCompletedMatchupWorkout(){
+            this.matchupWorkout = await API.getCompletedMatchupWorkoutbyID(this.$route.params.completedMatchupWorkoutID)
+            console.log(this.matchupWorkout)
+        }
+
+    },
+    mounted (){
+        this.getCompletedMatchupWorkout()
+    }
 };
 </script>
