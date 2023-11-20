@@ -1,10 +1,12 @@
 <template>
-<div></div>
+<div>
+</div>
 </template>
 
 <script>
 import API from '../api'
 export default {
+  
     data() {
         return {
             matchupWorkout: {},
