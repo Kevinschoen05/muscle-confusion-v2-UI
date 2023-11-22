@@ -5,7 +5,10 @@ const exercise_url =
 const workout_url = "https://muscle-confusion-server.onrender.com/api/workouts";
 const completedWorkout_url =
   "https://muscle-confusion-server.onrender.com/api/completedworkouts";
-const matchupWorkout_url = "https://muscle-confusion-server.onrender.com/api/matchupWorkouts"
+const matchupWorkout_url =
+  "https://muscle-confusion-server.onrender.com/api/matchupWorkouts";
+const completedMatchupWorkout_url =
+  "https://muscle-confusion-server.onrender.com/api/completedMatchupWorkouts";
 const user_url = "https://muscle-confusion-server.onrender.com/api/users";
 
 /*
@@ -59,16 +62,30 @@ export default class API {
 
   //Matchup workouts
 
-  static async createMatchupWorkout(matchupWorkout){
+  static async createMatchupWorkout(matchupWorkout) {
     const res = await axios.post(matchupWorkout_url, matchupWorkout);
     return res.data;
   }
 
-  static async getMatchupWorkoutByID(matchupWorkoutID){
-    const res = await axios.get(
-      `${matchupWorkout_url}/id/${matchupWorkoutID}`
-    )
+  //COMPLETED MATCHUP WORKOUTS
+  static async getCompletedMatchupWorkouts(){
+    const res = await axios.get(`${completedMatchupWorkout_url}`)
     return res.data
+  }
+  static async getCompletedMatchupWorkoutsByUserID(userIDs){
+    const userIDsArray = Array.isArray(userIDs) ? userIDs : [userIDs];
+    const userIDsString = userIDsArray.join(","); // Convert the array of userIDs to a comma-separated string
+    const res = await axios.get(
+      `${completedMatchupWorkout_url}/${userIDsString}`
+    );  
+      return res.data
+  }
+
+  static async getCompletedMatchupWorkoutbyID(completedMatchupWorkoutID){
+    const res = await axios.get(
+      `${completedMatchupWorkout_url}/id/${completedMatchupWorkoutID}`
+    );
+    return res.data;
   }
 
   //USER DATA
@@ -126,9 +143,9 @@ export default class API {
 
   static async updateUserFriends(userID, body) {
     const res = await axios.put(`${user_url}/friends/add/${userID}`, {
-      newFriends: body
-    })
-    return res.data
+      newFriends: body,
+    });
+    return res.data;
   }
 
   //MESSAGING
@@ -165,8 +182,8 @@ export default class API {
     return res.data;
   }
 
-  static async getExerciseByExerciseID(exerciseID){
-    const res = await axios.get(`${exercise_url}/id/${exerciseID}`)
-    return res.data
-  } 
+  static async getExerciseByExerciseID(exerciseID) {
+    const res = await axios.get(`${exercise_url}/id/${exerciseID}`);
+    return res.data;
+  }
 }
