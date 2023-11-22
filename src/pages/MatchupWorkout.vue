@@ -2,16 +2,24 @@
     <div class="flex p-grid w-full align-items-stretch">
         <div class="p-col w-full flex flex-column ">
             <div class="header card bg-gray-900 ">
-                <h3 class="m-0 p-2 pt-4 text-white">{{ senderUserName }}</h3>
+                <div class="flex align-content-center justify-content-center">
+                    <h3 class="m-0 p-2 pt-4 text-white">{{ senderUserName }}</h3><span clas="a">
+                        <Tag v-if="this.winner === 'sender'" value="Winner"></Tag>
+                    </span>
+                </div>
                 <h2 class=" text-white"> {{ senderWorkoutData.totalVolume }} lbs </h2>
-                <p class=" p-2 text-white">Completion Date: {{ senderWorkoutData.completionDate }}</p>
+                <p class=" p-2 text-white">Completion Date: {{ formattedSenderCompletionDate }}</p>
             </div>
             <div class=" results card w-full" v-for=" exercise in senderWorkoutData.exercises" :key="exercise.id">
-                <Panel toggleable collapsed="true">
+                <Panel toggleable collapsed>
                     <template #header>
-                        <div>
+                        <div class="panel-header">
                             <h4>{{ exercise.exerciseName }}</h4>
-                            <p class="font-bold m-0">{{ totalWeight(exercise.sets) }} lbs</p>
+                            <span class="font-bold m-0">{{ totalWeight(exercise.sets) }} lbs</span>
+                            <span class="text-green-500 font-medium"
+                                v-if="getWinnerAndDifference(exercise.id).winner === 'sender'">
+                                +{{ getWinnerAndDifference(exercise.id).difference }} lbs
+                            </span>
                         </div>
                     </template>
                     <ul class="p-0 m-0">
@@ -28,16 +36,24 @@
         </div>
         <div class=" p-col w-full flex flex-column">
             <div class="header card bg-gray-900">
-                <h3 class="m-0 p-2 pt-4 text-white">{{ receiverUserName }}</h3>
+                <div class="flex align-content-center justify-content-center">
+                    <h3 class="m-0 p-2 pt-4 text-white">{{ receiverUserName }}</h3><span clas="a">
+                        <Tag v-if="this.winner === 'receiver'" value="Winner"></Tag>
+                    </span>
+                </div>
                 <h2 class=" text-white"> {{ receiverWorkoutData.totalVolume }} lbs </h2>
-                <p class=" p-2 text-white">Completion Date: {{ receiverWorkoutData.completionDate }}</p>
+                <p class=" p-2 text-white">Completion Date: {{ formattedReceiverCompletionDate }}</p>
             </div>
             <div class=" results card w-full " v-for=" exercise in receiverWorkoutData.exercises" :key="exercise.id">
-                <Panel toggleable collapsed="true">
+                <Panel toggleable collapsed>
                     <template #header>
-                        <div>
+                        <div class="panel-header">
                             <h4>{{ exercise.exerciseName }}</h4>
-                            <p class="font-bold m-0">{{ totalWeight(exercise.sets) }} lbs</p>
+                            <span class="font-bold m-0">{{ totalWeight(exercise.sets) }} lbs</span>
+                            <span class="text-green-500 font-medium"
+                                v-if="getWinnerAndDifference(exercise.id).winner === 'receiver'">
+                                +{{ getWinnerAndDifference(exercise.id).difference }} lbs
+                            </span>
                         </div>
                     </template>
                     <ul class="p-0 m-0">
@@ -52,6 +68,8 @@
 
 <script>
 import API from '../api'
+import dayjs from "dayjs";
+
 export default {
 
     data() {
@@ -64,15 +82,42 @@ export default {
             senderWorkoutData: [],
             receiverUserID: '',
             receiverUserName: '',
-            receiverWorkoutData: []
+            receiverWorkoutData: [],
+            winner: ''
 
         };
+    },
+
+    computed: {
+        formattedSenderCompletionDate() {
+            return dayjs(this.senderWorkoutData.completionDate).format('MMMM D, YYYY');
+        },
+        formattedReceiverCompletionDate() {
+            return dayjs(this.receiverWorkoutData.completionDate).format('MMMM D, YYYY');
+        }
     },
     methods: {
 
         totalWeight(sets) {
             return sets.reduce((total, set) => total + (set.actual_weight * set.actual_reps), 0);
         },
+
+        getWinnerAndDifference(exerciseId) {
+            const senderExercise = this.senderWorkoutData.exercises.find(e => e.id === exerciseId);
+            const receiverExercise = this.receiverWorkoutData.exercises.find(e => e.id === exerciseId);
+
+            const senderTotal = this.totalWeight(senderExercise.sets);
+            const receiverTotal = this.totalWeight(receiverExercise.sets);
+
+            if (senderTotal > receiverTotal) {
+                return { winner: 'sender', difference: senderTotal - receiverTotal };
+            } else if (receiverTotal > senderTotal) {
+                return { winner: 'receiver', difference: receiverTotal - senderTotal };
+            } else {
+                return { winner: 'tie', difference: 0 };
+            }
+        },
+
 
         //API Calls
         async getCompletedMatchupWorkout() {
@@ -103,6 +148,13 @@ export default {
             this.receiverWorkoutData = this.matchupWorkout[0].userWorkoutData[1]
             console.log(this.receiverWorkoutData)
 
+            if (this.senderWorkoutData.totalVolume > this.receiverWorkoutData.totalVolume) {
+                this.winner = 'sender'
+            }
+            else {
+                this.winner = 'receiver'
+            }
+
         },
     },
     mounted() {
@@ -125,5 +177,9 @@ export default {
     border-width: 2px;
 }
 
-.results {}
+@media only screen and (max-width: 600px) {
+    .panel-header {
+        height: 150px
+    }
+}
 </style>
