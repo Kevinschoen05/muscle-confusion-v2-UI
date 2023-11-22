@@ -32,6 +32,7 @@
         <div class="card p-col w-full flex flex-column " style="min-width: 50px; max-width: 150px;">
             <!-- Middle Column, Narrower -->
             <div class="header card bg-gray-900">
+                <h5 class="text-white wrap">{{ workoutTitle }}</h5>
             </div>
         </div>
         <div class=" p-col w-full flex flex-column">
@@ -77,6 +78,7 @@ export default {
             headerTopPosition: 0,
 
             matchupWorkout: {},
+            workoutTitle: '',
             senderUserID: '',
             senderUserName: '',
             senderWorkoutData: [],
@@ -123,6 +125,7 @@ export default {
         async getCompletedMatchupWorkout() {
             this.matchupWorkout = await API.getCompletedMatchupWorkoutbyID(this.$route.params.completedMatchupWorkoutID)
             console.log(this.matchupWorkout)
+            this.workoutTitle = this.matchupWorkout[0].workoutTitle
             this.getUserData()
         },
         async getUserData() {
