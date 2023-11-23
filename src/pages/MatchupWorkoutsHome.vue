@@ -29,6 +29,12 @@
                             <Menu ref="menu2" id="overlay_menu" :popup="true"></Menu>
                         </div>
                     </div>
+                    <ul>
+                        <li class="list-none mt-2" v-for="workout in userMatchupWorkouts" :key="workout._id">
+                            {{ workout.workoutTitle }}
+                            <Button @click="startMatchupWorkout(workout.workoutID)">Complete Matchup</Button>
+                        </li>
+                    </ul>
                 </div>
             </div>
             <div class="col-12 lg:col-4">
@@ -59,6 +65,14 @@ export default {
     },
 
     methods: {
+
+        startMatchupWorkout(workoutID) {
+            this.$router.push({
+                name: "active-workout",
+                params: { workoutID: workoutID },
+                query: { matchup: 'true' }
+            });
+        },
 
 
         //API CALLS
