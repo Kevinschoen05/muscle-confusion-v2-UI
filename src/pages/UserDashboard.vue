@@ -77,7 +77,7 @@
                     <img src="../assets/trophy.png" alt="Image" class="mx-auto block mb-4  h-3 w-3">
                     <div class="text-900 font-medium mb-3 text-xl">Compete With Friends</div>
                     <p class="mt-0 mb-4 p-0 line-height-3">View your head to head results</p>
-                    <Button label="View Matchups" icon="pi pi-arrow-right p-button-rounded" @click="debug()"></Button>
+                    <Button label="View Matchups" icon="pi pi-arrow-right p-button-rounded" @click="viewMatchups()"></Button>
                 </div>
             </div>
         </div>
@@ -224,6 +224,13 @@ export default {
             this.$router.push({
                 name: "stats-home",
                 link: "/stats",
+            });
+        },
+
+        viewMatchups() {
+            this.$router.push({
+                name: "matchup-workouts",
+                link: "/matchupworkouts",
             });
         },
 
