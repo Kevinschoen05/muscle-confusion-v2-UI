@@ -67,6 +67,15 @@ export default class API {
     return res.data;
   }
 
+  static async getMatchupWorkoutsByUserID(userIDs) {
+    const userIDsArray = Array.isArray(userIDs) ? userIDs : [userIDs];
+    const userIDsString = userIDsArray.join(","); // Convert the array of userIDs to a comma-separated string
+    const res = await axios.get(
+      `${matchupWorkout_url}/${userIDsString}`
+    );  
+      return res.data
+  }
+
   //COMPLETED MATCHUP WORKOUTS
   static async getCompletedMatchupWorkouts(){
     const res = await axios.get(`${completedMatchupWorkout_url}`)

@@ -47,3 +47,28 @@
         </div>
     </div>
 </template>
+
+<script>
+import API from '../api'
+export default {
+
+    data() {
+        return {
+            userMatchupWorkouts: {}
+        };
+    },
+
+    methods: {
+
+
+        //API CALLS
+        async getUserMatchupWorkouts() {
+            this.userMatchupWorkouts = await API.getMatchupWorkoutsByUserID(this.$store.state.user.uid)
+            console.log(this.userMatchupWorkouts)
+        }
+    },
+    mounted() {
+        this.getUserMatchupWorkouts()
+    }
+}
+</script>
