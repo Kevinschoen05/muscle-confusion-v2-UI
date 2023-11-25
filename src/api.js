@@ -76,6 +76,23 @@ export default class API {
       return res.data
   }
 
+  static async updateMatchupWorkout(matchupWorkoutID, userID, totalVolume, completionDate, workoutDuration){
+    
+    const requestBody = {
+      userID: userID,
+      matchupWorkoutID: matchupWorkoutID,
+      totalVolume: totalVolume,
+      completionDate: completionDate,
+      workoutDuration: workoutDuration
+    };
+    const res = await axios.put(
+      `${matchupWorkout_url}/update/${matchupWorkoutID}`, 
+      requestBody
+    );
+
+    return res.data;
+  }
+
   //COMPLETED MATCHUP WORKOUTS
   static async getCompletedMatchupWorkouts(){
     const res = await axios.get(`${completedMatchupWorkout_url}`)

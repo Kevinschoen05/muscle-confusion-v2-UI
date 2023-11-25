@@ -28,7 +28,7 @@
 
             <div class=" mb-3 flex flex-column flex-auto align-items-center">
 
-                <Button v-if=!visible1 icon="pi pi-plus" class="mb-6" @click="visible3 = true"></Button>
+                <Button v-if="!visible1 && !this.$route.query.matchup" icon="pi pi-plus" class="mb-6" @click="visible3 = true"></Button>
                 <Button v-if=!visible1 label="Complete Workout" class=" flex align-items-center"
                     @click="visible2 = true, this.calculateTotalVolume(), stopTimer()"></Button>
             </div>
@@ -38,8 +38,12 @@
         </Dialog>
         <Dialog v-model:visible="visible2" appendTo="body" :modal="true">
             <div class="p-4">
-                <div class="text-900 font-medium mb-3 text-xl">Workout summary</div>
-                <p class="mt-0 mb-4 p-0 line-height-3">Review all your completed workouts from your Dashboard</p>
+                <div v-if="!this.$route.query.matchup" class="text-900 font-medium mb-3 text-xl">Workout summary</div>
+                <div v-else class="text-900 font-medium mb-3 text-xl">Matchup Workout summary</div>
+
+                <p v-if="!this.$route.query.matchup" class="mt-0 mb-4 p-0 line-height-3">Review all your completed workouts from your Dashboard</p>
+                <p v-else class="mt-0 mb-4 p-0 line-height-3">Check your Matchup results from the Matchup Dashboard</p>
+
                 <div class="flex mb-4 flex-column lg:flex-row">
                     <div class="surface-50 p-3 flex-auto mx-0 my-3 lg:my-0 lg:mx-3">
                         <div class="text-600 mb-3">Total Volume</div>
@@ -74,9 +78,13 @@
                     </div>
 
                 </div>
-                <Button class="w-full mt-4" icon="pi pi-check" label="Save Workout"
+                <Button v-if="!this.$route.query.matchup" class="w-full mt-4" icon="pi pi-check" label="Save Workout"
                     @click="saveCompletedWorkout(), visible2 = false"></Button>
-                <Button class=" w-full mt-4" icon="pi pi-send" label="Save & Share Results"
+
+                    <Button v-else class="w-full mt-4" icon="pi pi-check" label="Complete Matchup Workout"
+                    @click="updateMatchupWorkout(), visible2 = false"></Button>
+                
+                <Button v-if="!this.$route.query.matchup" class=" w-full mt-4" icon="pi pi-send" label="Save & Share Results"
                     @click="getUserFriends(), visible2 = false, visible4 = true, shareWorkout = true"></Button>
             </div>
         </Dialog>
@@ -107,6 +115,7 @@
 
 <script>
 import API from '../api'
+import dayjs from 'dayjs'
 import ExerciseCard from '../components/ExerciseCard.vue'
 import ActiveWorkoutSummary from '../components/ActiveWorkoutSummary.vue'
 import ActiveWorkoutExerciseAdd from '../components/ActiveWorkoutExerciseAdd.vue'
@@ -314,6 +323,24 @@ export default {
                 console.log(this.completedWorkoutID)
             }
 
+        },
+
+        async updateMatchupWorkout() {
+            let completionDate = dayjs().format();
+            let workoutDuration = this.formattedElapsedTime
+
+            console.log('matchupWorkoutID' + ' ' + this.$route.query.matchupWorkoutID)
+            console.log('userID' + ' ' + this.$store.state.user.uid)
+            console.log('totalVolume' + ' ' + this.totalVolume)
+            console.log('completionDate' + ' ' + completionDate)
+            console.log('workoutDuration' + ' ' + workoutDuration)
+
+            await API.updateMatchupWorkout(this.$route.query.matchupWorkoutID, this.$store.state.user.uid, this.totalVolume, completionDate , workoutDuration)
+
+            this.$router.push({
+                    name: "matchup-workouts",
+                    link: "/matchupWorkouts",
+                });
         },
 
         async getUserFriends() {
