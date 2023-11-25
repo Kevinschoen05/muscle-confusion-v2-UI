@@ -32,7 +32,7 @@
                     <ul>
                         <li class="list-none mt-2" v-for="workout in userMatchupWorkouts" :key="workout._id">
                             {{ workout.workoutTitle }}
-                            <Button @click="startMatchupWorkout(workout.workoutID)">Complete Matchup</Button>
+                            <Button @click="startMatchupWorkout(workout.workoutID, workout._id)">Complete Matchup</Button>
                         </li>
                     </ul>
                 </div>
@@ -66,11 +66,11 @@ export default {
 
     methods: {
 
-        startMatchupWorkout(workoutID) {
+        startMatchupWorkout(workoutID, matchupWorkoutID) {
             this.$router.push({
                 name: "active-workout",
                 params: { workoutID: workoutID },
-                query: { matchup: 'true' }
+                query: { matchup: 'true', matchupWorkoutID: matchupWorkoutID }
             });
         },
 
