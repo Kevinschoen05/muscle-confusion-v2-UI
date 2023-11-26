@@ -28,7 +28,8 @@
 
             <div class=" mb-3 flex flex-column flex-auto align-items-center">
 
-                <Button v-if="!visible1 && !this.$route.query.matchup" icon="pi pi-plus" class="mb-6" @click="visible3 = true"></Button>
+                <Button v-if="!visible1 && !this.$route.query.matchup" icon="pi pi-plus" class="mb-6"
+                    @click="visible3 = true"></Button>
                 <Button v-if=!visible1 label="Complete Workout" class=" flex align-items-center"
                     @click="visible2 = true, this.calculateTotalVolume(), stopTimer()"></Button>
             </div>
@@ -41,7 +42,8 @@
                 <div v-if="!this.$route.query.matchup" class="text-900 font-medium mb-3 text-xl">Workout summary</div>
                 <div v-else class="text-900 font-medium mb-3 text-xl">Matchup Workout summary</div>
 
-                <p v-if="!this.$route.query.matchup" class="mt-0 mb-4 p-0 line-height-3">Review all your completed workouts from your Dashboard</p>
+                <p v-if="!this.$route.query.matchup" class="mt-0 mb-4 p-0 line-height-3">Review all your completed workouts
+                    from your Dashboard</p>
                 <p v-else class="mt-0 mb-4 p-0 line-height-3">Check your Matchup results from the Matchup Dashboard</p>
 
                 <div class="flex mb-4 flex-column lg:flex-row">
@@ -81,10 +83,11 @@
                 <Button v-if="!this.$route.query.matchup" class="w-full mt-4" icon="pi pi-check" label="Save Workout"
                     @click="saveCompletedWorkout(), visible2 = false"></Button>
 
-                    <Button v-else class="w-full mt-4" icon="pi pi-check" label="Complete Matchup Workout"
+                <Button v-else class="w-full mt-4" icon="pi pi-check" label="Complete Matchup Workout"
                     @click="updateMatchupWorkout(), visible2 = false"></Button>
-                
-                <Button v-if="!this.$route.query.matchup" class=" w-full mt-4" icon="pi pi-send" label="Save & Share Results"
+
+                <Button v-if="!this.$route.query.matchup" class=" w-full mt-4" icon="pi pi-send"
+                    label="Save & Share Results"
                     @click="getUserFriends(), visible2 = false, visible4 = true, shareWorkout = true"></Button>
             </div>
         </Dialog>
@@ -327,20 +330,86 @@ export default {
 
         async updateMatchupWorkout() {
             let completionDate = dayjs().format();
-            let workoutDuration = this.formattedElapsedTime
+            let workoutDuration = this.formattedElapsedTime;
 
-            console.log('matchupWorkoutID' + ' ' + this.$route.query.matchupWorkoutID)
-            console.log('userID' + ' ' + this.$store.state.user.uid)
-            console.log('totalVolume' + ' ' + this.totalVolume)
-            console.log('completionDate' + ' ' + completionDate)
-            console.log('workoutDuration' + ' ' + workoutDuration)
+            // Fetch the current matchupWorkout data
+            let matchupWorkout = await API.getMatchupWorkoutByMatchupWorkoutID(this.$route.query.matchupWorkoutID);
 
-            await API.updateMatchupWorkout(this.$route.query.matchupWorkoutID, this.$store.state.user.uid, this.totalVolume, completionDate , workoutDuration)
+            // Find the userWorkout that matches the current user
+            const userWorkout = matchupWorkout[0].userWorkoutData.find(workout => workout.userID === this.$store.state.user.uid);
 
-            this.$router.push({
+            if (userWorkout) {
+                // Merge completedExercises with the existing exercises in the userWorkout
+                const updatedExercises = userWorkout.exercises.map(exercise => {
+                    const completedExercise = this.completedExercises.find(ce => ce.id === exercise.id);
+                    return completedExercise || exercise;
+                });
+
+                // Update the exercises in the userWorkout with the merged data
+                userWorkout.exercises = updatedExercises;
+
+                // Include this updated userWorkout in the API call
+                await API.updateMatchupWorkout(
+                    this.$route.query.matchupWorkoutID,
+                    this.$store.state.user.uid,
+                    this.totalVolume,
+                    completionDate,
+                    workoutDuration,
+                    userWorkout.exercises
+                );
+
+                await this.completeMatchupWorkout();
+
+                await this.$router.push({
                     name: "matchup-workouts",
                     link: "/matchupWorkouts",
                 });
+            } else {
+                console.log("No workout data found for the current user.");
+            }
+        },
+
+        async completeMatchupWorkout() {
+            let matchupWorkout = await API.getMatchupWorkoutByMatchupWorkoutID(this.$route.query.matchupWorkoutID);
+            console.log("Original matchupWorkout:", matchupWorkout);
+
+            // Iterate through each object in the userWorkoutData array
+            for (let workout of matchupWorkout[0].userWorkoutData) {
+                // Check if the completionDate is not populated
+                if (!workout.completionDate || workout.completionDate.trim() === "") {
+                    console.log("One or more workouts lack a completion date. Exiting function.");
+                    return; // Exit the function early
+                }
+            }
+            console.log("All workouts have a completion date. Executing additional logic.");
+
+            // Additional logic to update exercises array for the matching user
+            const currentUserUID = this.$store.state.user.uid;
+            let userWorkout = matchupWorkout[0].userWorkoutData.find(workout => workout.userID === currentUserUID);
+
+            if (userWorkout) {
+                // Update only the exercises that are present in the completedExercises array
+                userWorkout.exercises.forEach((exercise, index, exercises) => {
+                    let completedExercise = this.completedExercises.find(ce => ce.id === exercise.id);
+                    if (completedExercise) {
+                        exercises[index] = completedExercise;
+                    }
+                    // If no matching exercise is found in completedExercises, the original exercise remains unchanged
+                });
+                console.log("Exercises updated for the current user.");
+            } else {
+                console.log("No workout data found for the current user.");
+            }
+
+            // Log the final state of the matchupWorkout object
+            console.log("Final matchupWorkout:", matchupWorkout);
+
+            try {
+                const saveResponse = await API.createCompletedMatchupWorkout(matchupWorkout);
+                console.log("Matchup Workout saved successfully:", saveResponse);
+            } catch (error) {
+                console.error("Error saving the matchup workout:", error);
+            }
         },
 
         async getUserFriends() {
@@ -397,11 +466,7 @@ export default {
 
         },
 
-        debug() {
-            console.log(this.activeWorkout[0])
-            console.log(this.currentUserName)
-            console.log(this.activeWorkout[0].users)
-        }
+
     },
     mounted() {
         if (this.$route.params.workoutID) {

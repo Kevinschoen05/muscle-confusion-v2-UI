@@ -76,14 +76,20 @@ export default class API {
       return res.data
   }
 
-  static async updateMatchupWorkout(matchupWorkoutID, userID, totalVolume, completionDate, workoutDuration){
+  static async getMatchupWorkoutByMatchupWorkoutID(matchupWorkoutID){
+    const res = await axios.get(`${matchupWorkout_url}/id/${matchupWorkoutID}`)
+    return res.data
+  }
+
+  static async updateMatchupWorkout(matchupWorkoutID, userID, totalVolume, completionDate, workoutDuration, completedExercises){
     
     const requestBody = {
       userID: userID,
       matchupWorkoutID: matchupWorkoutID,
       totalVolume: totalVolume,
       completionDate: completionDate,
-      workoutDuration: workoutDuration
+      workoutDuration: workoutDuration,
+      completedExercises: completedExercises
     };
     const res = await axios.put(
       `${matchupWorkout_url}/update/${matchupWorkoutID}`, 
@@ -112,6 +118,15 @@ export default class API {
       `${completedMatchupWorkout_url}/id/${completedMatchupWorkoutID}`
     );
     return res.data;
+  }
+
+  static async createCompletedMatchupWorkout(workout){
+    const requestBody = workout
+
+    const res = await axios.post(`${completedMatchupWorkout_url}`, requestBody 
+    )
+
+    return res.data
   }
 
   //USER DATA
