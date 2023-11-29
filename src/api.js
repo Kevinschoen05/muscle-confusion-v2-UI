@@ -67,32 +67,42 @@ export default class API {
     return res.data;
   }
 
-  static async getMatchupWorkoutsByUserID(userIDs) {
+  static async getMatchupWorkoutsByUserID(userIDs, pendingUserWorkout = false) {
     const userIDsArray = Array.isArray(userIDs) ? userIDs : [userIDs];
     const userIDsString = userIDsArray.join(","); // Convert the array of userIDs to a comma-separated string
-    const res = await axios.get(
-      `${matchupWorkout_url}/${userIDsString}`
-    );  
-      return res.data
+
+    // Construct the URL with the userIDs as path parameter and pendingUserWorkout as query parameter
+    const url = `${matchupWorkout_url}/${encodeURIComponent(
+      userIDsString
+    )}?pendingUserWorkout=${pendingUserWorkout}`;
+
+    const res = await axios.get(url);
+    return res.data;
   }
 
-  static async getMatchupWorkoutByMatchupWorkoutID(matchupWorkoutID){
-    const res = await axios.get(`${matchupWorkout_url}/id/${matchupWorkoutID}`)
-    return res.data
+  static async getMatchupWorkoutByMatchupWorkoutID(matchupWorkoutID) {
+    const res = await axios.get(`${matchupWorkout_url}/id/${matchupWorkoutID}`);
+    return res.data;
   }
 
-  static async updateMatchupWorkout(matchupWorkoutID, userID, totalVolume, completionDate, workoutDuration, completedExercises){
-    
+  static async updateMatchupWorkout(
+    matchupWorkoutID,
+    userID,
+    totalVolume,
+    completionDate,
+    workoutDuration,
+    completedExercises
+  ) {
     const requestBody = {
       userID: userID,
       matchupWorkoutID: matchupWorkoutID,
       totalVolume: totalVolume,
       completionDate: completionDate,
       workoutDuration: workoutDuration,
-      completedExercises: completedExercises
+      completedExercises: completedExercises,
     };
     const res = await axios.put(
-      `${matchupWorkout_url}/update/${matchupWorkoutID}`, 
+      `${matchupWorkout_url}/update/${matchupWorkoutID}`,
       requestBody
     );
 
@@ -100,33 +110,32 @@ export default class API {
   }
 
   //COMPLETED MATCHUP WORKOUTS
-  static async getCompletedMatchupWorkouts(){
-    const res = await axios.get(`${completedMatchupWorkout_url}`)
-    return res.data
+  static async getCompletedMatchupWorkouts() {
+    const res = await axios.get(`${completedMatchupWorkout_url}`);
+    return res.data;
   }
-  static async getCompletedMatchupWorkoutsByUserID(userIDs){
+  static async getCompletedMatchupWorkoutsByUserID(userIDs) {
     const userIDsArray = Array.isArray(userIDs) ? userIDs : [userIDs];
     const userIDsString = userIDsArray.join(","); // Convert the array of userIDs to a comma-separated string
     const res = await axios.get(
       `${completedMatchupWorkout_url}/${userIDsString}`
-    );  
-      return res.data
+    );
+    return res.data;
   }
 
-  static async getCompletedMatchupWorkoutbyID(completedMatchupWorkoutID){
+  static async getCompletedMatchupWorkoutbyID(completedMatchupWorkoutID) {
     const res = await axios.get(
       `${completedMatchupWorkout_url}/id/${completedMatchupWorkoutID}`
     );
     return res.data;
   }
 
-  static async createCompletedMatchupWorkout(workout){
-    const requestBody = workout
+  static async createCompletedMatchupWorkout(workout) {
+    const requestBody = workout;
 
-    const res = await axios.post(`${completedMatchupWorkout_url}`, requestBody 
-    )
+    const res = await axios.post(`${completedMatchupWorkout_url}`, requestBody);
 
-    return res.data
+    return res.data;
   }
 
   //USER DATA

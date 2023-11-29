@@ -12,7 +12,7 @@
             <div class="col-12 lg:col-6">
                 <div class="surface-card shadow-2 border-round h-30rem p-4 overflow-auto">
                     <div class="flex align-items-center justify-content-between mb-3">
-                        <div class="text-900 font-medium text-xl">Recent Activity</div>
+                        <div class="text-900 font-medium text-xl">Completed Matchups</div>
                         <div>
                             <Button icon="pi pi-ellipsis-v" class="p-button-text p-button-plain p-button-rounded"></Button>
                             <Menu ref="menu1" id="overlay_menu" :popup="true"></Menu>
@@ -29,10 +29,51 @@
                             <Menu ref="menu2" id="overlay_menu" :popup="true"></Menu>
                         </div>
                     </div>
-                    <ul>
-                        <li class="list-none mt-2" v-for="workout in userMatchupWorkouts" :key="workout._id">
-                            {{ workout.workoutTitle }}
-                            <Button @click="startMatchupWorkout(workout.workoutID, workout._id)">Complete Matchup</Button>
+                    <ul class="p-0">
+                        <li class="py-3 border-bottom-1 surface-border flex md:align-items-start md:justify-content-between flex-column md:flex-row"
+                            v-for="workout in userMatchupWorkouts" :key="workout._id">
+                            <div class="flex align-items-start">
+                                <div>
+                                    <span class="text-900 font-bold block mb-2">{{ workout.workoutTitle }}</span>
+                                    <div
+                                        class="flex md:align-items-stretch md:justify-content-between flex-column md:flex-row">
+                                        <div class="surface-card shadow-2 p-3 border-1 border-50 border-round">
+                                            <div class="flex justify-content-between mb-3">
+                                                <div>
+                                                    <span class="block text-500 font-medium mb-3">{{
+                                                        workout.userWorkoutData[0].userName }}</span>
+                                                    <div class="text-900 font-medium text-xl">{{
+                                                        workout.userWorkoutData[0].totalVolume }} lbs</div>
+                                                </div>
+                                            </div>
+                                            <Button v-if="workout.userWorkoutData[0].userID === this.$store.state.user.uid"
+                                                class="flex align-self-center p-button-success m-2"
+                                                @click="startMatchupWorkout(workout.workoutID, workout._id)"> Complete
+                                                Workout</Button>
+                                        </div>
+                                        <span class="flex align-self-center text-900 font-bold block p-4">VS.</span>
+                                        <div class="surface-card shadow-2 p-3 border-1 border-50 border-round">
+                                            <div class="flex justify-content-between mb-3">
+                                                <div>
+                                                    <span class="block text-500 font-medium mb-3">
+                                                        {{ workout.userWorkoutData[1].userName }}</span>
+                                                    <div class="text-900 font-medium text-xl">{{
+                                                        workout.userWorkoutData[1].totalVolume }} lbs</div>
+                                                </div>
+                                            </div>
+                                            <Button v-if="workout.userWorkoutData[1].userID === this.$store.state.user.uid"
+                                                class="flex align-self-center p-button-success m-2"
+                                                @click="startMatchupWorkout(workout.workoutID, workout._id)"> Complete
+                                                Workout</Button>
+                                            <div v-else>
+                                                <span v-if="workout.userWorkoutData[1].completionDate" class="text-500">Completed: {{
+                                                    formatDate(workout.userWorkoutData[1].completionDate) }}</span>
+                                                <span v-else class="text-500"> Not Completed</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </li>
                     </ul>
                 </div>
@@ -56,15 +97,24 @@
 
 <script>
 import API from '../api'
+import dayjs from 'dayjs';
+import localizedFormat from "dayjs/plugin/localizedFormat"
+
+dayjs.extend(localizedFormat)
+
 export default {
 
     data() {
         return {
-            userMatchupWorkouts: {}
+            userMatchupWorkouts: [],
         };
     },
 
     methods: {
+
+        formatDate(date) {
+            return dayjs(date).format('LL');
+        },
 
         startMatchupWorkout(workoutID, matchupWorkoutID) {
             this.$router.push({
@@ -77,12 +127,36 @@ export default {
 
         //API CALLS
         async getUserMatchupWorkouts() {
-            this.userMatchupWorkouts = await API.getMatchupWorkoutsByUserID(this.$store.state.user.uid)
-            console.log(this.userMatchupWorkouts)
-        }
+            // Fetch the initial data
+            let workouts = await API.getMatchupWorkoutsByUserID(this.$store.state.user.uid, true);
+
+            // Function to fetch user names and augment the workout data
+            const augmentWorkoutDataWithUserNames = async (workout) => {
+                // Fetch user names for each userWorkoutData in parallel
+                const augmentedUserWorkoutData = await Promise.all(workout.userWorkoutData.map(async (userData) => {
+                    const userName = await this.getUserNames(userData.userID);
+                    return { ...userData, userName }; // Augment the userData with userName
+                }));
+
+                return { ...workout, userWorkoutData: augmentedUserWorkoutData };
+            };
+
+            // Augment each workout in the workouts array
+            this.userMatchupWorkouts = await Promise.all(workouts.map(augmentWorkoutDataWithUserNames));
+
+            console.log(this.userMatchupWorkouts);
+        },
+
+        async getUserNames(userID) {
+            let UserInfo = await API.getUserFriends(userID)
+            let userName = UserInfo[0].userName
+            return userName
+        },
+
     },
     mounted() {
         this.getUserMatchupWorkouts()
+        console.log(this.userMatchupWorkouts)
     }
 }
 </script>
