@@ -29,10 +29,10 @@
                             <Menu ref="menu2" id="overlay_menu" :popup="true"></Menu>
                         </div>
                     </div>
-                    <ul>
+                    <ul class="p-0">
                         <li class="py-3 border-bottom-1 surface-border flex md:align-items-start md:justify-content-between flex-column md:flex-row"
                             v-for="workout in userMatchupWorkouts" :key="workout._id">
-                            <div class="flex align-items-start mr-0 lg:mr-5">
+                            <div class="flex align-items-start">
                                 <div>
                                     <span class="text-900 font-bold block mb-2">{{ workout.workoutTitle }}</span>
                                     <div
@@ -46,12 +46,10 @@
                                                         workout.userWorkoutData[0].totalVolume }} lbs</div>
                                                 </div>
                                             </div>
-                                            <span class="text-green-500 font-medium"> 24 new </span>
-                                            <span class="text-500">since last visit</span>
-
-                                            <Button v-if="workout.userWorkoutData[0].userID  === this.$store.state.user.uid"
+                                            <Button v-if="workout.userWorkoutData[0].userID === this.$store.state.user.uid"
                                                 class="flex align-self-center p-button-success m-2"
-                                                @click="startMatchupWorkout(workout.workoutID, workout._id)"> Complete Workout</Button>
+                                                @click="startMatchupWorkout(workout.workoutID, workout._id)"> Complete
+                                                Workout</Button>
                                         </div>
                                         <span class="flex align-self-center text-900 font-bold block p-4">VS.</span>
                                         <div class="surface-card shadow-2 p-3 border-1 border-50 border-round">
@@ -63,12 +61,15 @@
                                                         workout.userWorkoutData[1].totalVolume }} lbs</div>
                                                 </div>
                                             </div>
-                                            <span class="text-green-500 font-medium">24 new </span>
-                                            <span class="text-500">since last visit</span>
-
                                             <Button v-if="workout.userWorkoutData[1].userID === this.$store.state.user.uid"
                                                 class="flex align-self-center p-button-success m-2"
-                                                @click="startMatchupWorkout(workout.workoutID, workout._id)"> Complete Workout</Button>
+                                                @click="startMatchupWorkout(workout.workoutID, workout._id)"> Complete
+                                                Workout</Button>
+                                            <div v-else>
+                                                <span v-if="workout.userWorkoutData[1].completionDate" class="text-500">Completed: {{
+                                                    formatDate(workout.userWorkoutData[1].completionDate) }}</span>
+                                                <span v-else class="text-500"> Not Completed</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -96,6 +97,11 @@
 
 <script>
 import API from '../api'
+import dayjs from 'dayjs';
+import localizedFormat from "dayjs/plugin/localizedFormat"
+
+dayjs.extend(localizedFormat)
+
 export default {
 
     data() {
@@ -105,6 +111,10 @@ export default {
     },
 
     methods: {
+
+        formatDate(date) {
+            return dayjs(date).format('LL');
+        },
 
         startMatchupWorkout(workoutID, matchupWorkoutID) {
             this.$router.push({
