@@ -15,16 +15,22 @@ export default {
     data() {
         return {
             userData: '',
-            items: [{
+            items: [
+            {
                 label: 'Biometrics',
                 icon: 'fa-solid fa-address-card',
-                to: '/profile/biometrics'
+                command: () => {
+                    this.$router.push('/profile/biometrics');
+                }
             },
             {
                 label: 'Friends',
                 icon: 'fa-solid fa-user-group',
-                to: '/profile/friends'
-            }]
+                command: () => {
+                    this.$router.push('/profile/friends');
+                }
+            }
+        ]
         }
     },
     methods: {
