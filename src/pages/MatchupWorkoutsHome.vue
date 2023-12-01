@@ -107,6 +107,7 @@ export default {
     data() {
         return {
             userMatchupWorkouts: [],
+            userCompletedMatchupWorkouts: []
         };
     },
 
@@ -144,7 +145,12 @@ export default {
             // Augment each workout in the workouts array
             this.userMatchupWorkouts = await Promise.all(workouts.map(augmentWorkoutDataWithUserNames));
 
-            console.log(this.userMatchupWorkouts);
+            console.log( "Active Workouts: " + this.userMatchupWorkouts);
+        },
+
+        async getUserCompletedMatchupWorkouts(){
+            this.userCompletedMatchupWorkouts = await API.getCompletedMatchupWorkoutsByUserID(this.$store.state.user.uid)
+            console.log("Completed Workouts: " + this.userCompletedMatchupWorkouts)
         },
 
         async getUserNames(userID) {
@@ -156,7 +162,7 @@ export default {
     },
     mounted() {
         this.getUserMatchupWorkouts()
-        console.log(this.userMatchupWorkouts)
+        this,this.getUserCompletedMatchupWorkouts()
     }
 }
 </script>
