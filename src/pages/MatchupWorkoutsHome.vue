@@ -18,6 +18,20 @@
                             <Menu ref="menu1" id="overlay_menu" :popup="true"></Menu>
                         </div>
                     </div>
+                    <ul class="p-0">
+                        <li class="py-3 border-bottom-1 surface-border flex flex-column"
+                            v-for="workout in workoutsWithWinners" :key="workout._id">
+                            <span class="text-900 font-bold block mb-2">
+                                {{ workout.workoutTitle }}
+                            </span>
+                            <div v-if="!workout.isTie">
+                                <p>Winner: {{ workout.winner }}</p>
+                                <p>Loser: {{ workout.loser }}</p>
+                                <Button @click="viewCompletedMatchupResults(workout._id)">See Detailed Results</Button>
+                            </div>
+                            <p v-else>Tie</p>
+                        </li>
+                    </ul>
                 </div>
             </div>
             <div class="col-12 lg:col-6">
@@ -66,8 +80,9 @@
                                                 @click="startMatchupWorkout(workout.workoutID, workout._id)"> Complete
                                                 Workout</Button>
                                             <div v-else>
-                                                <span v-if="workout.userWorkoutData[1].completionDate" class="text-500">Completed: {{
-                                                    formatDate(workout.userWorkoutData[1].completionDate) }}</span>
+                                                <span v-if="workout.userWorkoutData[1].completionDate"
+                                                    class="text-500">Completed: {{
+                                                        formatDate(workout.userWorkoutData[1].completionDate) }}</span>
                                                 <span v-else class="text-500"> Not Completed</span>
                                             </div>
                                         </div>
@@ -110,6 +125,31 @@ export default {
             userCompletedMatchupWorkouts: []
         };
     },
+    computed: {
+        workoutsWithWinners() {
+            return this.userCompletedMatchupWorkouts.map(workout => {
+                // Assuming there are always 2 users in userWorkoutData
+                const user1 = workout.userWorkoutData[0];
+                const user2 = workout.userWorkoutData[1];
+
+                let winner, loser;
+                if (user1.totalVolume > user2.totalVolume) {
+                    winner = user1;
+                    loser = user2;
+                } else {
+                    winner = user2;
+                    loser = user1;
+                }
+
+                return {
+                    ...workout,
+                    winner: winner.userName,
+                    loser: loser.userName,
+                    isTie: user1.totalVolume === user2.totalVolume
+                };
+            });
+        }
+    },
 
     methods: {
 
@@ -123,6 +163,14 @@ export default {
                 params: { workoutID: workoutID },
                 query: { matchup: 'true', matchupWorkoutID: matchupWorkoutID }
             });
+        },
+
+        viewCompletedMatchupResults(completedMatchupWorkoutID) {
+            this.$router.push({
+                name: 'matchup-workout',
+                params: { completedMatchupWorkoutID: completedMatchupWorkoutID }
+            })
+            console.log(completedMatchupWorkoutID)
         },
 
 
@@ -145,11 +193,25 @@ export default {
             // Augment each workout in the workouts array
             this.userMatchupWorkouts = await Promise.all(workouts.map(augmentWorkoutDataWithUserNames));
 
-            console.log( "Active Workouts: " + this.userMatchupWorkouts);
+            console.log("Active Workouts: " + this.userMatchupWorkouts);
         },
 
-        async getUserCompletedMatchupWorkouts(){
-            this.userCompletedMatchupWorkouts = await API.getCompletedMatchupWorkoutsByUserID(this.$store.state.user.uid)
+        async getUserCompletedMatchupWorkouts() {
+            let workouts = await API.getCompletedMatchupWorkoutsByUserID(this.$store.state.user.uid)
+
+            const augmentWorkoutDataWithUserNames = async (workout) => {
+                // Fetch user names for each userWorkoutData in parallel
+                const augmentedUserWorkoutData = await Promise.all(workout.userWorkoutData.map(async (userData) => {
+                    const userName = await this.getUserNames(userData.userID);
+                    return { ...userData, userName }; // Augment the userData with userName
+                }));
+
+                return { ...workout, userWorkoutData: augmentedUserWorkoutData };
+            };
+
+            // Augment each workout in the workouts array
+            this.userCompletedMatchupWorkouts = await Promise.all(workouts.map(augmentWorkoutDataWithUserNames));
+
             console.log("Completed Workouts: " + this.userCompletedMatchupWorkouts)
         },
 
@@ -162,7 +224,7 @@ export default {
     },
     mounted() {
         this.getUserMatchupWorkouts()
-        this,this.getUserCompletedMatchupWorkouts()
+        this.getUserCompletedMatchupWorkouts()
     }
 }
 </script>
