@@ -93,19 +93,6 @@
                     </ul>
                 </div>
             </div>
-            <div class="col-12 lg:col-4">
-                <div class="surface-card border-round shadow-2 p-4 text-center">
-
-                </div>
-            </div>
-            <div class="col-12 lg:col-4">
-                <div class="surface-card border-round shadow-2 p-4 text-center">
-                </div>
-            </div>
-            <div class="col-12 lg:col-4">
-                <div class="surface-card border-round shadow-2 p-4 text-center">
-                </div>
-            </div>
         </div>
     </div>
 </template>
