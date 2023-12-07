@@ -6,7 +6,7 @@
                     <div class="text-900 font-medium text-xl">Leaderboard</div>
                 </div>
                 <div
-                    class="surface-card   border-top-none border-noround-top border-round flex p-3 flex-column md:flex-row">
+                    class="surface-card border-top-none border-noround-top border-round flex p-3 flex-column md:flex-row">
                 </div>
             </div>
             <div class="col-12 lg:col-6">
