@@ -76,7 +76,8 @@ export default {
         startFreestyleWorkout(){
             this.$router.push({
                 name: 'freestyle-workout',
-                link: "/activeworkout/freestyle"
+                link: "/activeworkout/freestyle",
+                params: { workoutID: 'freestyle' }
             })
         },
 

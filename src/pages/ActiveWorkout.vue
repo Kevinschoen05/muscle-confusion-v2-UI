@@ -1,5 +1,5 @@
 <template>
-    <Toast />
+    <Toast class="z-5" />
     <div class="surface-ground">
         <div class="grid">
             <ActiveWorkoutSummary v-if="this.$route.params.workoutID" :workoutID="this.workoutID"
@@ -80,6 +80,10 @@
                     </div>
 
                 </div>
+                <Button v-if="this.$route.params.workoutID === freestyle" class=" p-button-outlined w-full mt-4"
+                    icon="pi pi-bookmark-fill" label="Save as Preset Workout"
+                    @click="visible2 = false, visible5 = true"></Button>
+
                 <Button v-if="!this.$route.query.matchup" class="w-full mt-4" icon="pi pi-check" label="Save Workout"
                     @click="saveCompletedWorkout(), visible2 = false"></Button>
 
@@ -89,6 +93,7 @@
                 <Button v-if="!this.$route.query.matchup" class=" w-full mt-4" icon="pi pi-send"
                     label="Save & Share Results"
                     @click="getUserFriends(), visible2 = false, visible4 = true, shareWorkout = true"></Button>
+
             </div>
         </Dialog>
         <Dialog v-model:visible="visible4" appendTo="body" :modal="true">
@@ -111,7 +116,18 @@
                 </ul>
                 <Button @click="sendWorkoutSummary()" label="Send"></Button>
             </div>
-
+        </Dialog>
+        <Dialog v-model:visible="visible5" appendTo="body" :modal="true">
+            <div class="p-2">
+                <div class="text-900 font-medium mb-3 text-xl">Save as a Preset Workout</div>
+                <p class="mt-0 mb-4 p-0 line-height-3">Save this Freestyle Workout to your Dashboard so it can be used
+                    again. </p>
+                <div class="field mb-4 col-12 pl-0 pr-0">
+                    <label for="freestyle-workout-title" class="font-medium text-900">Enter Workout Title</label>
+                    <InputText id="freestyle-workout-title" type="text" v-model="freestyleWorkoutTitle" />
+                </div>
+                <Button label="Save Preset Workout" @click="visible5 = false, saveFreestyleWorkoutasPreset()"></Button>
+            </div>
         </Dialog>
     </div>
 </template>
@@ -135,8 +151,10 @@ export default {
             visible2: false,
             visible3: false,
             visible4: false,
+            visible5: false,
             activeWorkout: {},
             workoutTitle: '',
+            freestyleWorkoutTitle: '',
             workoutID: this.$route.params.workoutID,
             exercises: [],
             completedExercises: [],
@@ -199,6 +217,11 @@ export default {
 
         showWorkoutStart() {
             this.$toast.add({ severity: 'success', summary: 'Workout Started', detail: 'Workout Duration will be tracked.', life: 5000 });
+        },
+
+        showFreestyleWorkoutSaved() {
+            this.$toast.add({ severity: 'success', summary: 'Freestyle Workout Saved', detail: 'Freestyle Workout successfully saved to your Dashboard', life: 5000 });
+
         },
 
 
@@ -326,6 +349,21 @@ export default {
                 console.log(this.completedWorkoutID)
             }
 
+        },
+
+        async saveFreestyleWorkoutasPreset() {
+            let workoutTitle = this.freestyleWorkoutTitle
+            let users = []
+            users.push(this.$store.state.user.uid)
+
+            let finalFreestyleWorkout = {
+                workoutTitle: workoutTitle,
+                users: users,
+                exercises: this.exercises
+            }
+            
+        await API.addWorkout(finalFreestyleWorkout);
+        this.showFreestyleWorkoutSaved() 
         },
 
         async updateMatchupWorkout() {
