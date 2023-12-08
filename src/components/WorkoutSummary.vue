@@ -1,21 +1,38 @@
 <template>
     <div class="surface-card border-round shadow-2 p-4">
         <div class="text-900 font-medium mb-3 text-xl">Today's Scheduled Workout</div>
-        <p class="mt-0 mb-4 p-0 line-height-3"> {{ workoutTitle }}</p>
-        <ul>
-            <li v-for="exercise in exercises" :key="exercise.id"> <img aria-hidden="true" loading="lazy" decoding="async"
-                    src="../assets/check-circle.svg" alt="check mark" width="20" height="20">{{
-                        exercise.exerciseName
-                    }}</li>
-        </ul>
-        <div class="flex">
-            <Button class="mr-1" label="Start Workout" @click="startActiveWorkout(workout)"></Button>
+        <div v-if="workoutTitle">
+            <p class="mt-0 mb-4 p-0 line-height-3"> {{ workoutTitle }}</p>
+            <ul>
+                <li v-for="exercise in exercises" :key="exercise.id"> <img aria-hidden="true" loading="lazy"
+                        decoding="async" src="../assets/check-circle.svg" alt="check mark" width="20" height="20">{{
+                            exercise.exerciseName
+                        }}</li>
+            </ul>
+        </div>
+        <div v-else>
+            <p class="mt-0 mb-4 p-0 line-height-3 "> No Workout Scheduled.</p>
+            <ul>
+                <li> <img aria-hidden="true" loading="lazy"
+                        decoding="async" src="../assets/check-circle.svg" alt="check mark" width="20" height="20">Update your Schedule from the Dashboard
+                </li>
+                <li> <img aria-hidden="true" loading="lazy"
+                        decoding="async" src="../assets/check-circle.svg" alt="check mark" width="20" height="20">Build a New Workout
+                </li>
+                <li> <img aria-hidden="true" loading="lazy"
+                        decoding="async" src="../assets/check-circle.svg" alt="check mark" width="20" height="20">Enjoy your Rest Day
+                </li>
+            </ul>
+
+        </div>
+        <div v-if="workoutTitle" class="flex">
+            <Button class="w-full" label="Start Workout" @click="startActiveWorkout(workout)"></Button>
+        </div>
+        <div class="flex flex-wrap align-items-center justify-content-center gap-3 mt-3">
+            <Button label="Freestyle Workout" @click="startFreestyleWorkout"></Button>
             <Button class="p-button-outlined" @click="startWorkoutBuilder" label="Build New Workout"></Button>
         </div>
-        <div class="flex flex-wrap align-items-center justify-content-center gap-3">
-            <Button class="mt-3" label="Freestyle Workout" @click="startFreestyleWorkout"></Button>
-        </div>
-</div>
+    </div>
 </template>
   
 <script>
@@ -73,7 +90,7 @@ export default {
             });
         },
 
-        startFreestyleWorkout(){
+        startFreestyleWorkout() {
             this.$router.push({
                 name: 'freestyle-workout',
                 link: "/activeworkout/freestyle",
