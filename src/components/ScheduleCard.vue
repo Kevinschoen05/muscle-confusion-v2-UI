@@ -1,24 +1,26 @@
 <template>
-    <div
-        class=" border-bottom-1  md:border-left-1 md:border-right-1 md:border-bottom-none surface-border flex-auto p-3">
+    <div class=" border-bottom-1  md:border-left-1 md:border-right-1 md:border-bottom-none surface-border flex-auto p-3">
         <div class="flex align-items-center mb-3">
             <span class="text-500 font-medium">{{ date }}</span>
         </div>
         <span v-if="!workoutID" class="block text-900 font-medium mb-4 text-xl">Rest Day</span>
         <span v-else class="block text-900 font-medium mb-4 text-xl">{{ workoutTitle }}</span>
-        <div class="flex align-items-bottom">
-            <Button v-if="!workoutID" label="Set Workout" @click="visible2 = true"
-                class="p-button-sm p-button"></Button>
+        <div v-if="!completed" class="flex align-items-bottom">
+            <Button v-if="!workoutID" label="Set Workout" @click="visible2 = true" class="p-button-sm p-button"></Button>
             <Button v-else label="Update Workout" @click="visible2 = true" class="p-button-sm p-button"></Button>
-            <Button v-if="workoutID" @click="this.startActiveWorkout(workoutID)" icon="pi pi-play" class="p-button-success ml-3"></Button>
+            <Button v-if="workoutID" @click="this.startActiveWorkout(workoutID)" icon="pi pi-play"
+                class="p-button-success ml-3"></Button>
         </div>
+        <div v-else class="flex align-content-center">
+            <img class="success-icon" aria-hidden="true" loading="lazy" decoding="async"
+                src="../assets/check-circle-success.svg" alt="check mark">
+                <span class="text-500 font-medium">Workout Completed</span>
+            </div>
     </div>
-    <Dialog v-model:visible="visible2" appendTo="body" :modal="true"
-        :breakpoints="{ '960px': '75vw', '640px': '100vw' }" :style="{ width: '40vw' }" :closable="false"
-        :showHeader="false">
+    <Dialog v-model:visible="visible2" appendTo="body" :modal="true" :breakpoints="{ '960px': '75vw', '640px': '100vw' }"
+        :style="{ width: '40vw' }" :closable="false" :showHeader="false">
         <div class="flex flex-column align-items-center my-4">
-            <span
-                class="flex align-items-center justify-content-center bg-cyan-100 text-cyan-800 mr-3 border-circle mb-3"
+            <span class="flex align-items-center justify-content-center bg-cyan-100 text-cyan-800 mr-3 border-circle mb-3"
                 style="width:64px;height:64px">
                 <i class="pi pi-check text-5xl"></i>
             </span>
@@ -61,7 +63,8 @@ export default {
         today: String,
         workoutTitle: String,
         workoutID: String,
-        presetWorkouts: Array
+        presetWorkouts: Array,
+        completed: Boolean
 
     },
 
@@ -86,14 +89,22 @@ export default {
             });
         },
     },
-
+    mounted() {
+        console.log("preset workouts prop from schedule card " + this.presetWorkouts)
+    }
 }
 
 </script>
   
   <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+.success-icon {
+    align-self: center;
+    width: 1.25em;
+    height: 1.25em;
+    margin-right: .5em;
+    padding-right : 0;
+}
 </style>
 
   
