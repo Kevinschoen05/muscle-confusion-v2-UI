@@ -1,11 +1,18 @@
 <template>
     <div class="surface-card border-round shadow-2 p-4">
-        <div class="text-900 font-medium mb-3 text-xl">Today's Scheduled Workout</div>
+            <div class="text-900 font-medium mb-3 text-xl">Today's Scheduled Workout</div>
+            <div v-if="completed" class=" completed text-900 font-medium mb-3 text-xl">Completed</div>
         <div v-if="workoutTitle">
             <p class="mt-0 mb-4 p-0 line-height-3"> {{ workoutTitle }}</p>
-            <ul>
+            <ul v-if="!completed">
                 <li v-for="exercise in exercises" :key="exercise.id"> <img aria-hidden="true" loading="lazy"
                         decoding="async" src="../assets/check-circle.svg" alt="check mark" width="20" height="20">{{
+                            exercise.exerciseName
+                        }}</li>
+            </ul>
+            <ul v-else>
+                <li v-for="exercise in exercises" :key="exercise.id"> <img aria-hidden="true" loading="lazy"
+                        decoding="async" src="../assets/check-circle-success.svg" alt="check mark" width="20" height="20">{{
                             exercise.exerciseName
                         }}</li>
             </ul>
@@ -25,7 +32,7 @@
             </ul>
 
         </div>
-        <div v-if="workoutTitle" class="flex">
+        <div v-if="workoutTitle && !completed" class="flex">
             <Button class="w-full" label="Start Workout" @click="startActiveWorkout(workout)"></Button>
         </div>
         <div class="flex flex-wrap align-items-center justify-content-center gap-3 mt-3">
@@ -56,6 +63,7 @@ export default {
         return {
             today: dayjs().tz().format('LL'),
             workout: [],
+            completed: '', 
             exercises: [],
             userSchedule: [],
             workoutTitle: ''
@@ -75,6 +83,8 @@ export default {
             for (var i = 0; i < this.userSchedule.length; i++) {
                 if (this.userSchedule[i].date === this.today) {
                     this.workout = this.userSchedule[i].workoutID
+                    this.completed = this.userSchedule[i].completed
+                    console.log("completed:" + this.completed)
                     console.log(this.today)
                     console.log(this.userSchedule[i].date)
                     console.log(this.workout)
@@ -257,6 +267,9 @@ ul li img {
     height: 100%;
 }
 
+.completed { 
+     color: #66C61C !important;
+}
 #diagram {
     height: 10em;
     width: 10em;
