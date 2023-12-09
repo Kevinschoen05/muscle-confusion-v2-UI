@@ -297,6 +297,13 @@ export default {
         },
 
         async saveCompletedWorkout() {
+
+
+            console.log("Query Parameters:", this.$route.query);
+            console.log("userSchedule Query:", this.$route.query.userSchedule);
+            console.log("Type of userSchedule Query:", typeof this.$route.query.userSchedule);
+            console.log("WorkoutID: " + this.workoutID)
+
             let activeFreestyleWorkoutID = 'freestyle';
             let finalWorkoutID = '';
             let finalWorkoutTitle = '';
@@ -334,6 +341,12 @@ export default {
                 externalities: this.externalities
             }
 
+            if (this.$route.query.userSchedule === "true") {
+                console.log("user Schedule update logic hit");
+                await API.updateUserScheduleAsComplete(this.$store.state.user.uid, this.$route.params.workoutID)
+            }
+
+
             await API.addCompletedWorkout(completedWorkout)
             this.showSuccess()
             if (this.shareWorkout === false) {
@@ -349,6 +362,7 @@ export default {
                 console.log(this.completedWorkoutID)
             }
 
+
         },
 
         async saveFreestyleWorkoutasPreset() {
@@ -361,9 +375,9 @@ export default {
                 users: users,
                 exercises: this.exercises
             }
-            
-        await API.addWorkout(finalFreestyleWorkout);
-        this.showFreestyleWorkoutSaved() 
+
+            await API.addWorkout(finalFreestyleWorkout);
+            this.showFreestyleWorkoutSaved()
         },
 
         async updateMatchupWorkout() {

@@ -81,6 +81,8 @@ export default {
                 name: "active-workout",
                 link: "/activeworkout/",
                 params: { workoutID: workoutID },
+                query: { userSchedule: 'true' }
+
             });
         },
     },

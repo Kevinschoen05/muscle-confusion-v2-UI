@@ -179,6 +179,14 @@ export default class API {
     return res.data;
   }
 
+  static async updateUserScheduleAsComplete(userID, workoutID){
+    const res = axios.put(`${user_url}/${userID}/complete/UserSchedule`, {
+      userID: userID,
+      workoutID: workoutID 
+    });
+    return res.data
+  }
+
   static async getUserFriends(userID) {
     const res = await axios.get(`${user_url}/friends/${userID}`);
     return res.data;

@@ -13,14 +13,14 @@
         <div v-else>
             <p class="mt-0 mb-4 p-0 line-height-3 "> No Workout Scheduled.</p>
             <ul>
-                <li> <img aria-hidden="true" loading="lazy"
-                        decoding="async" src="../assets/check-circle.svg" alt="check mark" width="20" height="20">Update your Schedule from the Dashboard
+                <li> <img aria-hidden="true" loading="lazy" decoding="async" src="../assets/check-circle.svg"
+                        alt="check mark" width="20" height="20">Update your Schedule from the Dashboard
                 </li>
-                <li> <img aria-hidden="true" loading="lazy"
-                        decoding="async" src="../assets/check-circle.svg" alt="check mark" width="20" height="20">Build a New Workout
+                <li> <img aria-hidden="true" loading="lazy" decoding="async" src="../assets/check-circle.svg"
+                        alt="check mark" width="20" height="20">Build a New Workout
                 </li>
-                <li> <img aria-hidden="true" loading="lazy"
-                        decoding="async" src="../assets/check-circle.svg" alt="check mark" width="20" height="20">Enjoy your Rest Day
+                <li> <img aria-hidden="true" loading="lazy" decoding="async" src="../assets/check-circle.svg"
+                        alt="check mark" width="20" height="20">Enjoy your Rest Day
                 </li>
             </ul>
 
@@ -87,54 +87,56 @@ export default {
                 name: "active-workout",
                 link: "/activeworkout/",
                 params: { workoutID: workoutID },
+                query: { userSchedule: 'true' }
+
             });
-        },
+    },
 
-        startFreestyleWorkout() {
-            this.$router.push({
-                name: 'freestyle-workout',
-                link: "/activeworkout/freestyle",
-                params: { workoutID: 'freestyle' }
-            })
-        },
+    startFreestyleWorkout() {
+        this.$router.push({
+            name: 'freestyle-workout',
+            link: "/activeworkout/freestyle",
+            params: { workoutID: 'freestyle' }
+        })
+    },
 
-        startWorkoutBuilder() {
-            this.$router.push({
-                name: "workout-builder",
-                link: "/workoutbuilder"
-            });
-        },
+    startWorkoutBuilder() {
+        this.$router.push({
+            name: "workout-builder",
+            link: "/workoutbuilder"
+        });
+    },
 
-        //API CALLS
-        async getUserSchedule() {
-            let scheduleObject = await API.getUserSchedule(this.$store.state.user.uid)
-            console.log(scheduleObject);
-            console.log(this.today)
-            this.userSchedule = scheduleObject[0].schedule
-            this.getTodaysWorkout()
-
-        },
-
-        async getWorkoutDetails() {
-            let workoutObject = await API.getWorkoutsByWorkoutID(this.workout)
-            console.log(workoutObject)
-            this.exercises = workoutObject[0].exercises
-            this.workoutTitle = workoutObject[0].workoutTitle
-
-        }
-
-
-        /* getWorkoutImage(workout){
-             return require('../assets/workout-images/'+ workout  +'.png')
-        }
-        */
+    //API CALLS
+    async getUserSchedule() {
+        let scheduleObject = await API.getUserSchedule(this.$store.state.user.uid)
+        console.log(scheduleObject);
+        console.log(this.today)
+        this.userSchedule = scheduleObject[0].schedule
+        this.getTodaysWorkout()
 
     },
-    mounted() {
-        //this.getWorkoutImage(this.workout)
-        this.getUserSchedule()
-        console.log(this.workout)
+
+    async getWorkoutDetails() {
+        let workoutObject = await API.getWorkoutsByWorkoutID(this.workout)
+        console.log(workoutObject)
+        this.exercises = workoutObject[0].exercises
+        this.workoutTitle = workoutObject[0].workoutTitle
+
     }
+
+
+    /* getWorkoutImage(workout){
+         return require('../assets/workout-images/'+ workout  +'.png')
+    }
+    */
+
+},
+mounted() {
+    //this.getWorkoutImage(this.workout)
+    this.getUserSchedule()
+    console.log(this.workout)
+}
 
 }
 
