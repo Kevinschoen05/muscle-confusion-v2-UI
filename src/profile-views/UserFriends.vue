@@ -64,11 +64,6 @@
                         <div class="text-600">{{ friend.userID }}</div>
                     </div>
                 </div>
-                <div class="mt-2 md:mt-0 flex flex-nowrap">
-                    <Button class="p-button-text p-button-plain p-button-rounded mr-1" icon="pi pi-twitter"></Button>
-                    <Button class="p-button-text p-button-plain p-button-rounded mr-1" icon="pi pi-github"></Button>
-                    <Button class="p-button-text p-button-plain p-button-rounded mr-1" icon="pi pi-facebook"></Button>
-                </div>
             </li>
         </ul>
     </div>
