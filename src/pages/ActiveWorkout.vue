@@ -31,7 +31,7 @@
                 <Button v-if="!visible1 && !this.$route.query.matchup" icon="pi pi-plus" class="mb-6"
                     @click="visible3 = true"></Button>
                 <Button v-if=!visible1 label="Complete Workout" class=" flex align-items-center"
-                    @click="visible2 = true, this.calculateTotalVolume(), stopTimer()"></Button>
+                    @click="this.completeWorkout()"></Button>
             </div>
         </div>
         <Dialog v-model:visible="visible3" appendTo="body" :modal="true">
@@ -53,7 +53,7 @@
                     </div>
                     <div class="surface-50 p-3 flex-auto">
                         <div class="text-600 mb-3">Duration</div>
-                        <span class="text-blue-600 font-medium text-xl">{{ formattedElapsedTime }}</span>
+                        <span class="text-blue-600 font-medium text-xl">{{ totalWorkoutDuration }}</span>
                     </div>
                 </div>
                 <div>
@@ -129,6 +129,14 @@
                 <Button label="Save Preset Workout" @click="visible5 = false, saveFreestyleWorkoutasPreset()"></Button>
             </div>
         </Dialog>
+        <Dialog v-model:visible="showContinueWorkoutPrompt" appendTo="body" :modal="true">
+            <div clas="p-2">
+            <div class="text-900 font-medium mb-3 text-xl">Continue Workout</div>
+            <p class="mt-0 mb-4 p-0 line-height-3">You had a workout in progress. Continue where you left off?</p>
+            <Button label="Yes" @click="continueSavedWorkout(), startTimer(), visible1 = false"></Button>
+            <Button class=" ml-2" label="No" @click="showContinueWorkoutPrompt = false"></Button>
+            </div>
+        </Dialog>
     </div>
 </template>
 
@@ -152,6 +160,7 @@ export default {
             visible3: false,
             visible4: false,
             visible5: false,
+            showContinueWorkoutPrompt: false,
             activeWorkout: {},
             workoutTitle: '',
             freestyleWorkoutTitle: '',
@@ -162,6 +171,8 @@ export default {
             externalities: [],
             totalVolume: 0,
             totalSets: 0,
+            storedWorkoutDuration: '',
+            totalWorkoutDuration: '',
 
             //User Info & Sharing
             currentUserName: '',
@@ -210,6 +221,34 @@ export default {
             return num.toString().padStart(2, '0');
         },
 
+        timeStringToMillis(timeString) {
+            const [hours, minutes, seconds] = timeString.split(':').map(Number);
+            return (hours * 60 * 60 * 1000) + (minutes * 60 * 1000) + (seconds * 1000);
+        },
+
+        calculateTotalDuration(formattedElapsedTime, storedDuration) {
+            if (!storedDuration) {
+                this.totalWorkoutDuration = formattedElapsedTime;
+                return formattedElapsedTime;
+            }
+
+            const elapsedTimeMillis = this.timeStringToMillis(formattedElapsedTime);
+            const storedDurationMillis = storedDuration ? this.timeStringToMillis(storedDuration) : 0;
+            const totalDurationMillis = elapsedTimeMillis + storedDurationMillis;
+
+            console.log("Elapsed Time in Millis: ", elapsedTimeMillis);
+            console.log("Stored Duration in Millis: ", storedDurationMillis);
+            console.log("Total Duration in Millis: ", totalDurationMillis);
+
+            const totalHours = Math.floor(totalDurationMillis / (1000 * 60 * 60));
+            const totalMinutes = Math.floor((totalDurationMillis / (1000 * 60)) % 60);
+            const totalSeconds = Math.floor((totalDurationMillis / 1000) % 60);
+
+            this.totalWorkoutDuration = `${this.padZero(totalHours)}:${this.padZero(totalMinutes)}:${this.padZero(totalSeconds)}`;
+            console.log("Total Workout Duration: ", this.totalWorkoutDuration);
+            return this.totalWorkoutDuration;
+
+        },
 
         showSuccess() {
             this.$toast.add({ severity: 'success', summary: 'Workout Complete', detail: 'You Can Review your Completed Workouts in your Dashboard.', life: 5000 });
@@ -224,9 +263,46 @@ export default {
 
         },
 
+        continueSavedWorkout() {
+            this.showContinueWorkoutPrompt = false;
+            // Now call the function to load data from local storage
+            this.continueWorkoutFromLocalStorage(this.$route.params.workoutID);
+        },
+
+        clearWorkoutSessionData() {
+            localStorage.removeItem('completedExercises');
+            localStorage.removeItem('workoutDuration');
+            localStorage.removeItem('workoutID');
+
+            console.log("Workout session data cleared from local storage.");
+        },
+
+
+        completeWorkout() {
+            console.log("Complete Workout Method Called");
+            this.visible2 = true;
+            this.calculateTotalVolume();
+            this.stopTimer();
+            this.calculateTotalDuration(this.formattedElapsedTime, this.storedWorkoutDuration);
+        },
 
         handleCompletedExercise(exercise) {
             this.completedExercises.push(exercise)
+
+            const currentTime = Date.now();
+            const currentElapsedTime = currentTime - this.startTime;
+
+            // Format the current elapsed time
+            const hours = Math.floor(currentElapsedTime / (1000 * 60 * 60));
+            const minutes = Math.floor((currentElapsedTime / (1000 * 60)) % 60);
+            const seconds = Math.floor((currentElapsedTime / 1000) % 60);
+            const formattedCurrentElapsedTime = `${this.padZero(hours)}:${this.padZero(minutes)}:${this.padZero(seconds)}`;
+
+            localStorage.setItem('workoutID', this.$route.params.workoutID)
+            localStorage.setItem('completedExercises', JSON.stringify(this.completedExercises));
+            localStorage.setItem('workoutDuration', formattedCurrentElapsedTime);
+
+
             console.log("completed exercises array: " + this.completedExercises)
         },
 
@@ -299,11 +375,6 @@ export default {
         async saveCompletedWorkout() {
 
 
-            console.log("Query Parameters:", this.$route.query);
-            console.log("userSchedule Query:", this.$route.query.userSchedule);
-            console.log("Type of userSchedule Query:", typeof this.$route.query.userSchedule);
-            console.log("WorkoutID: " + this.workoutID)
-
             let activeFreestyleWorkoutID = 'freestyle';
             let finalWorkoutID = '';
             let finalWorkoutTitle = '';
@@ -334,7 +405,7 @@ export default {
             let completedWorkout = {
                 workoutID: finalWorkoutID,
                 workoutTitle: finalWorkoutTitle,
-                workoutDuration: this.formattedElapsedTime,
+                workoutDuration: this.calculateTotalDuration(this.formattedElapsedTime, this.storedWorkoutDuration),
                 totalVolume: this.totalVolume,
                 users: finalUsers,
                 exercises: this.completedExercises,
@@ -345,6 +416,8 @@ export default {
                 console.log("user Schedule update logic hit");
                 await API.updateUserScheduleAsComplete(this.$store.state.user.uid, this.$route.params.workoutID)
             }
+
+            this.clearWorkoutSessionData()
 
 
             await API.addCompletedWorkout(completedWorkout)
@@ -518,11 +591,52 @@ export default {
 
         },
 
+        continueWorkoutFromLocalStorage(routeWorkoutID) {
+            // Retrieve workoutID from local storage
+            const storedWorkoutID = localStorage.getItem('workoutID');
+
+            // Check if the stored workoutID matches the route parameter workoutID
+            if (storedWorkoutID === routeWorkoutID) {
+                // Retrieve and assign completedExercises from local storage
+                const storedExercises = localStorage.getItem('completedExercises');
+                if (storedExercises) {
+                    this.completedExercises = JSON.parse(storedExercises);
+                    this.updateExercisesWithCompletedData(this.completedExercises)
+
+                }
+                // Retrieve and assign workoutDuration from local storage
+                const storedDuration = localStorage.getItem('workoutDuration');
+                if (storedDuration) {
+                    this.storedWorkoutDuration = storedDuration;
+                }
+
+                console.log("Continuing workout from saved session.");
+            } else {
+                console.log("No matching workout session found in local storage.");
+            }
+        },
+        updateExercisesWithCompletedData(completedExercises) {
+            this.exercises.forEach(exercise => {
+                const completedExercise = completedExercises.find(e => e.id === exercise.id);
+
+                if (completedExercise) {
+                    exercise.sets = completedExercise.sets; // Make sure the structure matches
+                    console.log("Updated Exercise:", exercise);
+                }
+            });
+        }
+
 
     },
     mounted() {
+        const storedWorkoutID = localStorage.getItem('workoutID');
         if (this.$route.params.workoutID) {
-            this.getActiveWorkout();
+            this.getActiveWorkout(this.$route.params.workoutID)
+
+        }
+
+        if (this.$route.params.workoutID && this.$route.params.workoutID === storedWorkoutID) {
+            this.showContinueWorkoutPrompt = true
         }
     }
 }
