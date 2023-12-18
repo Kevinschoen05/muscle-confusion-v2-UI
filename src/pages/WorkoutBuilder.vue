@@ -124,6 +124,14 @@
 
             </div>
         </div>
+        <Dialog v-model:visible="showContinueWorkoutPrompt" appendTo="body" :modal="true">
+            <div clas="p-2">
+                <div class="text-900 font-medium mb-3 text-xl">Continue Building Workout</div>
+                <p class="mt-0 mb-4 p-0 line-height-3">You had a draft workout in progress. Continue where you left off?</p>
+                <Button label="Yes" @click="loadDataFromLocalStorage()"></Button>
+                <Button class=" ml-2" label="No" @click="clearDataAndCloseDialog()"></Button>
+            </div>
+        </Dialog>
     </div>
 </template>
 <script>
@@ -136,7 +144,8 @@ export default {
     },
     data() {
         return {
-
+            visible: false,
+            showContinueWorkoutPrompt: false,
             //query needs to be run on mount to pull full list of potential muscle groups
             muscleGroups: [],
             muscleGroupSelected: false,
@@ -176,178 +185,223 @@ export default {
             this.$toast.add({ severity: 'success', summary: 'Workout Updated', detail: 'Changes to Preset Workout Saved', life: 5000 });
         },
 
+        loadDataFromLocalStorage() {
+            const workoutTitle = localStorage.getItem('workoutTitle');
+            const exercises = localStorage.getItem('exercises');
+
+            if (workoutTitle) {
+                this.finalWorkout.workoutTitle = workoutTitle;
+                this.draftWorkoutTitle = workoutTitle;
+            }
+            if (exercises) {
+                this.finalWorkout.exercises = JSON.parse(exercises);
+            }
+
+            this.showContinueWorkoutPrompt = false;
+        },
+
+        clearDataAndCloseDialog() {
+            // Clear specific local storage items
+            localStorage.removeItem('workoutTitle');
+            localStorage.removeItem('exercises');
+
+            // Close the dialog
+            this.showContinueWorkoutPrompt = false;
+
+            console.log("Data cleared from local storage and dialog closed.");
+        },
+    
+
         generateSets() {
-            for (let i = 1; i < this.draftExercise.targetSets + 1; i++) {
-                if (this.exerciseType === false) {
-                    this.draftExercise.sets.push({ 'index': i, target_reps: 0, actual_reps: 0, target_weight: 0, actual_weight: 0, completed: false, success: false })
-                }
-                else {
-                    this.draftExercise.sets.push({ 'index': i, target_duration_mins: 0, target_duration_secs: 0, actual_duration: '00:00:00', target_weight: 0, actual_weight: 0, completed: false, success: false })
+    for (let i = 1; i < this.draftExercise.targetSets + 1; i++) {
+        if (this.exerciseType === false) {
+            this.draftExercise.sets.push({ 'index': i, target_reps: 0, actual_reps: 0, target_weight: 0, actual_weight: 0, completed: false, success: false })
+        }
+        else {
+            this.draftExercise.sets.push({ 'index': i, target_duration_mins: 0, target_duration_secs: 0, actual_duration: '00:00:00', target_weight: 0, actual_weight: 0, completed: false, success: false })
 
-                }
-            }
-        },
+        }
+    }
+},
 
-        saveData() {
-            this.finalWorkout.workoutTitle = this.draftWorkoutTitle
-            this.finalWorkout.exercises.push(this.draftExercise)
-            this.draftExercise = {
-                exerciseName: '',
-                targetSets: 0,
-                sets: []
-            }
-            console.log(this.$store.state.user)
+saveData() {
+    this.finalWorkout.workoutTitle = this.draftWorkoutTitle
+    this.finalWorkout.exercises.push(this.draftExercise)
+    this.draftExercise = {
+        exerciseName: '',
+        targetSets: 0,
+        sets: []
+    }
+
+    // Save the workout title to local storage
+    localStorage.setItem('workoutTitle', this.finalWorkout.workoutTitle);
+
+    // Save the exercises array to local storage
+    localStorage.setItem('exercises', JSON.stringify(this.finalWorkout.exercises));
+
+    console.log(this.$store.state.user)
+    console.log(this.finalWorkout)
+},
+
+//when user saves the exercise, update pre-created draft exercise structure with completed values
+updateDraftExercise() {
+    this.draftExercise.id = this.selectedExercise._id
+    this.draftExercise.exerciseName = this.selectedExercise.exerciseName
+    this.draftExercise.primaryMuscleGroup = this.selectedExercise.primaryMuscleGroup
+    this.draftExercise.secondaryMuscleGroups = this.selectedExercise.secondaryMuscleGroups
+
+    if (this.exerciseType === false) {
+        this.draftExercise.exerciseType = 'Resistance'
+    }
+    else {
+        this.draftExercise.exerciseType = 'Timed'
+        this.draftExercise.sets.forEach((set) => {
+            set.target_duration_mins = this.formatAmount(set.target_duration_mins)
+            set.target_duration_secs = this.formatAmount(set.target_duration_secs)
+        })
+    }
+    console.log(this.draftExercise.sets[0].target_duration_mins)
+    console.log(this.draftExercise.sets[0].target_duration_secs)
+
+    this.saveData()
+},
+
+
+formatAmount(value) {
+    // Add leading zero if value is less than 10
+    if (value < 10) {
+        value = '0' + value;
+    }
+    return value
+},
+
+//In final workout summary list Delete Exercise Button will remove entire exercise from the list
+deleteExercise(exerciseID) {
+    for (let i = 0; i < this.finalWorkout.exercises.length; i++) {
+        if (this.finalWorkout.exercises[i].id === exerciseID) {
+            let index = this.finalWorkout.exercises.indexOf(this.finalWorkout.exercises[i])
+            this.finalWorkout.exercises.splice(index, 1)
             console.log(this.finalWorkout)
-        },
+        }
+    }
+},
 
-        //when user saves the exercise, update pre-created draft exercise structure with completed values
-        updateDraftExercise() {
-            this.draftExercise.id = this.selectedExercise._id
-            this.draftExercise.exerciseName = this.selectedExercise.exerciseName
-            this.draftExercise.primaryMuscleGroup = this.selectedExercise.primaryMuscleGroup
-            this.draftExercise.secondaryMuscleGroups = this.selectedExercise.secondaryMuscleGroups
+addSetToExercise(exerciseID) {
+    for (let i = 0; i < this.finalWorkout.exercises.length; i++) {
+        if (this.finalWorkout.exercises[i].id === exerciseID) {
+            this.finalWorkout.exercises[i].sets.push({ 'index': (this.finalWorkout.exercises[i].sets.length + 1), target_reps: 0, actual_reps: 0, target_weight: 0, actual_weight: 0, completed: false, success: false })
+        }
+    }
+},
 
-            if (this.exerciseType === false) {
-                this.draftExercise.exerciseType = 'Resistance'
-            }
-            else {
-                this.draftExercise.exerciseType = 'Timed'
-                this.draftExercise.sets.forEach((set) => {
-                    set.target_duration_mins = this.formatAmount(set.target_duration_mins)
-                    set.target_duration_secs = this.formatAmount(set.target_duration_secs)
-                })
-            }
-            console.log(this.draftExercise.sets[0].target_duration_mins)
-            console.log(this.draftExercise.sets[0].target_duration_secs)
+//COMPONENT HANDLERS
 
-            this.saveData()
-        },
+handleDeleteSet({ exerciseID, set }) {
+    let exerciseArray = this.finalWorkout.exercises
+    for (let i = 0; i < exerciseArray.length; i++) {
+        const obj = exerciseArray[i]
 
-
-        formatAmount(value) {
-            // Add leading zero if value is less than 10
-            if (value < 10) {
-                value = '0' + value;
-            }
-            return value
-        },
-
-        //In final workout summary list Delete Exercise Button will remove entire exercise from the list
-        deleteExercise(exerciseID) {
-            for (let i = 0; i < this.finalWorkout.exercises.length; i++) {
-                if (this.finalWorkout.exercises[i].id === exerciseID) {
-                    let index = this.finalWorkout.exercises.indexOf(this.finalWorkout.exercises[i])
-                    this.finalWorkout.exercises.splice(index, 1)
-                    console.log(this.finalWorkout)
+        if (obj.id === exerciseID) {
+            for (let j = 0; j < obj.sets.length; j++) {
+                if (obj.sets[j].index === set) {
+                    obj.sets.splice(j, 1);
                 }
             }
-        },
+        }
+    }
+},
 
-        addSetToExercise(exerciseID) {
-            for (let i = 0; i < this.finalWorkout.exercises.length; i++) {
-                if (this.finalWorkout.exercises[i].id === exerciseID) {
-                    this.finalWorkout.exercises[i].sets.push({ 'index': (this.finalWorkout.exercises[i].sets.length + 1), target_reps: 0, actual_reps: 0, target_weight: 0, actual_weight: 0, completed: false, success: false })
-                }
-            }
-        },
+handleUpdateSet({ exerciseID, set, newReps, newDurationMins, newDurationSecs }) {
+    let exerciseArray = this.finalWorkout.exercises
+    if (this.exerciseType === false) {
+        for (let i = 0; i < exerciseArray.length; i++) {
+            const obj = exerciseArray[i]
 
-        //COMPONENT HANDLERS
-
-        handleDeleteSet({ exerciseID, set }) {
-            let exerciseArray = this.finalWorkout.exercises
-            for (let i = 0; i < exerciseArray.length; i++) {
-                const obj = exerciseArray[i]
-
-                if (obj.id === exerciseID) {
-                    for (let j = 0; j < obj.sets.length; j++) {
-                        if (obj.sets[j].index === set) {
-                            obj.sets.splice(j, 1);
-                        }
+            if (obj.id === exerciseID) {
+                for (let j = 0; j < obj.sets.length; j++) {
+                    if (obj.sets[j].index === set) {
+                        console.log(newReps)
+                        obj.sets[j].target_reps = newReps;
                     }
                 }
             }
-        },
+        }
+    }
+    else {
+        for (let i = 0; i < exerciseArray.length; i++) {
+            const obj = exerciseArray[i]
 
-        handleUpdateSet({ exerciseID, set, newReps, newDurationMins, newDurationSecs }) {
-            let exerciseArray = this.finalWorkout.exercises
-            if (this.exerciseType === false) {
-                for (let i = 0; i < exerciseArray.length; i++) {
-                    const obj = exerciseArray[i]
-
-                    if (obj.id === exerciseID) {
-                        for (let j = 0; j < obj.sets.length; j++) {
-                            if (obj.sets[j].index === set) {
-                                console.log(newReps)
-                                obj.sets[j].target_reps = newReps;
-                            }
-                        }
+            if (obj.id === exerciseID) {
+                for (let j = 0; j < obj.sets.length; j++) {
+                    if (obj.sets[j].index === set) {
+                        obj.sets[j].target_duration_mins = this.formatAmount(newDurationMins);
+                        obj.sets[j].target_duration_secs = this.formatAmount(newDurationSecs);
                     }
                 }
             }
-            else {
-                for (let i = 0; i < exerciseArray.length; i++) {
-                    const obj = exerciseArray[i]
-
-                    if (obj.id === exerciseID) {
-                        for (let j = 0; j < obj.sets.length; j++) {
-                            if (obj.sets[j].index === set) {                                
-                                obj.sets[j].target_duration_mins = this.formatAmount(newDurationMins);
-                                obj.sets[j].target_duration_secs = this.formatAmount(newDurationSecs);
-                            }
-                        }
-                    }
-                }
-            }
+        }
+    }
 
 
-        },
+},
 
 
         //API CALLS
         async getExercises(muscleGroup) {
-            this.muscleGroupExercises = await API.getExercisesByMuscleGroup(muscleGroup)
-        },
+    this.muscleGroupExercises = await API.getExercisesByMuscleGroup(muscleGroup)
+},
 
 
         async getMuscleGroups() {
-            this.muscleGroups = await API.getMuscleGroups()
-        },
+    this.muscleGroups = await API.getMuscleGroups()
+},
 
         async saveFinalWorkout() {
-            await API.addWorkout(this.finalWorkout);
-            this.showSuccess();
-        },
+    await API.addWorkout(this.finalWorkout);
+    this.showSuccess();
+
+    localStorage.removeItem('workoutTitle');
+    localStorage.removeItem('exercises');
+    console.log("Local storage cleared for workoutTitle and exercises.");
+},
 
         async saveUpdatedWorkout() {
-            console.log(this.finalWorkout.exercises)
-            await API.updateWorkoutByWorkoutID(this.$route.params.workoutID, this.finalWorkout.exercises)
-            this.showSuccessUpdate();
-        },
+    console.log(this.finalWorkout.exercises)
+    await API.updateWorkoutByWorkoutID(this.$route.params.workoutID, this.finalWorkout.exercises)
+    this.showSuccessUpdate();
+},
 
         async getPresetWorkoutforEdit(workoutID) {
-            let editableWorkout = await API.getWorkoutsByWorkoutID(workoutID)
-            console.log(editableWorkout)
-            this.draftWorkoutTitle = editableWorkout[0].workoutTitle
-            this.finalWorkout.workoutTitle = editableWorkout[0].workoutTitle
-            this.finalWorkout.users = editableWorkout[0].users
-            this.finalWorkout.exercises = editableWorkout[0].exercises
-        }
+    let editableWorkout = await API.getWorkoutsByWorkoutID(workoutID)
+    console.log(editableWorkout)
+    this.draftWorkoutTitle = editableWorkout[0].workoutTitle
+    this.finalWorkout.workoutTitle = editableWorkout[0].workoutTitle
+    this.finalWorkout.users = editableWorkout[0].users
+    this.finalWorkout.exercises = editableWorkout[0].exercises
+}
 
     },
-    mounted() {
-        if (this.$route.params.workoutID) {
-            let editWorkoutID = this.$route.params.workoutID
-            this.getPresetWorkoutforEdit(editWorkoutID)
+mounted() {
+    const workoutTitle = localStorage.getItem('workoutTitle');
+    const exercises = localStorage.getItem('exercises');
 
-        }
-        else {
-            this.finalWorkout.users.push(this.$store.state.user.uid)
-        }
+    if (workoutTitle || exercises) {
+        this.showContinueWorkoutPrompt = true;
+    }
 
-        this.getMuscleGroups()
-        console.log(this.finalWorkout)
+    if (this.$route.params.workoutID) {
+        let editWorkoutID = this.$route.params.workoutID
+        this.getPresetWorkoutforEdit(editWorkoutID)
 
     }
+    else {
+        this.finalWorkout.users.push(this.$store.state.user.uid)
+    }
+
+    this.getMuscleGroups()
+    console.log(this.finalWorkout)
+
+}
 }
 
 </script>
