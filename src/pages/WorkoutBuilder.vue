@@ -123,6 +123,7 @@
                 </div>
 
             </div>
+            <ExerciseBuilder></ExerciseBuilder>
         </div>
         <Dialog v-model:visible="showContinueWorkoutPrompt" appendTo="body" :modal="true">
             <div clas="p-2">
@@ -137,10 +138,12 @@
 <script>
 import API from "../api";
 import WorkoutBuilderTable from "@/components/WorkoutBuilderTable";
+import ExerciseBuilder from "@/pages/ExerciseBuilder.vue"
 
 export default {
     components: {
-        WorkoutBuilderTable
+        WorkoutBuilderTable,
+        ExerciseBuilder
     },
     data() {
         return {
