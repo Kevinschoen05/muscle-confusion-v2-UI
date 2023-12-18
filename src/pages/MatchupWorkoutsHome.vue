@@ -43,15 +43,15 @@
                             <Menu ref="menu2" id="overlay_menu" :popup="true"></Menu>
                         </div>
                     </div>
-                    <ul class="p-0">
-                        <li class="py-3 border-bottom-1 surface-border flex md:align-items-start md:justify-content-between flex-column md:flex-row"
+                    <ul class="p-0 w-full">
+                        <li class="py-3 border-bottom-1 surface-border flex md:align-items-start md:justify-content-between flex-column md:flex-row w-full lg:justify-content-between"
                             v-for="workout in userMatchupWorkouts" :key="workout._id">
                             <div class="flex align-items-start">
                                 <div>
                                     <span class="text-900 font-bold block mb-2">{{ workout.workoutTitle }}</span>
                                     <div
                                         class="flex md:align-items-stretch md:justify-content-between flex-column md:flex-row">
-                                        <div class="surface-card shadow-2 p-3 border-1 border-50 border-round">
+                                        <div class=" matchup-surface-card surface-card shadow-2 p-3 border-1 border-50 border-round">
                                             <div class="flex justify-content-between mb-3">
                                                 <div>
                                                     <span class="block text-500 font-medium mb-3">{{
@@ -61,12 +61,12 @@
                                                 </div>
                                             </div>
                                             <Button v-if="workout.userWorkoutData[0].userID === this.$store.state.user.uid"
-                                                class="flex align-self-center p-button-success m-2"
+                                                class="flex align-self-center p-button-success p-button-sm m-2"
                                                 @click="startMatchupWorkout(workout.workoutID, workout._id)"> Complete
                                                 Workout</Button>
                                         </div>
                                         <span class="flex align-self-center text-900 font-bold block p-4">VS.</span>
-                                        <div class="surface-card shadow-2 p-3 border-1 border-50 border-round">
+                                        <div class="matchup-surface-card surface-card shadow-2 p-3 border-1 border-50 border-round ">
                                             <div class="flex justify-content-between mb-3">
                                                 <div>
                                                     <span class="block text-500 font-medium mb-3">
@@ -76,7 +76,7 @@
                                                 </div>
                                             </div>
                                             <Button v-if="workout.userWorkoutData[1].userID === this.$store.state.user.uid"
-                                                class="flex align-self-center p-button-success m-2"
+                                                class="flex align-self-center p-button-success p-button-sm m-2"
                                                 @click="startMatchupWorkout(workout.workoutID, workout._id)"> Complete
                                                 Workout</Button>
                                             <div v-else>
@@ -215,3 +215,11 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+    .matchup-surface-card {
+        width: 210px
+    }
+
+
+</style>
