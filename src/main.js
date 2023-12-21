@@ -51,6 +51,8 @@ import TextArea from 'primevue/textarea';
 import Card from 'primevue/card'
 import Panel from 'primevue/panel';
 import Tag from 'primevue/tag';
+import Slider from 'primevue/slider';
+
 
 
 
@@ -103,5 +105,6 @@ app.component('TextArea', TextArea)
 app.component('Card', Card)
 app.component('Panel', Panel)
 app.component('Tag', Tag)
+app.component('Slider', Slider)
 
 app.mount('#app')
