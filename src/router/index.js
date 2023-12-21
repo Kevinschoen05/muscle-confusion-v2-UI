@@ -85,6 +85,11 @@ const routes = [
     component: () => import("../pages/MatchupWorkoutsHome.vue")
   },
   {
+    path: "/randomworkoutgenerator",
+    name: "random-workout-generator",
+    component: () => import("../pages/RandomWorkoutGenerator.vue")
+  },
+  {
     path: "/stats",
     name: "stats-home",
     component: () => import("../pages/StatsHome.vue"),
@@ -105,7 +110,6 @@ const routes = [
         component: () => import("../data-views/CompletedExercisesView.vue"),
 
       },
-
     ],
   },
 

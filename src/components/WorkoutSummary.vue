@@ -38,6 +38,7 @@
         <div class="flex flex-wrap align-items-center justify-content-center gap-3 mt-3">
             <Button label="Freestyle Workout" @click="startFreestyleWorkout"></Button>
             <Button class="p-button-outlined" @click="startWorkoutBuilder" label="Build New Workout"></Button>
+            <Button label="Random Workout" @click="startRandomWorkoutGenerator"></Button>
         </div>
     </div>
 </template>
@@ -115,6 +116,13 @@ export default {
             name: "workout-builder",
             link: "/workoutbuilder"
         });
+    },
+
+    startRandomWorkoutGenerator(){
+        this.$router.push({
+            name: "random-workout-generator",
+            link: "/randomworkoutgenerator"
+        })
     },
 
     //API CALLS
