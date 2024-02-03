@@ -50,6 +50,11 @@ const routes = [
     component: () => import("../pages/WorkoutBuilder.vue"),
   },
   {
+    path: "/randomworkoutgenerator",
+    name: "random-workout-generator",
+    component: () => import("../pages/RandomWorkoutGenerator.vue")
+  },
+  {
     path: "/exercisebuilder",
     name: "exercise-builder",
     component: () => import("../pages/ExerciseBuilder.vue"),

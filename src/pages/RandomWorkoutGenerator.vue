@@ -19,7 +19,7 @@
                             <InputText v-model.number="this.minSets" />
                             <Slider :min="1" :max="10" :step="1" v-model="this.minSets" />
                         </div>
-                        <div class="ml-4">
+                        <div class="pt-3 md:ml-4 md:pt-0">
                             <label class="font-medium text-900 ">Maximum Target Sets</label>
                             <InputText v-model.number="this.maxSets" />
                             <Slider :min="1" :max="10" :step="1" v-model="this.maxSets" />
@@ -30,10 +30,10 @@
                             <InputText v-model.number="this.minReps" />
                             <Slider :min="1" :max="10" :step="1" v-model="this.minReps" />
                         </div>
-                        <div class="ml-4">
+                        <div class="pt-3 md:ml-4 md:pt-0">
                             <label class="font-medium text-900 ">Maximum Target Reps</label>
                             <InputText v-model.number="this.maxReps" />
-                            <Slider :min="1" :max="10" :step="1" v-model="this.maxReps" />
+                            <Slider :min="1" :max="25" :step="1" v-model="this.maxReps" />
                         </div>
                         <div class="surface-100 mb-3 col-12" style="height:2px"></div>
                         <div class="col-12">
@@ -73,6 +73,8 @@
                                 @click="addSetToExercise(exercise.id)"></Button>
                         </AccordionTab>
                     </Accordion>
+                    <Button v-if="workoutExercises.length === desiredExerciseCount" label="Start Workout" class="w-auto mt-3"></Button>
+
                 </div>
             </div>
         </div>
@@ -102,7 +104,42 @@ export default {
     },
     methods: {
 
-        //COMPONENT HANDLERS
+        //Add Set or Delete Exerices
+
+        deleteExercise(exerciseID) {
+            console.log(exerciseID)
+
+            // Filter out the exercise with the given ID and update the original array reference
+            const filteredExercises = this.workoutExercises.filter(exercise => exercise.id !== exerciseID);
+            this.workoutExercises.length = 0; // Clear the original array
+            filteredExercises.forEach(exercise => this.workoutExercises.push(exercise)); // Copy the filtered elements back
+        },
+
+        addSetToExercise(exerciseID) {
+            console.log(exerciseID)
+
+            const exercise = this.workoutExercises.find(exercise => exercise.id === exerciseID);
+            if (exercise) {
+                // Calculate the new index value
+                const newIndex = exercise.sets.length + 1;
+                // Create the new set object
+                const newSet = {
+                    index: newIndex,
+                    target_reps: 0,
+                    actual_reps: 0,
+                    target_weight: 0,
+                    actual_weight: 0,
+                    completed: false,
+                    success: false
+                };
+                // Add the new set to the sets array of the found exercise
+                exercise.sets.push(newSet);
+            }
+
+        },
+
+
+        //COMPONENT HANDLERS - Delete and Update Sets
 
         handleDeleteSet({ exerciseID, set }) {
             let exerciseArray = this.workoutExercises
@@ -121,7 +158,8 @@ export default {
 
         handleUpdateSet({ exerciseID, set, newReps, newDurationMins, newDurationSecs }) {
             let exerciseArray = this.workoutExercises
-            if (this.exerciseType === false) {
+            let exerciseType = false ; //hardcoding this until I need to make this work for timed workouts. 
+            if (exerciseType === false) {
                 for (let i = 0; i < exerciseArray.length; i++) {
                     const obj = exerciseArray[i]
 
