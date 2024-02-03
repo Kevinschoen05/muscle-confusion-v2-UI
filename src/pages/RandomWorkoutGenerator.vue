@@ -8,7 +8,7 @@
                 <div class="surface-card p-4 shadow-2 border-round">
 
                     <div class="grid formgrid p-fluid">
-                        <div>
+                        <div class="mb-3 ">
                             <label class="font-medium text-900 ">Total Exercises </label>
                             <InputText v-model.number="this.desiredExerciseCount" />
                             <Slider :min="1" :max="10" :step="1" v-model="this.desiredExerciseCount" />
