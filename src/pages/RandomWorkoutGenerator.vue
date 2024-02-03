@@ -14,6 +14,15 @@
                             <Slider :min="1" :max="10" :step="1" v-model="this.desiredExerciseCount" />
                         </div>
                         <div class="surface-100 mb-3 col-12" style="height:2px"></div>
+                        <label class=" col-12 font-medium text-900 ">Possible Muscle Groups</label>
+                        <div class="flex flex-wrap justify-content-center gap-3 p-3">
+                            <div v-for="(muscleGroup, index) in selectedMuscleGroups" :key="muscleGroup.name"
+                                class="col-12 flex align-items-center">
+                                <Checkbox v-model="muscleGroup.selected" :value="true" :false-value="false" />
+                                <label :for="`muscleGroup-${index}`" class="ml-2">{{ muscleGroup.name }}</label>
+                            </div>
+                        </div>
+                        <div class="surface-100 mb-3 col-12" style="height:2px"></div>
                         <div>
                             <label class="font-medium text-900 ">Minimum Target Sets</label>
                             <InputText v-model.number="this.minSets" />
@@ -73,7 +82,8 @@
                                 @click="addSetToExercise(exercise.id)"></Button>
                         </AccordionTab>
                     </Accordion>
-                    <Button v-if="workoutExercises.length === desiredExerciseCount" label="Start Workout" class="w-auto mt-3"></Button>
+                    <Button v-if="workoutExercises.length === desiredExerciseCount" label="Start Workout"
+                        class="w-auto mt-3"></Button>
 
                 </div>
             </div>
@@ -158,7 +168,7 @@ export default {
 
         handleUpdateSet({ exerciseID, set, newReps, newDurationMins, newDurationSecs }) {
             let exerciseArray = this.workoutExercises
-            let exerciseType = false ; //hardcoding this until I need to make this work for timed workouts. 
+            let exerciseType = false; //hardcoding this until I need to make this work for timed workouts. 
             if (exerciseType === false) {
                 for (let i = 0; i < exerciseArray.length; i++) {
                     const obj = exerciseArray[i]
@@ -208,7 +218,11 @@ export default {
 
         },
         async getWorkoutExercises() {
-            this.workoutExercises = await API.getRandomExercises(this.desiredExerciseCount, this.minSets, this.maxSets, this.minReps, this.maxReps, this.muscleGroups)
+            const muscleGroupParams = this.selectedMuscleGroups
+                .filter(muscleGroup => muscleGroup.selected !== false)
+                .map(muscleGroup => muscleGroup.name);
+            console.log(muscleGroupParams)
+            this.workoutExercises = await API.getRandomExercises(this.desiredExerciseCount, this.minSets, this.maxSets, this.minReps, this.maxReps, muscleGroupParams)
             console.log(this.workoutExercises)
         }
     },
