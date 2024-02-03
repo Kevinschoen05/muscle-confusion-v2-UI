@@ -179,12 +179,12 @@ export default class API {
     return res.data;
   }
 
-  static async updateUserScheduleAsComplete(userID, workoutID){
+  static async updateUserScheduleAsComplete(userID, workoutID) {
     const res = axios.put(`${user_url}/${userID}/complete/UserSchedule`, {
       userID: userID,
-      workoutID: workoutID 
+      workoutID: workoutID,
     });
-    return res.data
+    return res.data;
   }
 
   static async getUserFriends(userID) {
@@ -243,5 +243,28 @@ export default class API {
   static async getExerciseByExerciseID(exerciseID) {
     const res = await axios.get(`${exercise_url}/id/${exerciseID}`);
     return res.data;
+  }
+
+  static async getRandomExercises(
+    desiredExerciseCount,
+    minSets,
+    maxSets,
+    minReps,
+    maxReps,
+    muscleGroups
+  ) {
+    // Convert the array of muscle groups to a comma-separated string
+    const muscleGroupsStr = muscleGroups.join(",");
+
+    // Construct the query string
+    const queryString = `?desiredExerciseCount=${desiredExerciseCount}&minSets=${minSets}&maxSets=${maxSets}&minReps=${minReps}&maxReps=${maxReps}&muscleGroups=${muscleGroupsStr}`;
+
+    try {
+      const res = await axios.get(`${exercise_url}/random/${queryString}`);
+      return res.data;
+    } catch (error) {
+      console.error("Error fetching random exercises:", error);
+      throw error; // Rethrow or handle as needed
+    }
   }
 }

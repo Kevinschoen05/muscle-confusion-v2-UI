@@ -44,6 +44,13 @@
                         <span>Matchups</span>
                     </a>
                 </li>
+                <li>
+                    <a @click="$router.push('/randomworkoutgenerator')" v-ripple
+                        class="flex px-6 p-3 lg:px-3 lg:py-2 align-items-center text-gray-400 hover:text-white hover:bg-gray-800 font-medium border-round cursor-pointer transition-colors transition-duration-150 p-ripple">
+                        <i class="fa-solid fa-shuffle mr-2"></i>
+                        <span>Workout Generator</span>
+                    </a>
+                </li>
             </ul>
         </div>
         <ul class="list-none p-0 m-0  flex lg:align-items-center justify-content-end  select-none flex-row">
