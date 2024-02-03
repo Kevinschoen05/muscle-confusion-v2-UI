@@ -60,7 +60,6 @@ import Slider from 'primevue/slider';
 
 
 
-
 const app = createApp(App);
 app.use(router)
 app.use(store)

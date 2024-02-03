@@ -6,25 +6,73 @@
                 <p class="m-0 mb-4 p-0 text-600 line-height-3 mr-3">Enter your parameters and automatically generate a
                     custom workout.</p>
                 <div class="surface-card p-4 shadow-2 border-round">
+
                     <div class="grid formgrid p-fluid">
                         <div>
-                            <Label class="font-medium text-900 ">Minimum Target Sets</Label>
+                            <label class="font-medium text-900 ">Total Exercises </label>
+                            <InputText v-model.number="this.desiredExerciseCount" />
+                            <Slider :min="1" :max="10" :step="1" v-model="this.desiredExerciseCount" />
+                        </div>
+                        <div class="surface-100 mb-3 col-12" style="height:2px"></div>
+                        <div>
+                            <label class="font-medium text-900 ">Minimum Target Sets</label>
                             <InputText v-model.number="this.minSets" />
                             <Slider :min="1" :max="10" :step="1" v-model="this.minSets" />
                         </div>
                         <div class="ml-4">
-                            <Label class="font-medium text-900 ">Maximum Target Sets</Label>
+                            <label class="font-medium text-900 ">Maximum Target Sets</label>
                             <InputText v-model.number="this.maxSets" />
                             <Slider :min="1" :max="10" :step="1" v-model="this.maxSets" />
                         </div>
-                        <div class="field mb-4 col-12">
-                        </div>
                         <div class="surface-100 mb-3 col-12" style="height:2px"></div>
+                        <div>
+                            <label class="font-medium text-900 ">Minimum Target Reps</label>
+                            <InputText v-model.number="this.minReps" />
+                            <Slider :min="1" :max="10" :step="1" v-model="this.minReps" />
+                        </div>
+                        <div class="ml-4">
+                            <label class="font-medium text-900 ">Maximum Target Reps</label>
+                            <InputText v-model.number="this.maxReps" />
+                            <Slider :min="1" :max="10" :step="1" v-model="this.maxReps" />
+                        </div>
                         <div class="surface-100 mb-3 col-12" style="height:2px"></div>
                         <div class="col-12">
-                            <Button label="Start Workout" class="w-auto mt-3"></Button>
+                            <Button @click="getWorkoutExercises()" label="Generate Workout" class="w-auto mt-3"></Button>
                         </div>
                     </div>
+                </div>
+                <div class="surface-card mt-2 p-4 shadow-2 border-round">
+
+                    <div class="font-medium text-3xl text-900 mb-3">Random Workout </div>
+                    <div class="surface-border border-top-1 opacity-50 mb-3 col-12"></div>
+                    <Accordion>
+                        <AccordionTab v-for="exercise in workoutExercises" :key="exercise.exerciseName">
+                            <template #header>
+                                <p>{{ exercise.exerciseName }}</p>
+                            </template>
+                            <div class="chip-row">
+                                <Chip class="mr-2 mb-2 custom-chip-primary">
+                                    {{ exercise.primaryMuscleGroup }}
+                                </Chip>
+                                <Chip v-for="musclegroup in exercise.secondaryMuscleGroups" :key="musclegroup"
+                                    class="mr-2 mb-2 custom-chip-secondary">
+                                    {{ musclegroup }}
+                                </Chip>
+                            </div>
+                            <ul>
+                                <WorkoutBuilderTable v-for="set in exercise.sets" :key="set" :set="set.index"
+                                    :exerciseType="false" :reps="set.target_reps" :durationMins="set.target_duration_mins"
+                                    :durationSeconds="set.target_duration_secs" :exerciseID="exercise.id"
+                                    @delete-set="handleDeleteSet" @update-set="handleUpdateSet">
+
+                                </WorkoutBuilderTable>
+                            </ul>
+                            <Button label="Delete Exercise" class=" p-button-danger w-auto mt-3 mr-1"
+                                @click="deleteExercise(exercise.id)"></Button>
+                            <Button label="Add New Set" class=" p-button w-auto mt-3"
+                                @click="addSetToExercise(exercise.id)"></Button>
+                        </AccordionTab>
+                    </Accordion>
                 </div>
             </div>
         </div>
@@ -33,8 +81,12 @@
 
 <script>
 import API from "../api";
+import WorkoutBuilderTable from "@/components/WorkoutBuilderTable.vue";
 
 export default {
+    components: {
+        WorkoutBuilderTable
+    },
 
     data() {
         return {
@@ -44,10 +96,69 @@ export default {
             minReps: 1,
             maxReps: 1,
             muscleGroups: [],
-            selectedMuscleGroups: []
+            selectedMuscleGroups: [],
+            workoutExercises: []
         }
     },
     methods: {
+
+        //COMPONENT HANDLERS
+
+        handleDeleteSet({ exerciseID, set }) {
+            let exerciseArray = this.workoutExercises
+            for (let i = 0; i < exerciseArray.length; i++) {
+                const obj = exerciseArray[i]
+
+                if (obj.id === exerciseID) {
+                    for (let j = 0; j < obj.sets.length; j++) {
+                        if (obj.sets[j].index === set) {
+                            obj.sets.splice(j, 1);
+                        }
+                    }
+                }
+            }
+        },
+
+        handleUpdateSet({ exerciseID, set, newReps, newDurationMins, newDurationSecs }) {
+            let exerciseArray = this.workoutExercises
+            if (this.exerciseType === false) {
+                for (let i = 0; i < exerciseArray.length; i++) {
+                    const obj = exerciseArray[i]
+
+                    if (obj.id === exerciseID) {
+                        for (let j = 0; j < obj.sets.length; j++) {
+                            if (obj.sets[j].index === set) {
+                                console.log(newReps)
+                                obj.sets[j].target_reps = newReps;
+                            }
+                        }
+                    }
+                }
+            }
+            else {
+                for (let i = 0; i < exerciseArray.length; i++) {
+                    const obj = exerciseArray[i]
+
+                    if (obj.id === exerciseID) {
+                        for (let j = 0; j < obj.sets.length; j++) {
+                            if (obj.sets[j].index === set) {
+                                obj.sets[j].target_duration_mins = this.formatAmount(newDurationMins);
+                                obj.sets[j].target_duration_secs = this.formatAmount(newDurationSecs);
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
+        formatAmount(value) {
+            // Add leading zero if value is less than 10
+            if (value < 10) {
+                value = '0' + value;
+            }
+            return value
+        },
+
         async getMuscleGroups() {
             this.muscleGroups = await API.getMuscleGroups()
             for (var i = 0; i < this.muscleGroups.length; i++) {
@@ -58,6 +169,10 @@ export default {
             }
 
         },
+        async getWorkoutExercises() {
+            this.workoutExercises = await API.getRandomExercises(this.desiredExerciseCount, this.minSets, this.maxSets, this.minReps, this.maxReps, this.muscleGroups)
+            console.log(this.workoutExercises)
+        }
     },
 
     mounted() {
