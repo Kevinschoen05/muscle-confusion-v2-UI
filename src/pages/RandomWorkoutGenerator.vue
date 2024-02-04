@@ -45,13 +45,13 @@
                             <Slider :min="1" :max="25" :step="1" v-model="this.maxReps" />
                         </div>
                         <div class="surface-100 mb-3 col-12" style="height:2px"></div>
-                        <div class="col-12">
-                            <Button @click="getWorkoutExercises()" label="Generate Workout" class="w-auto mt-3"></Button>
+                        <div v-if="desiredExerciseCount > 0" class="col-12">
+                            <Button @click="getWorkoutExercises(), workoutGenerated = true" label="Generate Workout"
+                                class="w-auto mt-3"></Button>
                         </div>
                     </div>
                 </div>
-                <div class="surface-card mt-2 p-4 shadow-2 border-round">
-
+                <div v-if="workoutGenerated" class="surface-card mt-2 p-4 shadow-2 border-round">
                     <div class="font-medium text-3xl text-900 mb-3">Random Workout </div>
                     <div class="surface-border border-top-1 opacity-50 mb-3 col-12"></div>
                     <Accordion>
@@ -83,7 +83,7 @@
                         </AccordionTab>
                     </Accordion>
                     <Button v-if="workoutExercises.length === desiredExerciseCount" label="Start Workout"
-                        class="w-auto mt-3"></Button>
+                        class="w-auto mt-3" @click="startRandomWorkout()"></Button>
 
                 </div>
             </div>
@@ -102,6 +102,7 @@ export default {
 
     data() {
         return {
+            workoutGenerated: false,
             desiredExerciseCount: 0,
             minSets: 1,
             maxSets: 1,
@@ -224,6 +225,11 @@ export default {
             console.log(muscleGroupParams)
             this.workoutExercises = await API.getRandomExercises(this.desiredExerciseCount, this.minSets, this.maxSets, this.minReps, this.maxReps, muscleGroupParams)
             console.log(this.workoutExercises)
+        },
+
+        startRandomWorkout() {
+            localStorage.setItem('workoutExercises', JSON.stringify(this.workoutExercises));
+            this.$router.push({ path: '/activeworkout/random' });
         }
     },
 
