@@ -2,15 +2,19 @@
     <Toast class="z-5" />
     <div class="surface-ground">
         <div class="grid">
-            <ActiveWorkoutSummary v-if="this.$route.params.workoutID" :workoutID="this.workoutID"
+            <ActiveWorkoutSummary v-if="this.$route.meta.workoutType === 'preset'" :workoutID="this.workoutID"
                 :workoutTitle="this.workoutTitle" :totalSets="this.totalSets"
                 class="timer flex flex-column flex-auto align-items-center">
             </ActiveWorkoutSummary>
-            <div v-else class="p-5 flex flex-column flex-auto">
+            <div v-else-if="this.$route.meta.workoutType === 'freestyle'" class="p-5 flex flex-column flex-auto">
                 <h1>Build a Workout as You Go</h1>
                 <p class="m-0 mb-4 p-0 text-900 line-height-3 mr-3">Build and track a standalone workout. You can view your
                     results from your dashboard just like any other preset workout.
                 </p>
+            </div>
+            <div v-else-if="this.$route.meta.workoutType === 'random'" class="p-5 flex flex-column flex-auto">
+                <h1>Random</h1>
+
             </div>
             <div class="col-12 p-3 flex flex-column flex-auto align-items-center">
                 <Button v-if="visible1" label="Start Workout" class=" flex align-items-center"
@@ -629,6 +633,8 @@ export default {
 
     },
     mounted() {
+
+        console.log("workoutID route param: " + this.$route.params.workoutID)
         const storedWorkoutID = localStorage.getItem('workoutID');
         if (this.$route.params.workoutID) {
             this.getActiveWorkout(this.$route.params.workoutID)
@@ -638,6 +644,8 @@ export default {
         if (this.$route.params.workoutID && this.$route.params.workoutID === storedWorkoutID) {
             this.showContinueWorkoutPrompt = true
         }
+
+
     }
 }
 

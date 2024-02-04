@@ -73,11 +73,21 @@ const routes = [
     path: "/activeworkout/:workoutID",
     name: "active-workout",
     component: () => import("../pages/ActiveWorkout.vue"),
+    meta: { workoutType: 'preset' }
+
   },
   {
     path: "/activeworkout/freestyle",
     name: "freestyle-workout",
     component: () => import("../pages/ActiveWorkout.vue"),
+    meta: { workoutType: 'freestyle' }
+
+  },
+  {
+    path: "/activeworkout/random",
+    name: "random-workout",
+    component: () => import("../pages/ActiveWorkout.vue"),
+    meta: { workoutType: 'random' }
   },
   {
     path: "/completedMatchupWorkout/id/:completedMatchupWorkoutID",
