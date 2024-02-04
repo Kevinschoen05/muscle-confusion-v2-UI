@@ -46,7 +46,8 @@
                         </div>
                         <div class="surface-100 mb-3 col-12" style="height:2px"></div>
                         <div v-if="desiredExerciseCount > 0" class="col-12">
-                            <Button @click="getWorkoutExercises(), workoutGenerated = true" label="Generate Workout" class="w-auto mt-3"></Button>
+                            <Button @click="getWorkoutExercises(), workoutGenerated = true" label="Generate Workout"
+                                class="w-auto mt-3"></Button>
                         </div>
                     </div>
                 </div>
@@ -82,7 +83,7 @@
                         </AccordionTab>
                     </Accordion>
                     <Button v-if="workoutExercises.length === desiredExerciseCount" label="Start Workout"
-                        class="w-auto mt-3"></Button>
+                        class="w-auto mt-3" @click="startRandomWorkout()"></Button>
 
                 </div>
             </div>
@@ -101,7 +102,7 @@ export default {
 
     data() {
         return {
-            workoutGenerated: false, 
+            workoutGenerated: false,
             desiredExerciseCount: 0,
             minSets: 1,
             maxSets: 1,
@@ -224,6 +225,11 @@ export default {
             console.log(muscleGroupParams)
             this.workoutExercises = await API.getRandomExercises(this.desiredExerciseCount, this.minSets, this.maxSets, this.minReps, this.maxReps, muscleGroupParams)
             console.log(this.workoutExercises)
+        },
+
+        startRandomWorkout() {
+            localStorage.setItem('workoutExercises', JSON.stringify(this.workoutExercises));
+            this.$router.push({ path: '/activeworkout/random' });
         }
     },
 

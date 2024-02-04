@@ -13,12 +13,14 @@
                 </p>
             </div>
             <div v-else-if="this.$route.meta.workoutType === 'random'" class="p-5 flex flex-column flex-auto">
-                <h1>Random</h1>
-
+                <h1>Custom Workout</h1>
+                <p class="m-0 mb-4 p-0 text-900 line-height-3 mr-3">Track your custom generated workout.You can view your
+                    results from your dashboard just like any other preset workout.
+                </p>
             </div>
             <div class="col-12 p-3 flex flex-column flex-auto align-items-center">
                 <Button v-if="visible1" label="Start Workout" class=" flex align-items-center"
-                    @click="startTimer(), visible1 = false"></Button>
+                    @click="startTimer(), startRandomWorkout(), visible1 = false"></Button>
 
                 <ul v-if=!visible1 class="list-none p-0 m-0">
                     <ExerciseCard v-for="exercise in exercises" :key="exercise"
@@ -135,10 +137,10 @@
         </Dialog>
         <Dialog v-model:visible="showContinueWorkoutPrompt" appendTo="body" :modal="true">
             <div clas="p-2">
-            <div class="text-900 font-medium mb-3 text-xl">Continue Workout</div>
-            <p class="mt-0 mb-4 p-0 line-height-3">You had a workout in progress. Continue where you left off?</p>
-            <Button label="Yes" @click="continueSavedWorkout(), startTimer(), visible1 = false"></Button>
-            <Button class=" ml-2" label="No" @click="showContinueWorkoutPrompt = false"></Button>
+                <div class="text-900 font-medium mb-3 text-xl">Continue Workout</div>
+                <p class="mt-0 mb-4 p-0 line-height-3">You had a workout in progress. Continue where you left off?</p>
+                <Button label="Yes" @click="continueSavedWorkout(), startTimer(), visible1 = false"></Button>
+                <Button class=" ml-2" label="No" @click="showContinueWorkoutPrompt = false"></Button>
             </div>
         </Dialog>
     </div>
@@ -267,6 +269,21 @@ export default {
 
         },
 
+        startRandomWorkout() {
+            if (this.$route.meta.workoutType !== 'random') {
+                return
+            }
+            else {
+                const storedExercises = localStorage.getItem('workoutExercises');
+                if (storedExercises) {
+                    this.exercises = JSON.parse(storedExercises);
+
+                }
+            }
+            localStorage.removeItem('workoutExercises'); // Clear the stored data
+
+        },
+
         continueSavedWorkout() {
             this.showContinueWorkoutPrompt = false;
             // Now call the function to load data from local storage
@@ -380,6 +397,7 @@ export default {
 
 
             let activeFreestyleWorkoutID = 'freestyle';
+            let activeRandomWorkoutID = 'random';
             let finalWorkoutID = '';
             let finalWorkoutTitle = '';
             let finalUsers = []
@@ -395,14 +413,19 @@ export default {
             }
             )
 
-            if (this.$route.params.workoutID) {
+            if (this.$route.meta.workoutType === 'preset') {
                 finalWorkoutID = this.activeWorkout[0]._id;
                 finalWorkoutTitle = this.activeWorkout[0].workoutTitle
                 finalUsers = this.$store.state.user.uid
             }
-            else {
+            else if (this.$route.meta.workoutType === 'freestyle') {
                 finalWorkoutID = activeFreestyleWorkoutID
                 finalWorkoutTitle = "Freestyle Workout"
+                finalUsers.push(this.$store.state.user.uid)
+            }
+            else if (this.$route.meta.workoutType === 'random') {
+                finalWorkoutID = activeRandomWorkoutID
+                finalWorkoutTitle = "Random Workout"
                 finalUsers.push(this.$store.state.user.uid)
             }
 
