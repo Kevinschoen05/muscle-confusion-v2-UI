@@ -52,6 +52,8 @@ import Card from 'primevue/card'
 import Panel from 'primevue/panel';
 import Tag from 'primevue/tag';
 import Slider from 'primevue/slider';
+import RadioButton from 'primevue/radiobutton';
+
 
 
 
@@ -105,5 +107,6 @@ app.component('Card', Card)
 app.component('Panel', Panel)
 app.component('Tag', Tag)
 app.component('Slider', Slider)
+app.component('RadioButton', RadioButton)
 
 app.mount('#app')

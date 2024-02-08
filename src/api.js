@@ -251,13 +251,14 @@ export default class API {
     maxSets,
     minReps,
     maxReps,
-    muscleGroups
+    muscleGroups,
+    equipment
   ) {
     // Convert the array of muscle groups to a comma-separated string
     const muscleGroupsStr = muscleGroups.join(",");
 
     // Construct the query string
-    const queryString = `?desiredExerciseCount=${desiredExerciseCount}&minSets=${minSets}&maxSets=${maxSets}&minReps=${minReps}&maxReps=${maxReps}&muscleGroups=${muscleGroupsStr}`;
+    const queryString = `?desiredExerciseCount=${desiredExerciseCount}&minSets=${minSets}&maxSets=${maxSets}&minReps=${minReps}&maxReps=${maxReps}&muscleGroups=${muscleGroupsStr}&equipment=${equipment}`;
 
     try {
       const res = await axios.get(`${exercise_url}/random/${queryString}`);
