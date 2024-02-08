@@ -22,6 +22,29 @@
                                 <label :for="`muscleGroup-${index}`" class="ml-2">{{ muscleGroup.name }}</label>
                             </div>
                         </div>
+                        <div class="surface-100 mb-3 col-12"></div>
+                        <div class="">
+                            <label class=" col-12 font-medium text-900">Available Equipment</label>
+                            <div class="md:flex flex-wrap justify-content-center p-3">
+                                <div class="flex align-items-center p-2">
+                                    <RadioButton v-model="equipment" inputId="equipment1" value="Bodyweight" />
+                                    <label for="equipment1" class="ml-2">Bodyweight</label>
+                                </div>
+                                <div class="flex align-items-center p-2">
+                                    <RadioButton v-model="equipment" inputId="equipment2" value="Dumbbells Only" />
+                                    <label for="equipment2" class="ml-2">Dumbbells Only</label>
+                                </div>
+                                <div class="flex align-items-center p-2">
+                                    <RadioButton v-model="equipment" inputId="equipment3" value="Dumbbells/Barbell Only" />
+                                    <label for="equipment3" class="ml-2">Dumbbells/Barbell Only</label>
+                                </div>
+                                <div class="flex align-items-center p-2">
+                                    <RadioButton v-model="equipment" inputId="equipment4" value="Full Gym" />
+                                    <label for="equipment4" class="ml-2">Full Gym</label>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="surface-100 mb-3 col-12" style="height:2px"></div>
                         <div>
                             <label class="font-medium text-900 ">Minimum Target Sets</label>
@@ -34,6 +57,8 @@
                             <Slider :min="1" :max="10" :step="1" v-model="this.maxSets" />
                         </div>
                         <div class="surface-100 mb-3 col-12" style="height:2px"></div>
+                        <div class="surface-100 mb-3 col-12" style="height:2px"></div>
+
                         <div>
                             <label class="font-medium text-900 ">Minimum Target Reps</label>
                             <InputText v-model.number="this.minReps" />
@@ -84,7 +109,6 @@
                     </Accordion>
                     <Button v-if="workoutExercises.length === desiredExerciseCount" label="Start Workout"
                         class="w-auto mt-3" @click="startRandomWorkout()"></Button>
-
                 </div>
             </div>
         </div>
@@ -110,11 +134,13 @@ export default {
             maxReps: 1,
             muscleGroups: [],
             selectedMuscleGroups: [],
-            workoutExercises: []
+            workoutExercises: [],
+            equipment: ''
         }
     },
     methods: {
 
+        
         //Add Set or Delete Exerices
 
         deleteExercise(exerciseID) {
@@ -222,8 +248,7 @@ export default {
             const muscleGroupParams = this.selectedMuscleGroups
                 .filter(muscleGroup => muscleGroup.selected !== false)
                 .map(muscleGroup => muscleGroup.name);
-            console.log(muscleGroupParams)
-            this.workoutExercises = await API.getRandomExercises(this.desiredExerciseCount, this.minSets, this.maxSets, this.minReps, this.maxReps, muscleGroupParams)
+            this.workoutExercises = await API.getRandomExercises(this.desiredExerciseCount, this.minSets, this.maxSets, this.minReps, this.maxReps, muscleGroupParams, this.equipment)
             console.log(this.workoutExercises)
         },
 
