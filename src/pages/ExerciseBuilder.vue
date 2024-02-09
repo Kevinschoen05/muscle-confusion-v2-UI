@@ -1,5 +1,4 @@
 <template>
-
     <div class="surface-ground px-4 py-8 md:px-6 lg:px-8">
         <Toast />
         <div class="text-900 font-medium text-xl mb-3">Create New Exercise</div>
@@ -21,10 +20,32 @@
                 <div class="surface-border border-top-1 opacity-50 mb-3 col-12"></div>
                 <div class="field mb-4 col-12 ">
                     <label class="font-medium text-900">Secondary Muscle Groups</label>
-                    <div class="flex align-items-center mb-4" v-for="muscle in selectedSecondaryMuscleGroups" :key="muscle.name">
+                    <div class="flex align-items-center mb-4" v-for="muscle in selectedSecondaryMuscleGroups"
+                        :key="muscle.name">
                         <InputSwitch v-model="muscle.selected"></InputSwitch>
-                        <span class="ml-2">{{muscle.name}}</span>
+                        <span class="ml-2">{{ muscle.name }}</span>
 
+                    </div>
+                </div>
+                <div class="">
+                    <label class=" col-12 font-medium text-900">Required Equipment</label>
+                    <div class="md:flex flex-wrap justify-content-center">
+                        <div class="flex align-items-center p-2">
+                            <RadioButton v-model="equipment" inputId="equipment1" value="Bodyweight" />
+                            <label for="equipment1" class="ml-2">Bodyweight</label>
+                        </div>
+                        <div class="flex align-items-center p-2">
+                            <RadioButton v-model="equipment" inputId="equipment2" value="Dumbbells Only" />
+                            <label for="equipment2" class="ml-2">Dumbbells Only</label>
+                        </div>
+                        <div class="flex align-items-center p-2">
+                            <RadioButton v-model="equipment" inputId="equipment3" value="Dumbbells/Barbell Only" />
+                            <label for="equipment3" class="ml-2">Dumbbells/Barbell Only</label>
+                        </div>
+                        <div class="flex align-items-center p-2">
+                            <RadioButton v-model="equipment" inputId="equipment4" value="Full Gym" />
+                            <label for="equipment4" class="ml-2">Full Gym</label>
+                        </div>
                     </div>
                 </div>
                 <div class="surface-border border-top-1 opacity-50 mb-3 col-12"></div>
@@ -45,7 +66,8 @@ export default {
             primaryMuscleGroup: '',
             secondaryMuscleGroups: [],
             muscleGroups: [],
-            selectedSecondaryMuscleGroups: []
+            selectedSecondaryMuscleGroups: [],
+            equipment: ''
 
         }
     },
@@ -69,9 +91,9 @@ export default {
 
         },
 
-        async addNewExercise(){
+        async addNewExercise() {
             for (var i = 0; i < this.selectedSecondaryMuscleGroups.length; i++) {
-                if(this.selectedSecondaryMuscleGroups[i].selected === true){
+                if (this.selectedSecondaryMuscleGroups[i].selected === true) {
                     this.secondaryMuscleGroups.push(this.selectedSecondaryMuscleGroups[i].name)
                 }
             }
@@ -79,15 +101,16 @@ export default {
             let finalExercise = {
                 exerciseName: this.exerciseName,
                 primaryMuscleGroup: this.primaryMuscleGroup,
-                secondaryMuscleGroups: this.secondaryMuscleGroups
+                secondaryMuscleGroups: this.secondaryMuscleGroups,
+                equipment: this.equipment
             }
 
             await API.addExercise(finalExercise)
 
             this.exerciseName = '',
-            this.primaryMuscleGroup = '',
-            this.secondaryMuscleGroups = [],
-            this.showSuccess()
+                this.primaryMuscleGroup = '',
+                this.secondaryMuscleGroups = [],
+                this.showSuccess()
         }
 
     },
@@ -97,6 +120,4 @@ export default {
 
 }
 </script>
-<style scoped>
-
-</style>
+<style scoped></style>
