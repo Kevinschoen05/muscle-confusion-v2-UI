@@ -18,7 +18,7 @@
                         <div class="flex flex-wrap justify-content-center gap-3 p-3">
                             <div v-for="(muscleGroup, index) in selectedMuscleGroups" :key="muscleGroup.name"
                                 class="col-12 flex align-items-center">
-                                <Checkbox v-model="muscleGroup.selected" :value="true" :false-value="false" />
+                                <Checkbox v-model="muscleGroup.selected" :value="true" :binary="true" />
                                 <label :for="`muscleGroup-${index}`" class="ml-2">{{ muscleGroup.name }}</label>
                             </div>
                         </div>
