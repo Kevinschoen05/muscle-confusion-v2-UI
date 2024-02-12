@@ -207,9 +207,16 @@ export default class API {
   }
   //BIOMETRICS
 
-  static async getUserWeights(userID){
-    const res = await axios.get(`${user_url}/${userID}/biometrics/weights`)
-    return res.data
+  static async getUserWeights(userID) {
+    const res = await axios.get(`${user_url}/${userID}/biometrics/weights`);
+    return res.data;
+  }
+
+  static async addUserWeight(userID, weight) {
+    const res = await axios.put(`${user_url}/${userID}/biometrics/weights`, {
+      weight: weight,
+    });
+    return res.data;
   }
 
   //MESSAGING
