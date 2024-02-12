@@ -1,4 +1,5 @@
 <template>
+    <Toast />
     <div class="surface-card shadow-2 border-round p-4">
         <div class="grid">
             <div class="col-12 md:col-6 lg:col-3 p-3">
@@ -42,6 +43,12 @@
                 </div>
             </div>
         </div>
+        <div class="flex flex-column gap-2">
+            <label for="updateWeight">Update Current Weight: </label>
+            <InputNumber v-model="updateWeight" inputId="updateWeight" :min="0" :minFractionDigits="0"
+                :maxFractionDigits="2" showButtons></InputNumber>
+            <Button @click="addNewUserWeight()">Update Weight</Button>
+        </div>
     </div>
 </template>
 <script>
@@ -50,10 +57,31 @@ export default {
     data() {
         return {
             userWeights: [],
-            userCurrentWeight: 0
+            userCurrentWeight: 0,
+            updateWeight: 0
         }
     },
     methods: {
+        showSuccess() {
+            this.$toast.add({ severity: 'success', summary: 'Current Weight Updated', detail: "Your Latest Weight Update has been saved.", life: 5000 });
+        },
+
+        async addNewUserWeight() {
+            try {
+                const weight = this.updateWeight;
+                const userID = this.$store.state.user.uid;
+
+                const response = await API.addUserWeight(userID, weight);
+
+                console.log('Weight added successfully', response);
+                this.showSuccess()
+                this.updateWeight = 0;
+
+            } catch (error) {
+                console.error('Error adding new user weight:', error);
+            }
+        },
+
         async getUserWeights() {
             this.userWeights = await API.getUserWeights(this.$store.state.user.uid)
             console.log(this.userWeights)
