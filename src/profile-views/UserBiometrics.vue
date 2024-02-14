@@ -49,11 +49,17 @@
                 :maxFractionDigits="2" showButtons></InputNumber>
             <Button @click="addNewUserWeight()">Update Weight</Button>
         </div>
+        <UserWeightChart :weightsData="userWeights"></UserWeightChart>
     </div>
 </template>
 <script>
 import API from '../api'
+import UserWeightChart from '../components/charts/UserWeightChart.vue'
+
 export default {
+    components: {
+        UserWeightChart
+    },
     data() {
         return {
             userWeights: [],
