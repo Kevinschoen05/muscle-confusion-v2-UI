@@ -18,8 +18,8 @@
                         style="width:49px; height: 49px">
                         <i class="pi pi-info-circle text-xl text-white"></i>
                     </span>
-                    <div class="text-2xl font-medium text-white mb-2">{{ }}</div>
-                    <span class="text-blue-100 font-medium">Height</span>
+                    <div class="text-2xl font-medium text-white mb-2">{{ userCurrentTargetWeight }}</div>
+                    <span class="text-blue-100 font-medium">Target Weight</span>
                 </div>
             </div>
             <div class="col-12 md:col-6 lg:col-3 p-3">
@@ -43,12 +43,26 @@
                 </div>
             </div>
         </div>
-        <div class="flex flex-column gap-2">
-            <label for="updateWeight">Update Current Weight: </label>
-            <InputNumber v-model="updateWeight" inputId="updateWeight" :min="0" :minFractionDigits="0"
-                :maxFractionDigits="2" showButtons></InputNumber>
-            <Button @click="addNewUserWeight()">Update Weight</Button>
+        <div class="grid">
+            <div class="md:col-6 mt-2">
+                <div class="flex flex-column gap-2">
+                    <label for="updateWeight">Update Target Weight: </label>
+                    <InputNumber v-model="updateTargetWeight" inputId="updateWeight" :min="0" :minFractionDigits="0"
+                        :maxFractionDigits="2" showButtons></InputNumber>
+                    <Button class="w-5" label="Save" @click="addNewUserTargetWeight()"></Button>
+                </div>
+            </div>
+            <div class="md:col-6 mt-2">
+                <div class="flex flex-column gap-2">
+                    <label for="updateWeight">Update Current Weight: </label>
+                    <InputNumber v-model="updateWeight" inputId="updateWeight" :min="0" :minFractionDigits="0"
+                        :maxFractionDigits="2" showButtons></InputNumber>
+                    <Button class="w-5" label="Save" @click="addNewUserWeight()"></Button>
+                </div>
+            </div>
+
         </div>
+
         <UserWeightChart :weightsData="userWeights"></UserWeightChart>
     </div>
 </template>
@@ -63,8 +77,11 @@ export default {
     data() {
         return {
             userWeights: [],
+            userTargetWeights: [],
+            userCurrentTargetWeight: 0,
             userCurrentWeight: 0,
-            updateWeight: 0
+            updateWeight: 0,
+            updateTargetWeight: 0
         }
     },
     methods: {
@@ -88,6 +105,23 @@ export default {
             }
         },
 
+        async addNewUserTargetWeight() {
+            try {
+                const weight = this.updateTargetWeight;
+                const userID = this.$store.state.user.uid;
+
+                const response = await API.addUserTargetWeight(userID, weight);
+
+                console.log('Weight added successfully', response);
+                this.showSuccess()
+                this.updateTargetWeight = 0;
+
+            } catch (error) {
+                console.error('Error adding new user weight:', error);
+            }
+        },
+
+
         async getUserWeights() {
             this.userWeights = await API.getUserWeights(this.$store.state.user.uid)
             console.log(this.userWeights)
@@ -99,10 +133,25 @@ export default {
                 console.log('No weight records found.');
                 this.userCurrentWeight = 0; // Or set a default value
             }
+        },
+
+        async getUserTargetWeights() {
+            this.userTargetWeights = await API.getUserTargetWeights(this.$store.state.user.uid)
+            console.log(this.userTargetWeights)
+
+            if (this.userTargetWeights && this.userTargetWeights.length > 0) {
+                this.userCurrentTargetWeight = this.userTargetWeights[this.userTargetWeights.length - 1].weight;
+            } else {
+                // Handle the case where there are no weights (optional)
+                console.log('No weight records found.');
+                this.userCurrentTargetWeight = 0; // Or set a default value
+            }
         }
+        
     },
     mounted() {
         this.getUserWeights()
+        this.getUserTargetWeights()
     }
 }
 
