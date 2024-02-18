@@ -12,12 +12,16 @@ dayjs.extend(utc)
 
 export default {
     props: {
-        weightsData: Array // Assuming this prop will receive the array of weights
+        weightsData: Array, // Assuming this prop will receive the array of weights
+        targetWeightsData: Array
     },
 
     watch: {
         // React to changes in weightsData
         weightsData: function () {
+            this.chartData = this.setChartData();
+        },
+        targetWeightsData: function () {
             this.chartData = this.setChartData();
         }
     },
@@ -36,24 +40,37 @@ export default {
         },
 
         setChartData() {
-            const documentStyle = getComputedStyle(document.documentElement);
+            // Prepare the weights data with x (date) and y (weight) coordinates
+            const weightsDataset = this.weightsData.map(item => ({
+                x: dayjs(item.date).format('MM/DD/YYYY'),
+                y: item.weight
+            }));
 
-            // Map weights data to chart format
-            const labels = this.weightsData.map(item =>
-                dayjs(item.date.$date).format('MM/DD/YYYY')
-            );
-            const data = this.weightsData.map(item => item.weight);
+            // Prepare the target weights data similarly
+            const targetWeightsDataset = this.targetWeightsData.map(item => ({
+                x: dayjs(item.date).format('MM/DD/YYYY'),
+                y: item.weight
+            }));
 
+            // Setting up the chart data using these datasets
             return {
-                labels: labels,
                 datasets: [
                     {
-                        label: 'User Weight',
-                        data: data,
+                        label: 'Weight',
+                        data: weightsDataset,
+                        borderColor: 'rgb(54, 162, 235)', // Example color for weights
+                        backgroundColor: 'rgba(54, 162, 235, 0.5)', // Adjust for your design
                         fill: false,
-                        borderColor: documentStyle.getPropertyValue('--blue-500'), // Assuming this is your desired border color
-                        tension: 0.4,
+                        tension: 0.6
                     },
+                    {
+                        label: 'Target Weight',
+                        data: targetWeightsDataset,
+                        borderColor: 'rgb(255, 99, 132)', // Example color for target weights
+                        backgroundColor: 'rgba(255, 99, 132, 0.5)', // Adjust for your design
+                        fill: false,
+                        tension: 0
+                    }
                 ]
             };
         },

@@ -63,7 +63,7 @@
 
         </div>
 
-        <UserWeightChart :weightsData="userWeights"></UserWeightChart>
+        <UserWeightChart :weightsData="userWeights" :targetWeightsData="userTargetWeights"></UserWeightChart>
     </div>
 </template>
 <script>
