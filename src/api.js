@@ -213,8 +213,17 @@ export default class API {
   }
 
   static async getUserTargetWeights(userID) {
-    const res = await axios.get(`${user_url}/${userID}/biometrics/targetWeights`);
+    const res = await axios.get(
+      `${user_url}/${userID}/biometrics/targetWeights`
+    );
     return res.data;
+  }
+
+  static async getUserBirthday(userID){
+    const res = await axios.get(
+      `${user_url}/${userID}/biometrics/birthday`
+    )
+    return res.data
   }
 
   static async addUserWeight(userID, weight) {
@@ -225,11 +234,22 @@ export default class API {
   }
 
   static async addUserTargetWeight(userID, weight) {
-    const res = await axios.put(`${user_url}/${userID}/biometrics/targetWeights`, {
-      weight: weight,
-    });
+    const res = await axios.put(
+      `${user_url}/${userID}/biometrics/targetWeights`,
+      {
+        weight: weight,
+      }
+    );
     return res.data;
   }
+
+  static async addUserBirthday(userID, birthday) {
+    const res = await axios.put(`${user_url}/${userID}/biometrics/birthday`, {
+      birthday: birthday,
+    });
+    return res.data
+  }
+
 
   //MESSAGING
   static async createMessage(newMessage) {
