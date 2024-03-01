@@ -2,8 +2,8 @@
     <Toast />
     <Dialog v-model:visible="visible2" appendTo="body" :modal="true">
         <div class="text-900 font-medium mb-3 text-xl">Update User Birthday</div>
-        <Calendar v-model="newBirthday"></Calendar>
-        <Button @click="test()" label="Save"></Button>
+        <Calendar v-model="userNewBirthday"></Calendar>
+        <Button @click="addUserBirthday()" label="Save"></Button>
     </Dialog>
     <div class="surface-card shadow-2 border-round p-4">
         <div class="grid">
@@ -11,7 +11,7 @@
                 <div class="p-3 text-center bg-blue-500" style="border-radius: 12px">
                     <span class="inline-flex justify-content-center align-items-center bg-blue-600 border-circle mb-3"
                         style="width:49px; height: 49px">
-                        <i v-if="this.userAge !== 0" class="pi pi-info-circle text-xl text-white"></i>
+                        <i v-if="this.userCurrentAge" class="pi pi-info-circle text-xl text-white"></i>
                         <i v-else class="pi pi-plus text-xl text-white" @click="this.visible2 = true"></i>
                     </span>
                     <div class="text-2xl font-medium text-white mb-2">{{ userCurrentAge }}</div>
@@ -137,6 +137,21 @@ export default {
             }
         },
 
+        async addUserBirthday() {
+            try {
+                const birthday = this.userNewBirthday;
+                const userID = this.$store.state.user.uid;
+
+                const response = await API.addUserBirthday(userID, birthday)
+                console.log('Birthday added successfully', response);
+            }
+            catch (error) {
+                console.error('Error adding new user birthday:', error);
+            }
+
+            this.calculateUserAge()
+            this.visible2 = false
+        },
 
         async getUserWeights() {
             this.userWeights = await API.getUserWeights(this.$store.state.user.uid)
