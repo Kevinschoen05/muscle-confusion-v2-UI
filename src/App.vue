@@ -73,10 +73,9 @@
     <Dialog v-model:visible="visible2" appendTo="body" :modal="true">
         <div class="flex flex-column">
             <Button icon="pi pi-cog" class="p-button m-2" label="Profile"
-                @click="$router.push('/profile'), this.visible2 = false" v-ripple></Button>
+                @click="$router.push('/profile/biometrics'), this.visible2 = false" v-ripple></Button>
             <Button icon="pi pi-sign-out
          " class="p-button-danger m-2" label="Logout" @click="logout()"></Button>
-
         </div>
 
     </Dialog>
