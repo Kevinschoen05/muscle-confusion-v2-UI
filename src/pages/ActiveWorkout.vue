@@ -319,7 +319,24 @@ export default {
             const seconds = Math.floor((currentElapsedTime / 1000) % 60);
             const formattedCurrentElapsedTime = `${this.padZero(hours)}:${this.padZero(minutes)}:${this.padZero(seconds)}`;
 
-            localStorage.setItem('workoutID', this.$route.params.workoutID)
+            let workoutID;
+
+            // Get the workoutType from the route meta
+            const workoutType = this.$route.meta.workoutType;
+
+            // Determine the workoutID based on the workoutType
+            if (workoutType === 'preset') {
+                // Use the workoutID from the route params
+                workoutID = this.$route.params.workoutID;
+            } else if (workoutType === 'freestyle') {
+                // Generate a unique workoutID for freestyle workouts
+                workoutID = `freestyle-${Date.now()}`;
+            } else if (workoutType === 'random') {
+                // Generate a unique workoutID for random workouts
+                workoutID = `random-${Date.now()}`;
+            }
+
+            localStorage.setItem('workoutID', workoutID)
             localStorage.setItem('completedExercises', JSON.stringify(this.completedExercises));
             localStorage.setItem('workoutDuration', formattedCurrentElapsedTime);
 
@@ -394,10 +411,6 @@ export default {
         },
 
         async saveCompletedWorkout() {
-
-
-            let activeFreestyleWorkoutID = 'freestyle';
-            let activeRandomWorkoutID = 'random';
             let finalWorkoutID = '';
             let finalWorkoutTitle = '';
             let finalUsers = []
@@ -419,12 +432,12 @@ export default {
                 finalUsers = this.$store.state.user.uid
             }
             else if (this.$route.meta.workoutType === 'freestyle') {
-                finalWorkoutID = activeFreestyleWorkoutID
+                finalWorkoutID = localStorage.getItem('workoutID')
                 finalWorkoutTitle = "Freestyle Workout"
                 finalUsers.push(this.$store.state.user.uid)
             }
             else if (this.$route.meta.workoutType === 'random') {
-                finalWorkoutID = activeRandomWorkoutID
+                finalWorkoutID = localStorage.getItem('workoutID')
                 finalWorkoutTitle = "Random Workout"
                 finalUsers.push(this.$store.state.user.uid)
             }
@@ -618,12 +631,12 @@ export default {
 
         },
 
-        continueWorkoutFromLocalStorage(routeWorkoutID) {
+        continueWorkoutFromLocalStorage() {
             // Retrieve workoutID from local storage
             const storedWorkoutID = localStorage.getItem('workoutID');
 
             // Check if the stored workoutID matches the route parameter workoutID
-            if (storedWorkoutID === routeWorkoutID) {
+            if (storedWorkoutID) {
                 // Retrieve and assign completedExercises from local storage
                 const storedExercises = localStorage.getItem('completedExercises');
                 if (storedExercises) {
@@ -638,19 +651,25 @@ export default {
                 }
 
                 console.log("Continuing workout from saved session.");
-            } else {
-                console.log("No matching workout session found in local storage.");
             }
         },
         updateExercisesWithCompletedData(completedExercises) {
-            this.exercises.forEach(exercise => {
-                const completedExercise = completedExercises.find(e => e.id === exercise.id);
+            if (this.$route.meta.workoutType === 'freestyle' && this.exercises.length === 0) {
+                // Directly assign completedExercises to exercises for a freestyle workout
+                this.exercises = completedExercises.map(exercise => ({
+                    ...exercise,
+                    // Ensure any necessary transformation or additional properties here
+                }));
+            } else {
+                this.exercises.forEach(exercise => {
+                    const completedExercise = completedExercises.find(e => e.id === exercise.id);
 
-                if (completedExercise) {
-                    exercise.sets = completedExercise.sets; // Make sure the structure matches
-                    console.log("Updated Exercise:", exercise);
-                }
-            });
+                    if (completedExercise) {
+                        exercise.sets = completedExercise.sets; // Make sure the structure matches
+                        console.log("Updated Exercise:", exercise);
+                    }
+                });
+            }
         }
 
 
@@ -664,7 +683,7 @@ export default {
 
         }
 
-        if (this.$route.params.workoutID && this.$route.params.workoutID === storedWorkoutID) {
+        if (storedWorkoutID) {
             this.showContinueWorkoutPrompt = true
         }
 
