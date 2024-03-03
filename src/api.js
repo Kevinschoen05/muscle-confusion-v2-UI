@@ -226,6 +226,13 @@ export default class API {
     return res.data
   }
 
+  static async getUserHeight(userID){
+    const res = await axios.get(
+      `${user_url}/${userID}/biometrics/heights`
+    )
+    return res.data
+  }
+
   static async addUserWeight(userID, weight) {
     const res = await axios.put(`${user_url}/${userID}/biometrics/weights`, {
       weight: weight,
@@ -250,6 +257,15 @@ export default class API {
     return res.data
   }
 
+  static async addUserHeight(userID, height) {
+    const res = await axios.put(
+      `${user_url}/${userID}/biometrics/heights`,
+      {
+        height: height,
+      }
+    );
+    return res.data;
+  }
 
   //MESSAGING
   static async createMessage(newMessage) {
