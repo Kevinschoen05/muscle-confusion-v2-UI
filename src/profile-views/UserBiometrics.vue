@@ -5,14 +5,32 @@
         <Calendar v-model="userNewBirthday"></Calendar>
         <Button @click="addUserBirthday()" label="Save"></Button>
     </Dialog>
+    <Dialog v-model:visible="visible3" appendTo="body" :modal="true">
+        <div class="text-900 font-medium mb-3 text-xl">Update User Height </div>
+        <div class="grid">
+            <div class="md:col-6 mt-2">
+                <div class="flex flex-column gap-2">
+                    <label for="updateHeightFeet">Height Feet: </label>
+                    <InputNumber v-model="updateHeightFeet" inputId="updateHeightFeet" :min="0" showButtons></InputNumber>
+                </div>
+            </div>
+            <div class="md:col-6 mt-2">
+                <div class="flex flex-column gap-2">
+                    <label for="updateHeightInches">Height Inches: </label>
+                    <InputNumber v-model="updateHeightInches" inputId="updateHeightInches" :min="0" :minFractionDigits="0"
+                        :maxFractionDigits="2" showButtons></InputNumber>
+                </div>
+            </div>
+        </div>
+        <Button class="mt-3" @click="addUserHeight()" label="Save"></Button>
+    </Dialog>
     <div class="surface-card shadow-2 border-round p-4">
         <div class="grid">
             <div class="col-12 md:col-6 lg:col-3 p-3">
                 <div class="p-3 text-center bg-blue-500" style="border-radius: 12px">
                     <span class="inline-flex justify-content-center align-items-center bg-blue-600 border-circle mb-3"
                         style="width:49px; height: 49px">
-                        <i v-if="this.userCurrentAge" class="pi pi-info-circle text-xl text-white"></i>
-                        <i v-else class="pi pi-plus text-xl text-white" @click="this.visible2 = true"></i>
+                        <i class="pi pi-plus text-xl text-white" @click="this.visible2 = true"></i>
                     </span>
                     <div class="text-2xl font-medium text-white mb-2">{{ userCurrentAge }}</div>
                     <span class="text-blue-100 font-medium">Age</span>
@@ -48,6 +66,46 @@
                     <span class="text-blue-100 font-medium">BMI</span>
                 </div>
             </div>
+            <div class="col-12 md:col-6 lg:col-3 p-3">
+                <div class="p-3 text-center bg-blue-500" style="border-radius: 12px">
+                    <span class="inline-flex justify-content-center align-items-center bg-blue-600 border-circle mb-3"
+                        style="width:49px; height: 49px">
+                        <i class="pi pi-plus text-xl text-white" @click="this.visible3 = true"></i>
+                    </span>
+                    <div class="text-2xl font-medium text-white mb-2">{{userCurrentHeightFeet}}' {{userCurrentHeightInches}}" </div>
+                    <span class="text-blue-100 font-medium">Height</span>
+                </div>
+            </div>
+            <div class="col-12 md:col-6 lg:col-3 p-3">
+                <div class="p-3 text-center bg-blue-500" style="border-radius: 12px">
+                    <span class="inline-flex justify-content-center align-items-center bg-blue-600 border-circle mb-3"
+                        style="width:49px; height: 49px">
+                        <i class="pi pi-info-circle text-xl text-white"></i>
+                    </span>
+                    <div class="text-2xl font-medium text-white mb-2">{{ }} </div>
+                    <span class="text-blue-100 font-medium">Average Reported Sleep</span>
+                </div>
+            </div>
+            <div class="col-12 md:col-6 lg:col-3 p-3">
+                <div class="p-3 text-center bg-blue-500" style="border-radius: 12px">
+                    <span class="inline-flex justify-content-center align-items-center bg-blue-600 border-circle mb-3"
+                        style="width:49px; height: 49px">
+                        <i class="pi pi-info-circle text-xl text-white"></i>
+                    </span>
+                    <div class="text-2xl font-medium text-white mb-2">{{ }} </div>
+                    <span class="text-blue-100 font-medium">Average Reported Stress</span>
+                </div>
+            </div>
+            <div class="col-12 md:col-6 lg:col-3 p-3">
+                <div class="p-3 text-center bg-blue-500" style="border-radius: 12px">
+                    <span class="inline-flex justify-content-center align-items-center bg-blue-600 border-circle mb-3"
+                        style="width:49px; height: 49px">
+                        <i class="pi pi-info-circle text-xl text-white"></i>
+                    </span>
+                    <div class="text-2xl font-medium text-white mb-2">{{ }} </div>
+                    <span class="text-blue-100 font-medium">Average Reported Nutrition</span>
+                </div>
+            </div>
         </div>
         <div class="grid">
             <div class="md:col-6 mt-2">
@@ -66,10 +124,9 @@
                     <Button class="w-5" label="Save" @click="addNewUserWeight()"></Button>
                 </div>
             </div>
-
         </div>
-
         <UserWeightChart :weightsData="userWeights" :targetWeightsData="userTargetWeights"></UserWeightChart>
+
     </div>
 </template>
 <script>
@@ -88,12 +145,17 @@ export default {
             userTargetWeights: [],
             userCurrentTargetWeight: 0,
             userCurrentWeight: 0,
+            userCurrentHeightFeet: 0,
+            userCurrentHeightInches: 0,
             updateWeight: 0,
             updateTargetWeight: 0,
+            updateHeightFeet: 0,
+            updateHeightInches: 0,
             userCurrentAge: 0,
             userCurrentBirthday: '',
             userNewBirthday: '',
             visible2: false,
+            visible3: false,
         }
     },
     methods: {
@@ -153,6 +215,23 @@ export default {
             this.visible2 = false
         },
 
+        async addUserHeight() {
+            const heightFeet = this.updateHeightFeet;
+            const heightInches = this.updateHeightInches;
+            const userID = this.$store.state.user.uid;
+
+            try {
+                const response = await API.addUserHeight(userID, heightFeet, heightInches);
+                console.log("Height added successfully:", response);
+                // You can now handle the successful response, maybe update your UI accordingly
+            } catch (error) {
+                console.error("Failed to add height:", error);
+                // Handle any errors here, such as displaying a message to the user
+            }
+            this.visible3 = false
+
+        },
+
         async getUserWeights() {
             this.userWeights = await API.getUserWeights(this.$store.state.user.uid)
             console.log(this.userWeights)
@@ -177,6 +256,13 @@ export default {
                 console.log('No weight records found.');
                 this.userCurrentTargetWeight = 0; // Or set a default value
             }
+        },
+
+        async getUserHeight() {
+            const response = await API.getUserHeight(this.$store.state.user.uid)
+            this.userCurrentHeightFeet = response[0].heightFeet
+            this.userCurrentHeightInches = response[0].heightInches
+            console.log("User Height Feet: " + this.userCurrentHeightFeet)
         },
 
         async calculateUserAge() {
@@ -208,7 +294,9 @@ export default {
     mounted() {
         this.getUserWeights()
         this.getUserTargetWeights()
+        this.getUserHeight()
         this.calculateUserAge()
+        
     }
 }
 
