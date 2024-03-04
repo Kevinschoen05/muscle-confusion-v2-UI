@@ -219,18 +219,14 @@ export default class API {
     return res.data;
   }
 
-  static async getUserBirthday(userID){
-    const res = await axios.get(
-      `${user_url}/${userID}/biometrics/birthday`
-    )
-    return res.data
+  static async getUserBirthday(userID) {
+    const res = await axios.get(`${user_url}/${userID}/biometrics/birthday`);
+    return res.data;
   }
 
-  static async getUserHeight(userID){
-    const res = await axios.get(
-      `${user_url}/${userID}/biometrics/heights`
-    )
-    return res.data
+  static async getUserHeight(userID) {
+    const res = await axios.get(`${user_url}/${userID}/biometrics/heights`);
+    return res.data;
   }
 
   static async addUserWeight(userID, weight) {
@@ -254,16 +250,14 @@ export default class API {
     const res = await axios.put(`${user_url}/${userID}/biometrics/birthday`, {
       birthday: birthday,
     });
-    return res.data
+    return res.data;
   }
 
-  static async addUserHeight(userID, height) {
-    const res = await axios.put(
-      `${user_url}/${userID}/biometrics/heights`,
-      {
-        height: height,
-      }
-    );
+  static async addUserHeight(userID, heightFeet, heightInches) {
+    const res = await axios.put(`${user_url}/${userID}/biometrics/heights`, {
+      heightFeet: heightFeet, // Send heightFeet
+      heightInches: heightInches, // Send heightInches
+    });
     return res.data;
   }
 
