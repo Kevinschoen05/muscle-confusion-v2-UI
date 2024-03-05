@@ -62,7 +62,7 @@
                         style="width:49px; height: 49px">
                         <i class="pi pi-info-circle text-xl text-white"></i>
                     </span>
-                    <div class="text-2xl font-medium text-white mb-2">{{ }} </div>
+                    <div class="text-2xl font-medium text-white mb-2">{{ userCurrentBMI }} </div>
                     <span class="text-blue-100 font-medium">BMI</span>
                 </div>
             </div>
@@ -72,7 +72,8 @@
                         style="width:49px; height: 49px">
                         <i class="pi pi-plus text-xl text-white" @click="this.visible3 = true"></i>
                     </span>
-                    <div class="text-2xl font-medium text-white mb-2">{{userCurrentHeightFeet}}' {{userCurrentHeightInches}}" </div>
+                    <div class="text-2xl font-medium text-white mb-2">{{ userCurrentHeightFeet }}'
+                        {{ userCurrentHeightInches }}" </div>
                     <span class="text-blue-100 font-medium">Height</span>
                 </div>
             </div>
@@ -154,6 +155,7 @@ export default {
             userCurrentAge: 0,
             userCurrentBirthday: '',
             userNewBirthday: '',
+            userCurrentBMI: 0,
             visible2: false,
             visible3: false,
         }
@@ -181,6 +183,8 @@ export default {
             } catch (error) {
                 console.error('Error adding new user weight:', error);
             }
+            this.calculateUserBMI(this.userCurrentWeight, this.userCurrentHeightFeet, this.userCurrentHeightInches)
+
         },
 
         async addNewUserTargetWeight() {
@@ -229,6 +233,7 @@ export default {
                 // Handle any errors here, such as displaying a message to the user
             }
             this.visible3 = false
+            this.calculateUserBMI(this.userCurrentWeight, this.userCurrentHeightFeet, this.userCurrentHeightInches)
 
         },
 
@@ -263,6 +268,8 @@ export default {
             this.userCurrentHeightFeet = response[0].heightFeet
             this.userCurrentHeightInches = response[0].heightInches
             console.log("User Height Feet: " + this.userCurrentHeightFeet)
+            this.calculateUserBMI(this.userCurrentWeight, this.userCurrentHeightFeet, this.userCurrentHeightInches)
+
         },
 
         async calculateUserAge() {
@@ -288,6 +295,24 @@ export default {
             const currentDate = dayjs();
             const age = currentDate.diff(birthdayDate, 'year');
             this.userCurrentAge = age
+        },
+
+        calculateUserBMI(userCurrentWeight, userCurrentHeightFeet, userCurrentHeightInches) {
+            console.log(userCurrentWeight, userCurrentHeightFeet, userCurrentHeightInches)
+            // Convert height to inches (totalHeightInches) by converting feet to inches and adding the remaining inches
+            const totalHeightInches = userCurrentHeightFeet * 12 + userCurrentHeightInches;
+
+            // Convert height from inches to meters (1 inch = 0.0254 meters)
+            const heightInMeters = totalHeightInches * 0.0254;
+
+            // Convert weight from pounds to kilograms (1 pound = 0.453592 kilograms)
+            const weightInKilograms = userCurrentWeight * 0.453592;
+
+            // Calculate BMI
+            const bmi = weightInKilograms / (heightInMeters * heightInMeters);
+            console.log(bmi)
+
+            this.userCurrentBMI = bmi.toFixed(2);
         }
 
     },
@@ -296,7 +321,7 @@ export default {
         this.getUserTargetWeights()
         this.getUserHeight()
         this.calculateUserAge()
-        
+
     }
 }
 
