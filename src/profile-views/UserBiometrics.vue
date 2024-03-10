@@ -24,6 +24,22 @@
         </div>
         <Button class="mt-3" @click="addUserHeight()" label="Save"></Button>
     </Dialog>
+    <Dialog v-model:visible="visible4" appendTo="body" :modal="true">
+        <div class="text-900 font-medium mb-3 text-xl">Update Current Weight </div>
+        <div class="flex flex-column gap-2">
+            <InputNumber v-model="updateWeight" inputId="updateWeight" :min="0" :minFractionDigits="0"
+                :maxFractionDigits="2" showButtons></InputNumber>
+            <Button class="w-5" label="Save" @click="addNewUserWeight()"></Button>
+        </div>
+    </Dialog>
+    <Dialog v-model:visible="visible5" appendTo="body" :modal="true">
+        <div class="text-900 font-medium mb-3 text-xl">Update Target Weight </div>
+        <div class="flex flex-column gap-2">
+                    <InputNumber v-model="updateTargetWeight" inputId="updateWeight" :min="0" :minFractionDigits="0"
+                        :maxFractionDigits="2" showButtons></InputNumber>
+                    <Button class="w-5" label="Save" @click="addNewUserTargetWeight()"></Button>
+                </div>
+    </Dialog>
     <div class="surface-card shadow-2 border-round p-4">
         <div class="grid">
             <div class="col-12 md:col-6 lg:col-3 p-3">
@@ -40,7 +56,7 @@
                 <div class="p-3 text-center bg-blue-500" style="border-radius: 12px">
                     <span class="inline-flex justify-content-center align-items-center bg-blue-600 border-circle mb-3"
                         style="width:49px; height: 49px">
-                        <i class="pi pi-info-circle text-xl text-white"></i>
+                        <i class="pi pi-plus text-xl text-white" @click="this.visible5 = true"></i>
                     </span>
                     <div class="text-2xl font-medium text-white mb-2">{{ userCurrentTargetWeight }}</div>
                     <span class="text-blue-100 font-medium">Target Weight</span>
@@ -50,7 +66,7 @@
                 <div class="p-3 text-center bg-blue-500" style="border-radius: 12px">
                     <span class="inline-flex justify-content-center align-items-center bg-blue-600 border-circle mb-3"
                         style="width:49px; height: 49px">
-                        <i class="pi pi-info-circle text-xl text-white"></i>
+                        <i class="pi pi-plus text-xl text-white" @click="this.visible4 = true"></i>
                     </span>
                     <div class="text-2xl font-medium text-white mb-2">{{ userCurrentWeight }} lbs </div>
                     <span class="text-blue-100 font-medium">Current Weight</span>
@@ -108,24 +124,6 @@
                 </div>
             </div>
         </div>
-        <div class="grid">
-            <div class="md:col-6 mt-2">
-                <div class="flex flex-column gap-2">
-                    <label for="updateWeight">Update Target Weight: </label>
-                    <InputNumber v-model="updateTargetWeight" inputId="updateWeight" :min="0" :minFractionDigits="0"
-                        :maxFractionDigits="2" showButtons></InputNumber>
-                    <Button class="w-5" label="Save" @click="addNewUserTargetWeight()"></Button>
-                </div>
-            </div>
-            <div class="md:col-6 mt-2">
-                <div class="flex flex-column gap-2">
-                    <label for="updateWeight">Update Current Weight: </label>
-                    <InputNumber v-model="updateWeight" inputId="updateWeight" :min="0" :minFractionDigits="0"
-                        :maxFractionDigits="2" showButtons></InputNumber>
-                    <Button class="w-5" label="Save" @click="addNewUserWeight()"></Button>
-                </div>
-            </div>
-        </div>
         <UserWeightChart :weightsData="userWeights" :targetWeightsData="userTargetWeights"></UserWeightChart>
 
     </div>
@@ -158,6 +156,8 @@ export default {
             userCurrentBMI: 0,
             visible2: false,
             visible3: false,
+            visible4: false,
+            visible5: false
         }
     },
     methods: {
@@ -184,7 +184,7 @@ export default {
                 console.error('Error adding new user weight:', error);
             }
             this.calculateUserBMI(this.userCurrentWeight, this.userCurrentHeightFeet, this.userCurrentHeightInches)
-
+            this.visible4 = false
         },
 
         async addNewUserTargetWeight() {
