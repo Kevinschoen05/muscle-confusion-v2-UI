@@ -125,18 +125,20 @@
             </div>
         </div>
         <UserWeightChart :weightsData="userWeights" :targetWeightsData="userTargetWeights"></UserWeightChart>
-
+        <NumberPicker></NumberPicker>
     </div>
 </template>
 <script>
 import API from '../api'
 import UserWeightChart from '../components/charts/UserWeightChart.vue'
+import NumberPicker from '../components/NumberPicker.vue'
 import dayjs from 'dayjs'
 
 
 export default {
     components: {
-        UserWeightChart
+        UserWeightChart, 
+        NumberPicker
     },
     data() {
         return {
