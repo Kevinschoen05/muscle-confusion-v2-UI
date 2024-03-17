@@ -61,8 +61,8 @@
                         <td class="set-index">Target</td>
                         <td class="set-item">{{ set.target_reps }}</td>
                         <td class="set-item">
-                            <VueScrollPicker v-if="!set.completed" v-model="set.target_weight" :height="180"
-                                :itemHeight="36" :options="numbers"></VueScrollPicker>
+                            <VueScrollPicker v-if="!set.completed" v-model="set.target_weight" :scrollSensitivity="2"
+                                :options="numbersWeight"></VueScrollPicker>
                             <p v-else class="set-value">{{ set.target_weight }}</p>
                         </td>
                         <td class="success-icon"></td>
@@ -71,14 +71,14 @@
                         <td class="set-index">Actual</td>
                         <td class="set-item">
                             <VueScrollPicker class="scroll-picker" v-if="!set.completed" v-model="set.actual_reps"
-                                :options="numbers"></VueScrollPicker>
+                                :scrollSensitivity="2" :options="numbersReps"></VueScrollPicker>
                             <p v-else class="set-value"
                                 :class="{ 'set-success': (set.success && set.completed), 'set-failure': (!set.success && set.completed) }">
                                 {{ set.actual_reps }}</p>
                         </td>
                         <td class="set-item">
-                            <VueScrollPicker v-if="!set.completed" v-model="set.actual_weight" :height="180"
-                                :itemHeight="36" :options="numbers"></VueScrollPicker>
+                            <VueScrollPicker v-if="!set.completed" v-model="set.actual_weight" :scrollSensitivity="2"
+                                :options="numbersWeight"></VueScrollPicker>
                             <p v-else class="set-value"
                                 :class="{ 'set-success': (set.success && set.completed), 'set-failure': (!set.success && set.completed) }">
                                 {{ set.actual_weight }}</p>
@@ -140,8 +140,8 @@ export default {
     data() {
         return {
             //values for picker 
-            numbers: [],
-            selectedValue: 500,
+            numbersWeight: [],
+            numbersReps: [],
 
             totalTargetReps: 0,
             setTotal: 0,
@@ -168,7 +168,10 @@ export default {
         prepareNumbers() {
             // Fill the numbers array with values from 1 to 1000 in increments of 5
             for (let i = 0; i <= 800; i += 5) {
-                this.numbers.push(i);
+                this.numbersWeight.push(i);
+            }
+            for (let i = 0; i <= 100; i += 1) {
+                this.numbersReps.push(i);
             }
         },
 
