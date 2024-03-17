@@ -7,6 +7,8 @@ import dayjs from 'dayjs'
 
 //global stylesheet to use primevue fonts etc
 import './assets/app.css'
+import 'vue-scroll-picker/lib/style.css';
+
 
 //fontawesome icons
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -54,7 +56,7 @@ import Tag from 'primevue/tag';
 import Slider from 'primevue/slider';
 import RadioButton from 'primevue/radiobutton';
 
-
+import VueScrollPicker from "vue-scroll-picker";
 
 
 
@@ -67,6 +69,8 @@ app.use(store)
 app.use(PrimeVue)
 app.use(ToastService);
 app.use(PrimeVue, {ripple: true});
+app.use(VueScrollPicker); // export default is plugin
+
 
 app.directive('ripple', Ripple);
 app.directive('styleclass', StyleClass);
