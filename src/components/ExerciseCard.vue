@@ -60,22 +60,25 @@
                     <tr class="set">
                         <td class="set-index">Target</td>
                         <td class="set-item">{{ set.target_reps }}</td>
-                        <td class="set-item"> <input v-if="!set.completed" class="set-input" type="number" step=5
-                                pattern="\d*" v-model="set.target_weight">
+                        <td class="set-item">
+                            <VueScrollPicker v-if="!set.completed" v-model="set.target_weight" :height="180"
+                                :itemHeight="36" :options="numbers"></VueScrollPicker>
                             <p v-else class="set-value">{{ set.target_weight }}</p>
                         </td>
                         <td class="success-icon"></td>
                     </tr>
                     <tr class="set">
                         <td class="set-index">Actual</td>
-                        <td class="set-item"><input v-if="!set.completed" class="set-input" type="number" step=5
-                                pattern="\d*" v-model="set.actual_reps">
+                        <td class="set-item">
+                            <VueScrollPicker class="scroll-picker" v-if="!set.completed" v-model="set.actual_reps"
+                                :options="numbers"></VueScrollPicker>
                             <p v-else class="set-value"
                                 :class="{ 'set-success': (set.success && set.completed), 'set-failure': (!set.success && set.completed) }">
                                 {{ set.actual_reps }}</p>
                         </td>
-                        <td class="set-item"><input v-if="!set.completed" class="set-input" type="number" step=5
-                                pattern="\d*" v-model="set.actual_weight">
+                        <td class="set-item">
+                            <VueScrollPicker v-if="!set.completed" v-model="set.actual_weight" :height="180"
+                                :itemHeight="36" :options="numbers"></VueScrollPicker>
                             <p v-else class="set-value"
                                 :class="{ 'set-success': (set.success && set.completed), 'set-failure': (!set.success && set.completed) }">
                                 {{ set.actual_weight }}</p>
@@ -136,6 +139,10 @@ export default {
 
     data() {
         return {
+            //values for picker 
+            numbers: [],
+            selectedValue: 500,
+
             totalTargetReps: 0,
             setTotal: 0,
             completedCounter: 0,
@@ -157,6 +164,14 @@ export default {
         }
     },
     methods: {
+
+        prepareNumbers() {
+            // Fill the numbers array with values from 1 to 1000 in increments of 5
+            for (let i = 0; i <= 800; i += 5) {
+                this.numbers.push(i);
+            }
+        },
+
         calculateTotalReps() {
             this.sets.forEach(set => {
                 this.totalTargetReps += set.target_reps
@@ -229,6 +244,10 @@ export default {
             this.$emit("swap-exercises", { originalExercise, selectedSwapExercise });
         },
 
+        handleValueChange(newValue) {
+            this.parentSelectedValue = newValue;
+        },
+
         //API Calls
 
         async getSwapExercises() {
@@ -240,6 +259,7 @@ export default {
     },
     mounted() {
         this.calculateTotalReps()
+        this.prepareNumbers()
         console.log(this.exerciseID)
     }
 
@@ -248,7 +268,7 @@ export default {
 </script>
   
   <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style scoped >
 .container {
     box-sizing: border-box;
     display: flex;
